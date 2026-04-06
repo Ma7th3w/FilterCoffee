@@ -339,9 +339,7 @@ body {
     <div class="click-bar-label">C60 Clicks</div>
     <div><span class="click-bar-value" id="currentClickDisplay">--</span><span class="click-bar-unit">clicks</span></div>
   </div>
-  <div class="click-bar-right">
-    <div class="click-bar-bean" id="currentBeanDisplay">설정되지 않음</div>
-  </div>
+
 </div>
 
 <!-- ─── App Content ─── -->
@@ -685,105 +683,69 @@ function renderClickHistory() {
   `).join('');
 }
 
-// ─── Recipe Parser ───
-function parseRecipeText(text) {
+// ─── Recipe Parser (improved) ───
+function parseRecipeText(rawText) {
   const recipe = {
     id: Date.now().toString(),
-    raw: text,
+    raw: rawText,
     name: '', origin: '', variety: '', processing: '', roasting: '',
     notes: '', dripper: '', bottom: '', dose: '', water: '', ratio: '',
     temp: '', grind: '', meloDrip: '', targetTime: '',
     pourGuide: [], adjustments: [], createdAt: new Date().toISOString()
   };
 
-  // Name - first line or title
-  const titleMatch = text.match(/^(.+?)(?:\s*[—\-]|$)/m);
-  if (titleMatch) recipe.name = titleMatch[1].trim();
+  // 전처리: | 제거, ** 제거, 여러 공백 정리
+  const text = rawText.replace(/\|/g, '').replace(/\*\*/g, '').replace(/[ \t]+/g, ' ').replace(/^ +| +$/gm, '');
+  const m = re => { const x = text.match(re); return x ? x[1].trim() : ''; };
 
-  // Bean info
-  const originMatch = text.match(/산지\s+(.+)/);
-  if (originMatch) recipe.origin = originMatch[1].trim();
-  
-  const varietyMatch = text.match(/품종\s+(.+)/);
-  if (varietyMatch) recipe.variety = varietyMatch[1].trim();
-  
-  const procMatch = text.match(/프로세싱\s+(.+)/);
-  if (procMatch) recipe.processing = procMatch[1].trim();
-  
-  const roastMatch = text.match(/로스팅\s+(.+)/);
-  if (roastMatch) recipe.roasting = roastMatch[1].trim();
-  
-  const notesMatch = text.match(/(?:예상\s*노트|노트)\s+(.+)/);
-  if (notesMatch) recipe.notes = notesMatch[1].trim();
+  // 이름: 첫 줄에서 ## 제거 후 — 앞까지
+  const tM = text.match(/^(?:##\s*)?(.+?)(?:\s*[—\-–]|$)/m);
+  if (tM) recipe.name = tM[1].trim().replace(/^#+\s*/, '');
 
-  // Recipe info
-  const dripperMatch = text.match(/드리퍼\s+(.+)/);
-  if (dripperMatch) recipe.dripper = dripperMatch[1].trim();
-  
-  const bottomMatch = text.match(/바텀\s*(?:추천)?[:\s]+(\w+)/);
-  if (bottomMatch) recipe.bottom = bottomMatch[1].trim();
-  
-  const doseMatch = text.match(/도즈\s+(\d+)g/);
-  if (doseMatch) recipe.dose = doseMatch[1];
-  
-  const waterMatch = text.match(/물량\s+(\d+)g/);
-  if (waterMatch) recipe.water = waterMatch[1];
-  
-  const ratioMatch = text.match(/1:(\d+)/);
-  if (ratioMatch) recipe.ratio = '1:' + ratioMatch[1];
-  
-  const tempMatch = text.match(/수온\s+(\d+)°?C/);
-  if (tempMatch) recipe.temp = tempMatch[1];
-  
-  const grindMatch = text.match(/(?:그라인드|클릭수?)\s+(\d+)\s*(?:클릭)?/);
-  if (grindMatch) recipe.grind = grindMatch[1];
-  
-  const meloMatch = text.match(/멜로드립\s+(사용|미사용)/);
-  if (meloMatch) recipe.meloDrip = meloMatch[1];
-  
-  const timeMatch = text.match(/(?:목표\s*)?추출\s*시간\s+~?(\d+:\d+)/);
-  if (timeMatch) recipe.targetTime = timeMatch[1];
+  // 원두 정보
+  recipe.origin = m(/산지\s+(.+)/);
+  recipe.variety = m(/품종\s+(.+)/);
+  recipe.processing = m(/프로세싱\s+(.+)/);
+  recipe.roasting = m(/로스팅\s+(.+)/);
+  recipe.notes = m(/(?:예상\s*노트|노트)\s+(.+)/);
 
-  // Pour guide
-  const pourPattern = /(?:블루밍|[1-9]차\s*푸어|메인|3차)\s+(\d+:\d+)\s+(\d+)g\s+(\d+)g\s+(.+?)(?=\n|$)/g;
-  let pourMatch;
-  while ((pourMatch = pourPattern.exec(text)) !== null) {
-    recipe.pourGuide.push({
-      time: pourMatch[1], amount: pourMatch[2] + 'g',
-      cumulative: pourMatch[3] + 'g', action: pourMatch[4].trim()
-    });
-  }
-  
-  // Simpler pour guide fallback
-  if (!recipe.pourGuide.length) {
-    const lines = text.split('\n');
-    const pourKeywords = ['블루밍', '1차', '2차', '3차', '드로우다운'];
-    lines.forEach(line => {
-      if (pourKeywords.some(k => line.includes(k))) {
-        const timeM = line.match(/(\d+:\d+)/);
-        const amountM = line.match(/(\d+)g/);
-        if (timeM) {
-          recipe.pourGuide.push({
-            time: timeM[1], amount: amountM ? amountM[1] + 'g' : '',
-            cumulative: '', action: line.trim()
-          });
-        }
-      }
-    });
-  }
+  // 레시피 정보
+  recipe.dripper = m(/드리퍼\s+(.+)/);
+  recipe.bottom = m(/바텀\s*(?:추천)?[:\s]+(\w+)/);
+  recipe.dose = m(/도즈\s+(\d+)\s*g/);
+  recipe.water = m(/물량\s+(\d+)\s*g/);
+  const rM = text.match(/1:(\d+)/);
+  if (rM) recipe.ratio = '1:' + rM[1];
 
-  // Adjustments
-  const adjPattern = /(시다|쓰다|텁텁하다|밍밍하다|너무\s*진하다)\s+(.+?)(?=\n|$)/g;
-  let adjMatch;
-  while ((adjMatch = adjPattern.exec(text)) !== null) {
-    recipe.adjustments.push({ symptom: adjMatch[1].trim(), fix: adjMatch[2].trim() });
-  }
+  // 수온: "수온 93°C" 또는 "수온 93 °C" 등
+  recipe.temp = m(/수온\s+(\d{2,3})\s*°?\s*C/);
 
-  // Fallback name
-  if (!recipe.name && recipe.origin) {
-    recipe.name = [recipe.origin, recipe.variety, recipe.processing].filter(Boolean).join(' ');
-  }
+  // 그라인드: "33클릭" 또는 "그라인드 33"
+  recipe.grind = m(/(?:그라인드|클릭수?)\s+(\d{2,3})\s*(?:클릭)?/);
+  // 클릭수 계산 라인에서도 시도
+  if (!recipe.grind) { const gm = text.match(/클릭수\s*계산[:\s]*(\d{2,3})/); if (gm) recipe.grind = gm[1]; }
+  if (!recipe.grind) { const gm = text.match(/(\d{2,3})\s*클릭/); if (gm) recipe.grind = gm[1]; }
 
+  recipe.meloDrip = m(/멜로드립\s+(사용|미사용)/);
+  recipe.targetTime = m(/(?:목표\s*)?추출\s*시간\s+~?(\d+:\d+)/);
+
+  // 푸어링 가이드
+  const lines = text.split('\n');
+  const pk = ['블루밍', '1차 푸어', '2차 푸어', '3차 푸어', '드로우다운'];
+  lines.forEach(l => {
+    if (pk.some(k => l.includes(k))) {
+      const t = l.match(/(\d+:\d+)/), a = l.match(/(\d+)\s*g/);
+      if (t) recipe.pourGuide.push({ time: t[1], amount: a ? a[1] + 'g' : '', action: l.trim() });
+    }
+  });
+
+  // 미세 조정
+  lines.forEach(l => {
+    const am = l.match(/^(시다|쓰다|텁텁하다|밍밍하다|너무\s*진하다)\s+(.+)/);
+    if (am) recipe.adjustments.push({ symptom: am[1].trim(), fix: am[2].trim() });
+  });
+
+  if (!recipe.name && recipe.origin) recipe.name = [recipe.origin, recipe.variety, recipe.processing].filter(Boolean).join(' ');
   return recipe;
 }
 
