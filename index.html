@@ -109,7 +109,7 @@ body {
 /* ─── Main Content ─── */
 .app-content {
   padding-top: calc(env(safe-area-inset-top, 12px) + 76px);
-  padding-bottom: calc(70px + env(safe-area-inset-bottom, 20px));
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 4px);
   min-height: 100dvh;
 }
 
@@ -125,7 +125,7 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
   display: flex;
-  padding: 6px 0 env(safe-area-inset-bottom, 20px);
+  padding: 6px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
 }
 .tab {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
@@ -1128,7 +1128,8 @@ function renderRecipes() {
   let filtered = data.recipes.filter(r => {
     const sm = !search || [r.name, r.origin, r.variety, r.processing, r.dripper, r.roastery].some(f => (f || '').toLowerCase().includes(search));
     if (activeRecipeFilter === 'all') return sm;
-    if (['워시드', '내추럴', '허니'].includes(activeRecipeFilter)) return sm && r.processing === activeRecipeFilter;
+    const allProcs = data.recipes.map(x => x.processing).filter(Boolean);
+    if (allProcs.includes(activeRecipeFilter)) return sm && r.processing === activeRecipeFilter;
     if (data.recipes.some(x => x.roastery === activeRecipeFilter)) return sm && r.roastery === activeRecipeFilter;
     return sm && (r.dripper || '').includes(activeRecipeFilter);
   });
@@ -1409,6 +1410,8 @@ function init() {
   if (!data.wishlist) { data.wishlist = []; saveData(); }
   updateClickBar(); renderClickGrid(); renderClickHistory();
   renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
+  // iOS PWA viewport fix — force layout recalculation on load
+  requestAnimationFrame(() => { window.scrollTo(0, 0); });
 }
 init();
 
