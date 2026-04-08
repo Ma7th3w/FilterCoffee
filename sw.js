@@ -1,4 +1,4 @@
-const CACHE_NAME = 'filtercoffee-v6';
+const CACHE_NAME = 'filtercoffee-v8';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
