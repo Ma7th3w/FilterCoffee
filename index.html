@@ -74,13 +74,20 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: 'DM Sans', -apple-system, sans-serif;
   background: var(--bg);
   color: var(--text);
-  min-height: 100dvh;
+  height: 100%;
   overflow-x: hidden;
+  overflow-y: auto;
   -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ─── Click Bar (Top Fixed) ─── */
@@ -598,6 +605,7 @@ body {
       <div class="input-group" style="flex:1;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:13px;"></div>
       <div class="input-group" style="flex:1;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:13px;"></div>
     </div>
+    <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
     <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
     <button class="btn btn-primary" onclick="saveBean()">저장</button>
   </div>
@@ -665,6 +673,10 @@ body {
     <div class="modal-header">
       <span class="modal-title">레시피 추가</span>
       <button class="modal-close" onclick="closeModal('addRecipeModal')">&times;</button>
+    </div>
+    <div class="input-group">
+      <label>내 원두 선택 (선택)</label>
+      <select id="addRecipeBeanSelect"><option value="">선택 안 함</option></select>
     </div>
     <div class="input-group">
       <label>클로드 레시피 붙여넣기</label>
@@ -738,6 +750,7 @@ body {
       <button class="modal-close" onclick="closeModal('addBrewModal')">&times;</button>
     </div>
     <div class="input-group"><label>레시피 선택</label><select id="brewRecipeSelect" onchange="onBrewRecipeSelect()"><option value="">직접 입력</option></select></div>
+    <div class="input-group"><label>내 원두 선택</label><select id="brewBeanSelect" onchange="onBrewBeanSelect()"><option value="">직접 입력</option></select></div>
     <div class="input-group"><label>원두명</label><input type="text" id="brewBean"></div>
     <div class="input-group"><label>로스터리</label><input type="text" id="brewRoastery" placeholder="예: 커넥츠커피" list="brewRoasteryList"><datalist id="brewRoasteryList"></datalist></div>
     <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="brewTypeToggle"><button class="toggle-opt active" onclick="setBrewType('핫')">핫</button><button class="toggle-opt" onclick="setBrewType('아이스')">아이스</button></div></div>
@@ -893,6 +906,7 @@ function openAddBeanModal(editId) {
   document.getElementById('beanWeight').value = b?.weight || '';
   document.getElementById('beanPurchaseDate').value = b?.purchaseDate || new Date().toISOString().split('T')[0];
   document.getElementById('beanRoastDate').value = b?.roastDate || '';
+  document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
   document.getElementById('beanMemo').value = b?.memo || '';
   updateRoasteryList();
   openModal('addBeanModal');
@@ -909,6 +923,7 @@ function saveBean() {
     weight: document.getElementById('beanWeight').value.trim(),
     purchaseDate: document.getElementById('beanPurchaseDate').value,
     roastDate: document.getElementById('beanRoastDate').value,
+    roastLevel: document.getElementById('beanRoastLevel').value,
     memo: document.getElementById('beanMemo').value.trim()
   };
   if (editingBeanId) {
@@ -957,12 +972,13 @@ function renderBeans() {
           <div style="font-size:16px;font-weight:700;">${b.name}</div>
           ${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${b.roastery}</div>` : ''}
         </div>
-        ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}</div>` : ''}
+        ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};;text-align:right;">${degassing.label}${degassing.done ? `<div style="font-size:11px;font-weight:500;color:var(--text-tertiary);">(D+${degassing.days})</div>` : ''}</div>` : ''}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
         ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
         ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
         ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
+        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
         ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
       </div>
     </div>`;
@@ -985,10 +1001,12 @@ function openBeanDetail(id) {
   document.getElementById('beanDetailTitle').textContent = b.name;
   const degassing = getDegassingInfo(b.roastDate);
   let html = '<div class="recipe-detail-section"><h3>원두 정보</h3>';
-  [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['중량', b.weight ? b.weight + 'g' : ''], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
+  [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
     if (v) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span></div>`;
   });
-  if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label} (${degassing.days}일차)</span></div>`;
+  // 잔량 행 (수기 수정 가능)
+  html += `<div class="recipe-detail-row"><span class="recipe-detail-label">잔량</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:8px;"><span id="beanWeightDisplay">${b.weight ? b.weight + 'g' : '미입력'}</span><button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;width:auto;" onclick="editBeanWeight()">수정</button></span></div>`;
+  if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? ' (D+' + degassing.days + ')' : ' (' + degassing.days + '일차)'}</span></div>`;
   if (b.memo) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">메모</span><span class="recipe-detail-value">${b.memo}</span></div>`;
   html += '</div>';
   // Show related brews
@@ -1020,6 +1038,18 @@ function toggleBeanFinished() {
 }
 
 function editBeanFromDetail() { closeModal('beanDetailModal'); openAddBeanModal(selectedBeanId); }
+
+function editBeanWeight() {
+  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
+  const newWeight = prompt('잔량을 입력하세요 (g)', b.weight || '0');
+  if (newWeight === null) return;
+  const parsed = parseFloat(newWeight);
+  if (isNaN(parsed) || parsed < 0) { alert('올바른 숫자를 입력해주세요.'); return; }
+  b.weight = parsed.toString();
+  saveData();
+  document.getElementById('beanWeightDisplay').textContent = b.weight + 'g';
+  renderBeans();
+}
 
 function deleteBean() {
   if (!confirm('이 원두를 삭제할까요?')) return;
@@ -1054,6 +1084,7 @@ function onEditBeanSelect() {
   document.getElementById('editOrigin').value = b.origin || '';
   document.getElementById('editVariety').value = b.variety || '';
   document.getElementById('editProcessing').value = b.processing || '';
+  if (b.roastLevel) document.getElementById('editRoasting').value = b.roastLevel;
 }
 
 // ─── Recipe Parser ───
@@ -1094,12 +1125,33 @@ function parseRecipeText(text) {
   return recipe;
 }
 
-function openAddRecipeModal() { document.getElementById('recipePasteArea').value = ''; openModal('addRecipeModal'); }
+function openAddRecipeModal() {
+  document.getElementById('recipePasteArea').value = '';
+  const beanSelect = document.getElementById('addRecipeBeanSelect');
+  const activeBeans = data.beans.filter(b => !b.finished);
+  beanSelect.innerHTML = '<option value="">선택 안 함</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
+  beanSelect.value = '';
+  openModal('addRecipeModal');
+}
 
 function parseAndSaveRecipe() {
   const text = document.getElementById('recipePasteArea').value.trim();
   if (!text) return;
   const recipe = parseRecipeText(text);
+  // 선택된 원두 정보로 비어있는 항목만 채우기
+  const beanId = document.getElementById('addRecipeBeanSelect').value;
+  if (beanId) {
+    const b = data.beans.find(x => x.id === beanId);
+    if (b) {
+      recipe.beanId = beanId;
+      if (!recipe.name && b.name) recipe.name = b.name;
+      if (!recipe.roastery && b.roastery) recipe.roastery = b.roastery;
+      if (!recipe.origin && b.origin) recipe.origin = b.origin;
+      if (!recipe.variety && b.variety) recipe.variety = b.variety;
+      if (!recipe.processing && b.processing) recipe.processing = b.processing;
+      if (!recipe.roasting && b.roastLevel) recipe.roasting = b.roastLevel;
+    }
+  }
   data.recipes.unshift(recipe); saveData(); closeModal('addRecipeModal');
   if (recipe.grind) { data.currentClicks = parseInt(recipe.grind); data.currentBean = recipe.name; updateClickBar(); renderClickGrid(); }
   const missing = getMissingFields(recipe);
@@ -1231,6 +1283,10 @@ function openAddBrewModal(recipeId) {
   brewTypeValue = '핫'; setBrewType('핫');
   const select = document.getElementById('brewRecipeSelect');
   select.innerHTML = '<option value="">직접 입력</option>' + data.recipes.map(r => `<option value="${r.id}">${r.name || r.origin || '이름 없음'}</option>`).join('');
+  const beanSelect = document.getElementById('brewBeanSelect');
+  const activeBeans = data.beans.filter(b => !b.finished);
+  beanSelect.innerHTML = '<option value="">직접 입력</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.weight ? ' (' + b.weight + 'g 남음)' : ''}${b.roastery ? ' - ' + b.roastery : ''}</option>`).join('');
+  beanSelect.value = '';
   document.getElementById('brewBean').value = '';
   document.getElementById('brewRoastery').value = '';
   document.getElementById('brewDripper').value = '';
@@ -1242,6 +1298,13 @@ function openAddBrewModal(recipeId) {
   updateRoasteryList();
   if (recipeId) { select.value = recipeId; onBrewRecipeSelect(); }
   openModal('addBrewModal');
+}
+
+function onBrewBeanSelect() {
+  const id = document.getElementById('brewBeanSelect').value; if (!id) return;
+  const b = data.beans.find(x => x.id === id); if (!b) return;
+  document.getElementById('brewBean').value = b.name || '';
+  document.getElementById('brewRoastery').value = b.roastery || '';
 }
 
 function brewFromRecipe() { closeModal('recipeDetailModal'); openAddBrewModal(selectedRecipeId); }
@@ -1268,9 +1331,21 @@ function saveBrew() {
   const bean = document.getElementById('brewBean').value.trim();
   if (!bean) { alert('원두명을 입력해주세요.'); return; }
   const recipeId = document.getElementById('brewRecipeSelect').value;
+  const beanId = document.getElementById('brewBeanSelect').value;
   const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
-  const brew = { id: Date.now().toString(), recipeId: recipeId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
+  const brew = { id: Date.now().toString(), recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
   data.brews.unshift(brew);
+  // 원두 잔량 차감
+  if (beanId && brew.dose) {
+    const beanObj = data.beans.find(b => b.id === beanId);
+    if (beanObj && beanObj.weight) {
+      const remaining = parseFloat(beanObj.weight) - parseFloat(brew.dose);
+      beanObj.weight = Math.max(0, remaining).toString();
+      if (remaining <= 0 && !beanObj.finished) {
+        if (confirm(`${beanObj.name} 원두가 다 소진되었어요. '다 마심'으로 변경할까요?`)) beanObj.finished = true;
+      }
+    }
+  }
   if (brew.clicks) { data.currentClicks = parseInt(brew.clicks); data.currentBean = brew.bean; data.clickHistory.unshift({ clicks: parseInt(brew.clicks), bean: brew.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
   saveData(); closeModal('addBrewModal'); renderBrews();
 }
@@ -1470,8 +1545,13 @@ function init() {
   if (!data.wishlist) { data.wishlist = []; saveData(); }
   updateClickBar(); renderClickGrid(); renderClickHistory();
   renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
-  // iOS PWA viewport fix — force layout recalculation on load
-  requestAnimationFrame(() => { window.scrollTo(0, 0); });
+  // iOS PWA viewport fix
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 1);
+      setTimeout(() => window.scrollTo(0, 0), 50);
+    });
+  });
 }
 init();
 
