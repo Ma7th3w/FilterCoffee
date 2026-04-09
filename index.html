@@ -984,7 +984,7 @@ function getDegassingInfo(roastDate) {
   const now = new Date();
   const diffDays = Math.floor((now - roast) / 86400000);
   const target = 14;
-  if (diffDays >= target) return { done: true, label: '디게싱 완료', days: diffDays };
+  if (diffDays >= target) return { done: true, label: '디게싱 완료', days: diffDays - target };
   return { done: false, label: `D-${target - diffDays}`, days: diffDays };
 }
 
