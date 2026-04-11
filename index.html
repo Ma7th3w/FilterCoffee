@@ -498,6 +498,7 @@ body {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" placeholder="검색..." id="brewSearch" oninput="renderBrews()">
     </div>
+    <div class="filter-bar" id="brewStarFilters" style="margin-bottom:4px;"></div>
     <div class="filter-bar" id="brewFilters"></div>
     <div id="brewList"></div>
   </div>
@@ -783,6 +784,10 @@ body {
       <button class="modal-close" onclick="closeModal('brewDetailModal')">&times;</button>
     </div>
     <div id="brewDetailContent"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn btn-secondary btn-sm" onclick="editBrewFromDetail()" style="flex:1;">편집</button>
+      <button class="btn btn-primary btn-sm" onclick="rebrewFromDetail()" style="flex:2;">같은 세팅으로 추출</button>
+    </div>
     <div class="delete-zone"><button class="btn btn-danger" onclick="deleteBrew()">삭제</button></div>
   </div>
 </div>
@@ -817,6 +822,7 @@ let data = loadData();
 let currentBrewRating = 0;
 let selectedRecipeId = null;
 let selectedBrewId = null;
+let editingBrewId = null;
 let selectedBeanId = null;
 let editingRecipeId = null;
 let editingBeanId = null;
@@ -824,6 +830,7 @@ let editMeloDripValue = '';
 let editBrewTypeValue = '핫';
 let brewTypeValue = '핫';
 let activeBrewFilter = 'all';
+let activeBrewStarFilter = 0;
 let activeRecipeFilter = 'all';
 let pickData = null;
 let pickSource = 'unspecialty';
@@ -966,13 +973,17 @@ function renderBeans() {
   });
   container.innerHTML = sorted.map(b => {
     const degassing = getDegassingInfo(b.roastDate);
+    const brewCount = data.brews.filter(br => br.beanId === b.id || br.bean === b.name).length;
     return `<div class="card" style="cursor:pointer;" onclick="openBeanDetail('${b.id}')">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div style="flex:1;">
           <div style="font-size:16px;font-weight:700;">${b.name}</div>
           ${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${b.roastery}</div>` : ''}
         </div>
-        ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};;text-align:right;">${degassing.label}${degassing.done ? `<div style="font-size:11px;font-weight:500;color:var(--text-tertiary);">(D+${degassing.days})</div>` : ''}</div>` : ''}
+        <div style="text-align:right;">
+          ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? `<div style="font-size:11px;font-weight:500;color:var(--text-tertiary);">(D+${degassing.days})</div>` : ''}</div>` : ''}
+          ${brewCount > 0 ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${brewCount}회 추출</div>` : ''}
+        </div>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
         ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
@@ -1061,7 +1072,11 @@ function createRecipeFromBean() {
   const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
   closeModal('beanDetailModal');
   openAddRecipeModal();
-  // Pre-fill info will happen through bean select in edit modal
+  // 원두 셀렉트 자동 선택
+  const beanSelect = document.getElementById('addRecipeBeanSelect');
+  if (beanSelect) {
+    beanSelect.value = selectedBeanId;
+  }
 }
 
 // ─── Helper: Roastery autocomplete ───
@@ -1284,6 +1299,7 @@ function deleteRecipe() { if (!confirm('이 레시피를 삭제할까요?')) ret
 
 // ─── Brew Log ───
 function openAddBrewModal(recipeId) {
+  editingBrewId = null;
   currentBrewRating = 0; renderBrewStars();
   brewTypeValue = '핫'; setBrewType('핫');
   const select = document.getElementById('brewRecipeSelect');
@@ -1381,20 +1397,45 @@ function saveBrew() {
   const recipeId = document.getElementById('brewRecipeSelect').value;
   const beanId = document.getElementById('brewBeanSelect').value;
   const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
-  const brew = { id: Date.now().toString(), recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
-  data.brews.unshift(brew);
-  // 원두 잔량 차감
-  if (beanId && brew.dose) {
-    const beanObj = data.beans.find(b => b.id === beanId);
-    if (beanObj && beanObj.weight) {
-      const remaining = parseFloat(beanObj.weight) - parseFloat(brew.dose);
-      beanObj.weight = Math.max(0, remaining).toString();
-      if (remaining <= 0 && !beanObj.finished) {
-        if (confirm(`${beanObj.name} 원두가 다 소진되었어요. '다 마심'으로 변경할까요?`)) beanObj.finished = true;
+  const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
+
+  if (editingBrewId) {
+    // 편집 모드: 기존 기록 업데이트
+    const existing = data.brews.find(b => b.id === editingBrewId);
+    if (existing) {
+      // 원두 잔량 조정: 이전 도즈 복원 후 새 도즈 차감
+      if (existing.beanId && existing.dose) {
+        const oldBean = data.beans.find(b => b.id === existing.beanId);
+        if (oldBean) oldBean.weight = ((parseFloat(oldBean.weight) || 0) + parseFloat(existing.dose)).toString();
+      }
+      Object.assign(existing, brewData);
+      // 새 도즈 차감
+      if (beanId && brewData.dose) {
+        const beanObj = data.beans.find(b => b.id === beanId);
+        if (beanObj && beanObj.weight) {
+          const remaining = parseFloat(beanObj.weight) - parseFloat(brewData.dose);
+          beanObj.weight = Math.max(0, remaining).toString();
+        }
       }
     }
+    editingBrewId = null;
+  } else {
+    // 신규 추가
+    const brew = { id: Date.now().toString(), ...brewData };
+    data.brews.unshift(brew);
+    // 원두 잔량 차감
+    if (beanId && brew.dose) {
+      const beanObj = data.beans.find(b => b.id === beanId);
+      if (beanObj && beanObj.weight) {
+        const remaining = parseFloat(beanObj.weight) - parseFloat(brew.dose);
+        beanObj.weight = Math.max(0, remaining).toString();
+        if (remaining <= 0 && !beanObj.finished) {
+          if (confirm(`${beanObj.name} 원두가 다 소진되었어요. '다 마심'으로 변경할까요?`)) beanObj.finished = true;
+        }
+      }
+    }
+    if (brewData.clicks) { data.currentClicks = parseInt(brewData.clicks); data.currentBean = brewData.bean; data.clickHistory.unshift({ clicks: parseInt(brewData.clicks), bean: brewData.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
   }
-  if (brew.clicks) { data.currentClicks = parseInt(brew.clicks); data.currentBean = brew.bean; data.clickHistory.unshift({ clicks: parseInt(brew.clicks), bean: brew.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
   saveData(); closeModal('addBrewModal'); renderBrews(); renderBeans();
 }
 
@@ -1404,9 +1445,14 @@ function renderBrews() {
   const search = (document.getElementById('brewSearch')?.value || '').toLowerCase();
   let filtered = data.brews.filter(b => {
     const sm = !search || [b.bean, b.dripper, b.origin, b.note, b.roastery].some(f => (f || '').toLowerCase().includes(search));
-    if (activeBrewFilter === 'all') return sm;
-    return sm && (b.dripper || '').includes(activeBrewFilter);
+    if (!sm) return false;
+    if (activeBrewFilter !== 'all' && !(b.dripper || '').includes(activeBrewFilter)) return false;
+    if (activeBrewStarFilter > 0 && (b.rating || 0) < activeBrewStarFilter) return false;
+    return true;
   });
+  // 별점 필터
+  const starFilters = document.getElementById('brewStarFilters');
+  starFilters.innerHTML = `<button class="filter-chip ${activeBrewStarFilter === 0 ? 'active' : ''}" onclick="activeBrewStarFilter=0;renderBrews()">전체</button><button class="filter-chip ${activeBrewStarFilter === 4 ? 'active' : ''}" onclick="activeBrewStarFilter=4;renderBrews()">★4+</button><button class="filter-chip ${activeBrewStarFilter === 5 ? 'active' : ''}" onclick="activeBrewStarFilter=5;renderBrews()">★5</button>`;
   const filters = document.getElementById('brewFilters');
   const drippers = [...new Set(data.brews.map(b => b.dripper).filter(Boolean))];
   filters.innerHTML = `<button class="filter-chip ${activeBrewFilter === 'all' ? 'active' : ''}" onclick="activeBrewFilter='all';renderBrews()">전체</button>${drippers.map(d => `<button class="filter-chip ${activeBrewFilter === d ? 'active' : ''}" onclick="activeBrewFilter='${d}';renderBrews()">${d}</button>`).join('')}`;
@@ -1431,7 +1477,82 @@ function openBrewDetail(id) {
   openModal('brewDetailModal');
 }
 
-function deleteBrew() { if (!confirm('이 추출 기록을 삭제할까요?')) return; data.brews = data.brews.filter(b => b.id !== selectedBrewId); saveData(); closeModal('brewDetailModal'); renderBrews(); }
+function deleteBrew() {
+  if (!confirm('이 추출 기록을 삭제할까요?')) return;
+  const brew = data.brews.find(b => b.id === selectedBrewId);
+  if (brew && brew.beanId && brew.dose) {
+    const bean = data.beans.find(b => b.id === brew.beanId);
+    if (bean) {
+      const restored = (parseFloat(bean.weight) || 0) + parseFloat(brew.dose);
+      bean.weight = restored.toString();
+      if (bean.finished && restored > 0) bean.finished = false;
+    }
+  }
+  data.brews = data.brews.filter(b => b.id !== selectedBrewId);
+  saveData(); closeModal('brewDetailModal'); renderBrews(); renderBeans();
+}
+
+function editBrewFromDetail() {
+  const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
+  closeModal('brewDetailModal');
+  openAddBrewModal();
+  // 기존 값 채우기
+  document.getElementById('brewRecipeSelect').value = b.recipeId || '';
+  const beanSelect = document.getElementById('brewBeanSelect');
+  if (b.beanId) { beanSelect.value = b.beanId; updateBrewBeanInfo(); }
+  document.getElementById('brewBean').value = b.bean || '';
+  document.getElementById('brewRoastery').value = b.roastery || '';
+  if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
+  document.getElementById('brewDripper').value = b.dripper || '';
+  document.getElementById('brewClicks').value = b.clicks || '';
+  document.getElementById('brewTemp').value = b.temp || '';
+  document.getElementById('brewTime').value = b.time || '';
+  document.getElementById('brewDose').value = b.dose || '';
+  document.getElementById('brewWater').value = b.water || '';
+  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+  document.getElementById('brewDate').value = b.date || '';
+  document.getElementById('brewNote').value = b.note || '';
+  document.getElementById('brewAdjust').value = b.adjust || '';
+  currentBrewRating = b.rating || 0; renderBrewStars();
+  updateBrewBeanInfo();
+  // 편집 모드 표시 — 저장 시 기존 기록 교체
+  editingBrewId = selectedBrewId;
+}
+
+function rebrewFromDetail() {
+  const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
+  closeModal('brewDetailModal');
+  openAddBrewModal(b.recipeId || null);
+  // 기존 세팅 복사 (날짜/메모/별점은 새로)
+  if (b.beanId) {
+    document.getElementById('brewBeanSelect').value = b.beanId;
+    onBrewBeanSelect();
+  }
+  document.getElementById('brewBean').value = b.bean || '';
+  document.getElementById('brewRoastery').value = b.roastery || '';
+  if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
+  document.getElementById('brewDripper').value = b.dripper || '';
+  document.getElementById('brewClicks').value = b.clicks || '';
+  document.getElementById('brewTemp').value = b.temp || '';
+  document.getElementById('brewDose').value = b.dose || '';
+  document.getElementById('brewWater').value = b.water || '';
+  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+}
+
+// ─── Helper: brew의 roastery를 레시피/원두에서 가져오기 ───
+function getBrewRoastery(b) {
+  if (b.roastery) return b.roastery;
+  if (b.recipeId) { const r = data.recipes.find(x => x.id === b.recipeId); if (r?.roastery) return r.roastery; }
+  if (b.beanId) { const bn = data.beans.find(x => x.id === b.beanId); if (bn?.roastery) return bn.roastery; }
+  // 원두명으로 매칭 시도
+  if (b.bean) {
+    const matchBean = data.beans.find(x => x.name === b.bean);
+    if (matchBean?.roastery) return matchBean.roastery;
+    const matchRecipe = data.recipes.find(x => x.name === b.bean);
+    if (matchRecipe?.roastery) return matchRecipe.roastery;
+  }
+  return '';
+}
 
 // ─── Stats ───
 function renderStats() {
@@ -1441,14 +1562,51 @@ function renderStats() {
   const c = document.getElementById('statsContent');
   if (!data.brews.length) { c.innerHTML = '<div class="empty-state"><p>추출 기록이 없어 통계를 표시할 수 없습니다</p></div>'; return; }
   const total = filtered.length, rated = filtered.filter(b => b.rating), avg = rated.length ? (rated.reduce((s, b) => s + b.rating, 0) / rated.length).toFixed(1) : '-';
+  // 베스트 추출
+  const best = rated.length ? rated.reduce((a, b) => (b.rating > a.rating || (b.rating === a.rating && b.date > a.date)) ? b : a) : null;
   let html = `<div class="stat-grid"><div class="stat-card"><div class="stat-number">${total}</div><div class="stat-label">총 추출</div></div><div class="stat-card"><div class="stat-number">${avg}</div><div class="stat-label">평균 별점</div></div></div>`;
+  if (best) {
+    html += `<div class="card" style="cursor:pointer;" onclick="openBrewDetail('${best.id}')"><h3 style="font-size:14px;font-weight:600;margin-bottom:8px;">⭐ 베스트 추출</h3><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;">${best.bean}</div><div style="font-size:13px;color:var(--text-secondary);margin-top:2px;">${[best.dripper, best.clicks ? best.clicks + 'C' : '', best.temp ? best.temp + '°C' : ''].filter(Boolean).join(' · ')}</div></div><div style="color:var(--star);font-size:18px;">${'★'.repeat(best.rating)}</div></div>${best.note ? `<div style="font-size:13px;color:var(--text-tertiary);margin-top:6px;font-style:italic;">${best.note.length > 80 ? best.note.substring(0, 80) + '...' : best.note}</div>` : ''}</div>`;
+  }
   if (month === 'all') { html += '<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">월별 추출</h3>'; const mo = Array(12).fill(0); filtered.forEach(b => mo[new Date(b.date).getMonth()]++); const mx = Math.max(...mo, 1); for (let i = 0; i < 12; i++) html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${i + 1}월</span><span>${mo[i]}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(mo[i] / mx) * 100}%"></div></div></div>`; html += '</div>'; }
-  html += renderStatCategory(filtered, 'roastery', '로스터리별') + renderStatCategory(filtered, 'origin', '산지별') + renderStatCategory(filtered, 'processing', '프로세싱별') + renderStatCategory(filtered, 'dripper', '드리퍼별');
+  // roastery는 fallback 사용, origin/processing은 정규화
+  html += renderStatCategory(filtered, 'roastery', '로스터리별', { fallback: true }) + renderStatCategory(filtered, 'origin', '산지별', { normalize: 'origin' }) + renderStatCategory(filtered, 'processing', '프로세싱별', { normalize: 'processing' }) + renderStatCategory(filtered, 'dripper', '드리퍼별');
   c.innerHTML = html;
 }
 
-function renderStatCategory(brews, field, title) {
-  const counts = {}; brews.forEach(b => { const v = b[field]; if (v) counts[v] = (counts[v] || 0) + 1; });
+// ─── 통계 정규화 ───
+const PROCESSING_MAP = {
+  '네츄럴': '내추럴', '네추럴': '내추럴', 'natural': '내추럴', 'Natural': '내추럴',
+  '워싯': '워시드', '워쉬드': '워시드', 'washed': '워시드', 'Washed': '워시드',
+  '허니': '허니', 'honey': '허니', 'Honey': '허니',
+  '펄프드내추럴': '펄프드 내추럴', '펄프드 네츄럴': '펄프드 내추럴', '펄프드 네추럴': '펄프드 내추럴',
+  '애나로빅': '애나로빅', '에나로빅': '애나로빅', '안에어로빅': '애나로빅', 'anaerobic': '애나로빅',
+  '애나로빅 내추럴': '애나로빅 내추럴', '애나로빅 네츄럴': '애나로빅 내추럴', '애나로빅 네추럴': '애나로빅 내추럴',
+  '애나로빅 워시드': '애나로빅 워시드', '애나로빅 워싯': '애나로빅 워시드',
+};
+
+function normalizeProcessing(val) {
+  if (!val) return '';
+  const trimmed = val.trim();
+  return PROCESSING_MAP[trimmed] || trimmed;
+}
+
+function normalizeOrigin(val) {
+  if (!val) return '';
+  // 첫 단어(국가명)만 추출
+  return val.trim().split(/\s+/)[0];
+}
+
+function renderStatCategory(brews, field, title, opts) {
+  opts = opts || {};
+  const counts = {};
+  brews.forEach(b => {
+    let v = opts.fallback && field === 'roastery' ? getBrewRoastery(b) : b[field];
+    if (!v) return;
+    if (opts.normalize === 'origin') v = normalizeOrigin(v);
+    else if (opts.normalize === 'processing') v = normalizeProcessing(v);
+    counts[v] = (counts[v] || 0) + 1;
+  });
   const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]); if (!entries.length) return '';
   const max = entries[0][1]; let html = `<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">${title}</h3>`;
   entries.forEach(([n, c]) => html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${n}</span><span>${c}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(c / max) * 100}%"></div></div></div>`);
