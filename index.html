@@ -13,104 +13,104 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #faf8f5;
-  --bg-card: #ffffff;
-  --bg-card-alt: #f5f1ec;
-  --bg-input: #f0ece6;
-  --text: #1a1a1a;
-  --text-secondary: #6b6560;
-  --text-tertiary: #9e9890;
-  --accent: #c45e3a;
-  --accent-light: #f0d8cc;
-  --accent-dark: #a04828;
-  --border: #e8e2da;
-  --border-light: #f0ece6;
-  --shadow: rgba(0,0,0,0.06);
-  --shadow-md: rgba(0,0,0,0.1);
-  --star: #e8a838;
-  --success: #4a9e6a;
-  --danger: #c45050;
-  --warning: #e8a838;
-  --tab-bg: rgba(255,255,255,0.85);
-  --click-btn: #e8e2da;
-  --click-btn-active: #c45e3a;
-  --click-btn-text: #1a1a1a;
-  --click-btn-active-text: #ffffff;
-  --modal-overlay: rgba(0,0,0,0.4);
-  --tag-bg: #f0ece6;
-  --tag-text: #6b6560;
-  --chart-bar: #c45e3a;
-  --chart-bar-light: #f0d8cc;
+ --bg: #faf8f5;
+ --bg-card: #ffffff;
+ --bg-card-alt: #f5f1ec;
+ --bg-input: #f0ece6;
+ --text: #1a1a1a;
+ --text-secondary: #6b6560;
+ --text-tertiary: #9e9890;
+ --accent: #c45e3a;
+ --accent-light: #f0d8cc;
+ --accent-dark: #a04828;
+ --border: #e8e2da;
+ --border-light: #f0ece6;
+ --shadow: rgba(0,0,0,0.06);
+ --shadow-md: rgba(0,0,0,0.1);
+ --star: #e8a838;
+ --success: #4a9e6a;
+ --danger: #c45050;
+ --warning: #e8a838;
+ --tab-bg: rgba(255,255,255,0.85);
+ --click-btn: #e8e2da;
+ --click-btn-active: #c45e3a;
+ --click-btn-text: #1a1a1a;
+ --click-btn-active-text: #ffffff;
+ --modal-overlay: rgba(0,0,0,0.4);
+ --tag-bg: #f0ece6;
+ --tag-text: #6b6560;
+ --chart-bar: #c45e3a;
+ --chart-bar-light: #f0d8cc;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #121210;
-    --bg-card: #1e1e1c;
-    --bg-card-alt: #2a2a27;
-    --bg-input: #2a2a27;
-    --text: #ede8e2;
-    --text-secondary: #a09a92;
-    --text-tertiary: #706a62;
-    --accent: #d4714e;
-    --accent-light: #3d2820;
-    --accent-dark: #e8845e;
-    --border: #333330;
-    --border-light: #2a2a27;
-    --shadow: rgba(0,0,0,0.2);
-    --shadow-md: rgba(0,0,0,0.3);
-    --tab-bg: rgba(30,30,28,0.9);
-    --click-btn: #2a2a27;
-    --click-btn-active: #d4714e;
-    --click-btn-text: #ede8e2;
-    --click-btn-active-text: #ffffff;
-    --modal-overlay: rgba(0,0,0,0.6);
-    --tag-bg: #2a2a27;
-    --tag-text: #a09a92;
-    --chart-bar: #d4714e;
-    --chart-bar-light: #3d2820;
-  }
+ :root {
+   --bg: #121210;
+   --bg-card: #1e1e1c;
+   --bg-card-alt: #2a2a27;
+   --bg-input: #2a2a27;
+   --text: #ede8e2;
+   --text-secondary: #a09a92;
+   --text-tertiary: #706a62;
+   --accent: #d4714e;
+   --accent-light: #3d2820;
+   --accent-dark: #e8845e;
+   --border: #333330;
+   --border-light: #2a2a27;
+   --shadow: rgba(0,0,0,0.2);
+   --shadow-md: rgba(0,0,0,0.3);
+   --tab-bg: rgba(30,30,28,0.9);
+   --click-btn: #2a2a27;
+   --click-btn-active: #d4714e;
+   --click-btn-text: #ede8e2;
+   --click-btn-active-text: #ffffff;
+   --modal-overlay: rgba(0,0,0,0.6);
+   --tag-bg: #2a2a27;
+   --tag-text: #a09a92;
+   --chart-bar: #d4714e;
+   --chart-bar-light: #3d2820;
+ }
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: 'DM Sans', -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100dvh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+ font-family: 'DM Sans', -apple-system, sans-serif;
+ background: var(--bg);
+ color: var(--text);
+ min-height: 100dvh;
+ overflow-x: hidden;
+ -webkit-font-smoothing: antialiased;
 }
 
 /* ─── Click Bar (Top Fixed) ─── */
 .click-bar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
-  padding: env(safe-area-inset-top, 12px) 20px 12px;
-  display: flex; align-items: center; justify-content: space-between;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+ position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+ background: var(--bg-card);
+ border-bottom: 1px solid var(--border);
+ padding: env(safe-area-inset-top, 12px) 20px 12px;
+ display: flex; align-items: center; justify-content: space-between;
+ backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
 }
 .click-bar-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
 .click-bar-value { font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 500; color: var(--accent); line-height: 1; }
 .click-bar-unit { font-size: 14px; color: var(--text-tertiary); margin-left: 4px; }
 .click-bar-right { text-align: right; }
 .click-bar-settings {
-  width: 36px; height: 36px; border-radius: 50%; border: none;
-  background: var(--bg-input); color: var(--text-secondary);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.2s;
+ width: 36px; height: 36px; border-radius: 50%; border: none;
+ background: var(--bg-input); color: var(--text-secondary);
+ display: flex; align-items: center; justify-content: center;
+ cursor: pointer; transition: all 0.2s;
 }
 .click-bar-settings:active { background: var(--border); transform: scale(0.92); }
 .click-bar-settings svg { width: 20px; height: 20px; }
 
 /* ─── Main Content ─── */
 .app-content {
-  padding-top: calc(env(safe-area-inset-top, 12px) + 76px);
-  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 4px);
-  min-height: 100dvh;
+ padding-top: calc(env(safe-area-inset-top, 12px) + 76px);
+ padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 4px);
+ min-height: 100dvh;
 }
 
 .page { display: none; padding: 16px 20px; animation: fadeIn 0.2s ease; }
@@ -119,19 +119,19 @@ body {
 
 /* ─── Tab Bar ─── */
 .tab-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: var(--tab-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  display: flex;
-  padding: 6px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
+ position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+ background: var(--tab-bg);
+ backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
+ border-top: 1px solid var(--border);
+ display: flex;
+ padding: 6px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
 }
 .tab {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 6px 0; border: none; background: none; color: var(--text-tertiary);
-  font-size: 10px; font-family: 'DM Sans', sans-serif; font-weight: 500;
-  cursor: pointer; transition: color 0.2s;
+ flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+ padding: 6px 0; border: none; background: none; color: var(--text-tertiary);
+ font-size: 10px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+ cursor: pointer; transition: color 0.2s;
 }
 .tab.active { color: var(--accent); }
 .tab svg { width: 22px; height: 22px; }
@@ -141,20 +141,20 @@ body {
 .section-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; }
 
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  transition: box-shadow 0.2s;
+ background: var(--bg-card);
+ border: 1px solid var(--border);
+ border-radius: 16px;
+ padding: 16px;
+ margin-bottom: 12px;
+ transition: box-shadow 0.2s;
 }
 .card:active { box-shadow: 0 2px 12px var(--shadow-md); }
 
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 24px; border-radius: 12px; border: none;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-  cursor: pointer; transition: all 0.2s; width: 100%;
+ display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+ padding: 12px 24px; border-radius: 12px; border: none;
+ font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+ cursor: pointer; transition: all 0.2s; width: 100%;
 }
 .btn-primary { background: var(--accent); color: #fff; }
 .btn-primary:active { background: var(--accent-dark); transform: scale(0.98); }
@@ -167,16 +167,16 @@ body {
 .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
 .input-group label .required { color: var(--accent); margin-left: 2px; }
 .input-group input, .input-group select, .input-group textarea {
-  width: 100%; padding: 12px 14px; border-radius: 12px;
-  border: 1px solid var(--border); background: var(--bg-input);
-  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text);
-  outline: none; transition: border-color 0.2s;
+ width: 100%; padding: 12px 14px; border-radius: 12px;
+ border: 1px solid var(--border); background: var(--bg-input);
+ font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text);
+ outline: none; transition: border-color 0.2s;
 }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--accent); }
 .input-group textarea { resize: vertical; min-height: 80px; }
 .input-group.missing input, .input-group.missing select, .input-group.missing textarea {
-  border-color: var(--warning);
-  background: rgba(232,168,56,0.08);
+ border-color: var(--warning);
+ background: rgba(232,168,56,0.08);
 }
 .input-group .field-hint { font-size: 11px; color: var(--warning); margin-top: 4px; display: none; }
 .input-group.missing .field-hint { display: block; }
@@ -189,42 +189,42 @@ body {
 
 /* ─── Missing fields banner ─── */
 .missing-banner {
-  background: rgba(232,168,56,0.12);
-  border: 1px solid rgba(232,168,56,0.3);
-  border-radius: 12px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: var(--warning);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+ background: rgba(232,168,56,0.12);
+ border: 1px solid rgba(232,168,56,0.3);
+ border-radius: 12px;
+ padding: 12px 14px;
+ margin-bottom: 16px;
+ font-size: 13px;
+ color: var(--warning);
+ display: flex;
+ align-items: center;
+ gap: 8px;
 }
 .missing-banner svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* ─── Click Buttons ─── */
 .click-grid {
-  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 20px 0;
+ display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 20px 0;
 }
 .click-btn {
-  width: 64px; height: 64px; border-radius: 16px; border: 2px solid var(--border);
-  background: var(--click-btn); color: var(--click-btn-text);
-  font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.2s;
+ width: 64px; height: 64px; border-radius: 16px; border: 2px solid var(--border);
+ background: var(--click-btn); color: var(--click-btn-text);
+ font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
+ display: flex; align-items: center; justify-content: center;
+ cursor: pointer; transition: all 0.2s;
 }
 .click-btn.active {
-  background: var(--click-btn-active); color: var(--click-btn-active-text);
-  border-color: var(--click-btn-active); transform: scale(1.08);
-  box-shadow: 0 4px 16px rgba(196,94,58,0.3);
+ background: var(--click-btn-active); color: var(--click-btn-active-text);
+ border-color: var(--click-btn-active); transform: scale(1.08);
+ box-shadow: 0 4px 16px rgba(196,94,58,0.3);
 }
 .click-btn:active { transform: scale(0.95); }
 
 .click-history { margin-top: 24px; }
 .click-history-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 0; border-bottom: 1px solid var(--border-light);
-  font-size: 14px;
+ display: flex; justify-content: space-between; align-items: center;
+ padding: 12px 0; border-bottom: 1px solid var(--border-light);
+ font-size: 14px;
 }
 .click-history-item:last-child { border-bottom: none; }
 .click-history-clicks { font-family: 'DM Mono', monospace; font-weight: 600; font-size: 18px; color: var(--accent); }
@@ -238,8 +238,8 @@ body {
 .recipe-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
 .recipe-card-meta { font-size: 13px; color: var(--text-tertiary); margin-top: 8px; }
 .recipe-card-missing {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 11px; color: var(--warning); margin-top: 6px;
+ display: inline-flex; align-items: center; gap: 4px;
+ font-size: 11px; color: var(--warning); margin-top: 6px;
 }
 .recipe-card-missing svg { width: 12px; height: 12px; }
 
@@ -255,8 +255,8 @@ body {
 /* ─── Stars ─── */
 .star-rating { display: flex; gap: 6px; }
 .star-rating span {
-  font-size: 28px; cursor: pointer; color: var(--border);
-  transition: color 0.15s, transform 0.15s;
+ font-size: 28px; cursor: pointer; color: var(--border);
+ transition: color 0.15s, transform 0.15s;
 }
 .star-rating span.filled { color: var(--star); }
 .star-rating span:active { transform: scale(1.2); }
@@ -274,67 +274,67 @@ body {
 
 .year-month-selector { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; }
 .year-month-selector select {
-  padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border);
-  background: var(--bg-input); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+ padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border);
+ background: var(--bg-input); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
 }
 
 /* ─── Modal ─── */
 .modal-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: var(--modal-overlay);
-  align-items: flex-end; justify-content: center;
-  animation: fadeOverlay 0.2s ease;
+ display: none; position: fixed; inset: 0; z-index: 200;
+ background: var(--modal-overlay);
+ align-items: flex-end; justify-content: center;
+ animation: fadeOverlay 0.2s ease;
 }
 .modal-overlay.active { display: flex; }
 @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
 
 .modal {
-  background: var(--bg-card);
-  border-radius: 20px 20px 0 0;
-  width: 100%; max-width: 500px;
-  max-height: 90dvh; overflow-y: auto;
-  padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
-  animation: slideUp 0.3s ease;
+ background: var(--bg-card);
+ border-radius: 20px 20px 0 0;
+ width: 100%; max-width: 500px;
+ max-height: 90dvh; overflow-y: auto;
+ padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+ animation: slideUp 0.3s ease;
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .modal-title { font-size: 20px; font-weight: 700; }
 .modal-close {
-  width: 32px; height: 32px; border-radius: 50%; border: none;
-  background: var(--bg-input); color: var(--text-secondary);
-  font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+ width: 32px; height: 32px; border-radius: 50%; border: none;
+ background: var(--bg-input); color: var(--text-secondary);
+ font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 
 /* ─── Filter Bar ─── */
 .filter-bar {
-  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px;
-  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px;
+ -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 .filter-bar::-webkit-scrollbar { display: none; }
 .filter-chip {
-  flex-shrink: 0; padding: 8px 14px; border-radius: 10px;
-  border: 1px solid var(--border); background: var(--bg-card);
-  font-size: 13px; font-weight: 500; color: var(--text-secondary);
-  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+ flex-shrink: 0; padding: 8px 14px; border-radius: 10px;
+ border: 1px solid var(--border); background: var(--bg-card);
+ font-size: 13px; font-weight: 500; color: var(--text-secondary);
+ cursor: pointer; transition: all 0.2s; white-space: nowrap;
 }
 .filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* ─── Search ─── */
 .search-bar { position: relative; margin-bottom: 16px; }
 .search-bar input {
-  width: 100%; padding: 12px 14px 12px 40px; border-radius: 12px;
-  border: 1px solid var(--border); background: var(--bg-input);
-  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); outline: none;
+ width: 100%; padding: 12px 14px 12px 40px; border-radius: 12px;
+ border: 1px solid var(--border); background: var(--bg-input);
+ font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); outline: none;
 }
 .search-bar svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--text-tertiary); }
 
 /* ─── Textarea for paste ─── */
 .paste-area {
-  width: 100%; min-height: 120px; padding: 14px; border-radius: 12px;
-  border: 2px dashed var(--border); background: var(--bg-input);
-  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text);
-  outline: none; resize: vertical; transition: border-color 0.2s;
+ width: 100%; min-height: 120px; padding: 14px; border-radius: 12px;
+ border: 2px dashed var(--border); background: var(--bg-input);
+ font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text);
+ outline: none; resize: vertical; transition: border-color 0.2s;
 }
 .paste-area:focus { border-color: var(--accent); }
 .paste-area::placeholder { color: var(--text-tertiary); }
@@ -376,33 +376,33 @@ body {
 
 /* ─── Monthly Pick ─── */
 .pick-month-selector {
-  display: flex; gap: 8px; margin-bottom: 16px; align-items: center;
+ display: flex; gap: 8px; margin-bottom: 16px; align-items: center;
 }
 .pick-month-selector select {
-  padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border);
-  background: var(--bg-input); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+ padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border);
+ background: var(--bg-input); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
 }
 .pick-source-tabs {
-  display: flex; gap: 0; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+ display: flex; gap: 0; margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
 }
 .pick-source-tab {
-  flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600;
-  background: var(--bg-input); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s;
+ flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600;
+ background: var(--bg-input); color: var(--text-secondary); border: none; cursor: pointer; transition: all 0.2s;
 }
 .pick-source-tab.active { background: var(--accent); color: #fff; }
 .pick-category-tabs {
-  display: flex; gap: 8px; margin-bottom: 12px;
+ display: flex; gap: 8px; margin-bottom: 12px;
 }
 .pick-category-tab {
-  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
-  background: var(--bg-card); font-size: 12px; font-weight: 500;
-  color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+ padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+ background: var(--bg-card); font-size: 12px; font-weight: 500;
+ color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
 }
 .pick-category-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .pick-bean-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 14px 16px; margin-bottom: 10px; transition: box-shadow 0.2s;
-  position: relative;
+ background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+ padding: 14px 16px; margin-bottom: 10px; transition: box-shadow 0.2s;
+ position: relative;
 }
 .pick-bean-card.soldout { opacity: 0.5; }
 .pick-bean-card.wishlisted { border-color: var(--accent); }
@@ -413,25 +413,25 @@ body {
 .pick-bean-price .sale { color: var(--accent); }
 .pick-bean-meta { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
 .pick-bean-status {
-  display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-top: 6px;
+ display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; margin-top: 6px;
 }
 .pick-bean-status.soldout { background: var(--danger); color: #fff; }
 .pick-bean-status.almost { background: var(--warning); color: #fff; }
 .pick-bean-wish {
-  position: absolute; top: 14px; right: 14px;
-  width: 32px; height: 32px; border-radius: 50%; border: none;
-  background: var(--bg-input); color: var(--text-tertiary);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 16px; transition: all 0.2s;
+ position: absolute; top: 14px; right: 14px;
+ width: 32px; height: 32px; border-radius: 50%; border: none;
+ background: var(--bg-input); color: var(--text-tertiary);
+ display: flex; align-items: center; justify-content: center;
+ cursor: pointer; font-size: 16px; transition: all 0.2s;
 }
 .pick-bean-wish.active { background: var(--accent); color: #fff; }
 .pick-bean-wish:active { transform: scale(0.9); }
 .pick-bean-open { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 4px; }
 .pick-buy-link {
-  display: inline-flex; align-items: center; gap: 4px;
-  margin-top: 8px; padding: 6px 12px; border-radius: 8px;
-  background: var(--accent); color: #fff; font-size: 12px; font-weight: 600;
-  text-decoration: none; transition: all 0.2s;
+ display: inline-flex; align-items: center; gap: 4px;
+ margin-top: 8px; padding: 6px 12px; border-radius: 8px;
+ background: var(--accent); color: #fff; font-size: 12px; font-weight: 600;
+ text-decoration: none; transition: all 0.2s;
 }
 .pick-buy-link:active { opacity: 0.8; }
 .pick-loading { text-align: center; padding: 40px 20px; color: var(--text-tertiary); font-size: 14px; }
@@ -442,377 +442,377 @@ body {
 
 <!-- ─── Click Bar ─── -->
 <div class="click-bar">
-  <div style="cursor:pointer;" onclick="openModal('clickModal')">
-    <div class="click-bar-label">C60 Clicks</div>
-    <div><span class="click-bar-value" id="currentClickDisplay">--</span><span class="click-bar-unit">clicks</span></div>
-  </div>
-  <div class="click-bar-right">
-    <button class="click-bar-settings" onclick="openModal('settingsModal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </button>
-  </div>
+ <div style="cursor:pointer;" onclick="openModal('clickModal')">
+   <div class="click-bar-label">C60 Clicks</div>
+   <div><span class="click-bar-value" id="currentClickDisplay">--</span><span class="click-bar-unit">clicks</span></div>
+ </div>
+ <div class="click-bar-right">
+   <button class="click-bar-settings" onclick="openModal('settingsModal')">
+     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+   </button>
+ </div>
 </div>
 
 <!-- ─── App Content ─── -->
 <div class="app-content">
 
-  <!-- Tab: Beans (My Beans) -->
-  <div class="page active" id="page-beans">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h1 class="section-title" style="margin-bottom:0;">내 원두</h1>
-      <button class="btn btn-primary btn-sm" onclick="openAddBeanModal()">+ 등록</button>
-    </div>
-    <div class="pick-source-tabs" id="beanFilterTabs">
-      <button class="pick-source-tab active" onclick="beanFilter='active';renderBeans()">남은 원두</button>
-      <button class="pick-source-tab" onclick="beanFilter='finished';renderBeans()">다 마신 원두</button>
-    </div>
-    <div id="beanList"></div>
-  </div>
+ <!-- Tab: Beans (My Beans) -->
+ <div class="page active" id="page-beans">
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+     <h1 class="section-title" style="margin-bottom:0;">내 원두</h1>
+     <button class="btn btn-primary btn-sm" onclick="openAddBeanModal()">+ 등록</button>
+   </div>
+   <div class="pick-source-tabs" id="beanFilterTabs">
+     <button class="pick-source-tab active" onclick="beanFilter='active';renderBeans()">남은 원두</button>
+     <button class="pick-source-tab" onclick="beanFilter='finished';renderBeans()">다 마신 원두</button>
+   </div>
+   <div id="beanList"></div>
+ </div>
 
-  <!-- Tab: Recipes -->
-  <div class="page" id="page-recipes">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h1 class="section-title" style="margin-bottom:0;">레시피</h1>
-      <button class="btn btn-primary btn-sm" onclick="openAddRecipeModal()">+ 추가</button>
-    </div>
-    <div class="pick-source-tabs" id="recipeTypeTabs">
-      <button class="pick-source-tab active" onclick="recipeTypeFilter='all';renderRecipes()">전체</button>
-      <button class="pick-source-tab" onclick="recipeTypeFilter='핫';renderRecipes()">HOT</button>
-      <button class="pick-source-tab" onclick="recipeTypeFilter='아이스';renderRecipes()">ICE</button>
-    </div>
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="원두, 산지, 품종 검색..." id="recipeSearch" oninput="renderRecipes()">
-    </div>
-    <div class="filter-bar" id="recipeFilters"></div>
-    <div id="recipeList"></div>
-  </div>
+ <!-- Tab: Recipes -->
+ <div class="page" id="page-recipes">
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+     <h1 class="section-title" style="margin-bottom:0;">레시피</h1>
+     <button class="btn btn-primary btn-sm" onclick="openAddRecipeModal()">+ 추가</button>
+   </div>
+   <div class="pick-source-tabs" id="recipeTypeTabs">
+     <button class="pick-source-tab active" onclick="recipeTypeFilter='all';renderRecipes()">전체</button>
+     <button class="pick-source-tab" onclick="recipeTypeFilter='핫';renderRecipes()">HOT</button>
+     <button class="pick-source-tab" onclick="recipeTypeFilter='아이스';renderRecipes()">ICE</button>
+   </div>
+   <div class="search-bar">
+     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+     <input type="text" placeholder="원두, 산지, 품종 검색..." id="recipeSearch" oninput="renderRecipes()">
+   </div>
+   <div class="filter-bar" id="recipeFilters"></div>
+   <div id="recipeList"></div>
+ </div>
 
-  <!-- Tab: Brew Log -->
-  <div class="page" id="page-brews">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h1 class="section-title" style="margin-bottom:0;">추출 기록</h1>
-      <button class="btn btn-primary btn-sm" onclick="openAddBrewModal()">+ 기록</button>
-    </div>
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="검색..." id="brewSearch" oninput="renderBrews()">
-    </div>
-    <div class="filter-bar" id="brewStarFilters" style="margin-bottom:4px;"></div>
-    <div class="filter-bar" id="brewFilters"></div>
-    <div id="brewList"></div>
-  </div>
+ <!-- Tab: Brew Log -->
+ <div class="page" id="page-brews">
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+     <h1 class="section-title" style="margin-bottom:0;">추출 기록</h1>
+     <button class="btn btn-primary btn-sm" onclick="openAddBrewModal()">+ 기록</button>
+   </div>
+   <div class="search-bar">
+     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+     <input type="text" placeholder="검색..." id="brewSearch" oninput="renderBrews()">
+   </div>
+   <div class="filter-bar" id="brewStarFilters" style="margin-bottom:4px;"></div>
+   <div class="filter-bar" id="brewFilters"></div>
+   <div id="brewList"></div>
+ </div>
 
-  <!-- Tab: Stats -->
-  <div class="page" id="page-stats">
-    <h1 class="section-title">통계</h1>
-    <div class="year-month-selector">
-      <select id="statYear" onchange="renderStats()"></select>
-      <select id="statMonth" onchange="renderStats()">
-        <option value="all">전체</option>
-        <option value="1">1월</option><option value="2">2월</option><option value="3">3월</option>
-        <option value="4">4월</option><option value="5">5월</option><option value="6">6월</option>
-        <option value="7">7월</option><option value="8">8월</option><option value="9">9월</option>
-        <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
-      </select>
-    </div>
-    <div id="statsContent"></div>
-  </div>
+ <!-- Tab: Stats -->
+ <div class="page" id="page-stats">
+   <h1 class="section-title">통계</h1>
+   <div class="year-month-selector">
+     <select id="statYear" onchange="renderStats()"></select>
+     <select id="statMonth" onchange="renderStats()">
+       <option value="all">전체</option>
+       <option value="1">1월</option><option value="2">2월</option><option value="3">3월</option>
+       <option value="4">4월</option><option value="5">5월</option><option value="6">6월</option>
+       <option value="7">7월</option><option value="8">8월</option><option value="9">9월</option>
+       <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+     </select>
+   </div>
+   <div id="statsContent"></div>
+ </div>
 
-  <!-- Tab: Monthly Pick -->
-  <div class="page" id="page-picks">
-    <h1 class="section-title">월픽</h1>
-    <div class="pick-month-selector">
-      <select id="pickMonth" onchange="loadMonthlyPick()"></select>
-    </div>
-    <div class="pick-source-tabs" id="pickSourceTabs"></div>
-    <div class="pick-category-tabs" id="pickCategoryTabs"></div>
-    <div id="pickList"></div>
-  </div>
+ <!-- Tab: Monthly Pick -->
+ <div class="page" id="page-picks">
+   <h1 class="section-title">월픽</h1>
+   <div class="pick-month-selector">
+     <select id="pickMonth" onchange="loadMonthlyPick()"></select>
+   </div>
+   <div class="pick-source-tabs" id="pickSourceTabs"></div>
+   <div class="pick-category-tabs" id="pickCategoryTabs"></div>
+   <div id="pickList"></div>
+ </div>
 
 </div>
 
 <!-- ─── Tab Bar ─── -->
 <div class="tab-bar">
-  <button class="tab active" data-page="beans" onclick="switchTab(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="10" rx="7" ry="8"/><path d="M12 2c2 3 2 6 0 8"/></svg>
-    원두
-  </button>
-  <button class="tab" data-page="recipes" onclick="switchTab(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-    레시피
-  </button>
-  <button class="tab" data-page="brews" onclick="switchTab(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
-    추출
-  </button>
-  <button class="tab" data-page="stats" onclick="switchTab(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-    통계
-  </button>
-  <button class="tab" data-page="picks" onclick="switchTab(this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    월픽
-  </button>
+ <button class="tab active" data-page="beans" onclick="switchTab(this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="10" rx="7" ry="8"/><path d="M12 2c2 3 2 6 0 8"/></svg>
+   원두
+ </button>
+ <button class="tab" data-page="recipes" onclick="switchTab(this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+   레시피
+ </button>
+ <button class="tab" data-page="brews" onclick="switchTab(this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+   추출
+ </button>
+ <button class="tab" data-page="stats" onclick="switchTab(this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+   통계
+ </button>
+ <button class="tab" data-page="picks" onclick="switchTab(this)">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+   월픽
+ </button>
 </div>
 
 <!-- ─── Modals ─── -->
 
 <!-- Click Modal (moved from tab) -->
 <div class="modal-overlay" id="clickModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">클릭수 설정</span>
-      <button class="modal-close" onclick="closeModal('clickModal')">&times;</button>
-    </div>
-    <p class="section-sub">현재 그라인더 클릭수를 선택하세요</p>
-    <div class="click-grid" id="clickGrid"></div>
-    <div class="input-group" style="margin-top:20px;">
-      <label>원두 메모 (선택)</label>
-      <input type="text" id="clickBeanInput" placeholder="예: 에티오피아 예가체프 워시드">
-    </div>
-    <div class="click-history" style="margin-top:16px;">
-      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">히스토리</h3>
-      <div id="clickHistory"></div>
-    </div>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">클릭수 설정</span>
+     <button class="modal-close" onclick="closeModal('clickModal')">&times;</button>
+   </div>
+   <p class="section-sub">현재 그라인더 클릭수를 선택하세요</p>
+   <div class="click-grid" id="clickGrid"></div>
+   <div class="input-group" style="margin-top:20px;">
+     <label>원두 메모 (선택)</label>
+     <input type="text" id="clickBeanInput" placeholder="예: 에티오피아 예가체프 워시드">
+   </div>
+   <div class="click-history" style="margin-top:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">히스토리</h3>
+     <div id="clickHistory"></div>
+   </div>
+ </div>
 </div>
 
 <!-- Add Bean Modal -->
 <div class="modal-overlay" id="addBeanModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">원두 등록</span>
-      <button class="modal-close" onclick="closeModal('addBeanModal')">&times;</button>
-    </div>
-    <div class="input-group"><label>원두명</label><input type="text" id="beanName" placeholder="예: 에티오피아 벤치 마지 게샤"></div>
-    <div class="input-group"><label>로스터리</label><input type="text" id="beanRoastery" placeholder="예: 커넥츠커피" list="beanRoasteryList"><datalist id="beanRoasteryList"></datalist></div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>산지</label><input type="text" id="beanOrigin"></div>
-      <div class="input-group" style="flex:1;"><label>프로세싱</label><input type="text" id="beanProcessing" placeholder="워시드"></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>품종</label><input type="text" id="beanVariety"></div>
-      <div class="input-group" style="flex:1;"><label>중량 (g)</label><input type="number" id="beanWeight" placeholder="200"></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:13px;"></div>
-      <div class="input-group" style="flex:1;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:13px;"></div>
-    </div>
-    <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
-    <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
-    <button class="btn btn-primary" onclick="saveBean()">저장</button>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">원두 등록</span>
+     <button class="modal-close" onclick="closeModal('addBeanModal')">&times;</button>
+   </div>
+   <div class="input-group"><label>원두명</label><input type="text" id="beanName" placeholder="예: 에티오피아 벤치 마지 게샤"></div>
+   <div class="input-group"><label>로스터리</label><input type="text" id="beanRoastery" placeholder="예: 커넥츠커피" list="beanRoasteryList"><datalist id="beanRoasteryList"></datalist></div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>산지</label><input type="text" id="beanOrigin"></div>
+     <div class="input-group" style="flex:1;"><label>프로세싱</label><input type="text" id="beanProcessing" placeholder="워시드"></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>품종</label><input type="text" id="beanVariety"></div>
+     <div class="input-group" style="flex:1;"><label>중량 (g)</label><input type="number" id="beanWeight" placeholder="200"></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:13px;"></div>
+     <div class="input-group" style="flex:1;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:13px;"></div>
+   </div>
+   <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
+   <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
+   <button class="btn btn-primary" onclick="saveBean()">저장</button>
+ </div>
 </div>
 
 <!-- Bean Detail Modal -->
 <div class="modal-overlay" id="beanDetailModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="beanDetailTitle">원두 상세</span>
-      <button class="modal-close" onclick="closeModal('beanDetailModal')">&times;</button>
-    </div>
-    <div id="beanDetailContent"></div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <button class="btn btn-secondary btn-sm" onclick="editBeanFromDetail()" style="flex:1;">편집</button>
-      <button class="btn btn-primary btn-sm" onclick="toggleBeanFinished()" id="beanFinishBtn" style="flex:1;">다 마심 ✓</button>
-      <button class="btn btn-primary btn-sm" onclick="createRecipeFromBean()" style="flex:1;">레시피 만들기</button>
-    </div>
-    <div class="delete-zone"><button class="btn btn-danger" onclick="deleteBean()">삭제</button></div>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title" id="beanDetailTitle">원두 상세</span>
+     <button class="modal-close" onclick="closeModal('beanDetailModal')">&times;</button>
+   </div>
+   <div id="beanDetailContent"></div>
+   <div style="display:flex;gap:8px;margin-top:16px;">
+     <button class="btn btn-secondary btn-sm" onclick="editBeanFromDetail()" style="flex:1;">편집</button>
+     <button class="btn btn-primary btn-sm" onclick="toggleBeanFinished()" id="beanFinishBtn" style="flex:1;">다 마심 ✓</button>
+     <button class="btn btn-primary btn-sm" onclick="createRecipeFromBean()" style="flex:1;">레시피 만들기</button>
+   </div>
+   <div class="delete-zone"><button class="btn btn-danger" onclick="deleteBean()">삭제</button></div>
+ </div>
 </div>
 
 <!-- Settings Modal (moved from tab) -->
 <div class="modal-overlay" id="settingsModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">설정</span>
-      <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
-    </div>
-    <div class="card" style="border:none;padding:0;margin-bottom:16px;">
-      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 백업</h3>
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">JSON 파일로 데이터를 내보내거나 가져올 수 있습니다.</p>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-secondary" onclick="exportData()" style="flex:1;">내보내기</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="flex:1;">가져오기</button>
-        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-      </div>
-    </div>
-    <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
-      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">클릭수 범위 설정</h3>
-      <div style="display:flex;gap:8px;">
-        <div class="input-group" style="flex:1;margin-bottom:0;">
-          <label>최소</label>
-          <input type="number" id="clickMin" value="28" onchange="saveClickRange()">
-        </div>
-        <div class="input-group" style="flex:1;margin-bottom:0;">
-          <label>최대</label>
-          <input type="number" id="clickMax" value="34" onchange="saveClickRange()">
-        </div>
-      </div>
-    </div>
-    <div style="border-top:1px solid var(--border);padding-top:16px;">
-      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 초기화</h3>
-      <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
-    </div>
-    <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-      FilterCoffee v2.1<br>Made with Matthew
-    </div>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">설정</span>
+     <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+   </div>
+   <div class="card" style="border:none;padding:0;margin-bottom:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 백업</h3>
+     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">JSON 파일로 데이터를 내보내거나 가져올 수 있습니다.</p>
+     <div style="display:flex;gap:8px;">
+       <button class="btn btn-secondary" onclick="exportData()" style="flex:1;">내보내기</button>
+       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="flex:1;">가져오기</button>
+       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+     </div>
+   </div>
+   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">클릭수 범위 설정</h3>
+     <div style="display:flex;gap:8px;">
+       <div class="input-group" style="flex:1;margin-bottom:0;">
+         <label>최소</label>
+         <input type="number" id="clickMin" value="28" onchange="saveClickRange()">
+       </div>
+       <div class="input-group" style="flex:1;margin-bottom:0;">
+         <label>최대</label>
+         <input type="number" id="clickMax" value="34" onchange="saveClickRange()">
+       </div>
+     </div>
+   </div>
+   <div style="border-top:1px solid var(--border);padding-top:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 초기화</h3>
+     <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
+   </div>
+   <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
+     FilterCoffee v2.1<br>Made with Matthew
+   </div>
+ </div>
 </div>
 
 <!-- Add Recipe Modal (Paste) -->
 <div class="modal-overlay" id="addRecipeModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">레시피 추가</span>
-      <button class="modal-close" onclick="closeModal('addRecipeModal')">&times;</button>
-    </div>
-    <div class="input-group">
-      <label>내 원두 선택 (선택)</label>
-      <select id="addRecipeBeanSelect"><option value="">선택 안 함</option></select>
-    </div>
-    <div class="input-group">
-      <label>클로드 레시피 붙여넣기</label>
-      <textarea class="paste-area" id="recipePasteArea" placeholder="클로드에서 받은 레시피를 여기에 붙여넣으세요..."></textarea>
-    </div>
-    <button class="btn btn-primary" onclick="parseAndSaveRecipe()">파싱해서 저장</button>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">레시피 추가</span>
+     <button class="modal-close" onclick="closeModal('addRecipeModal')">&times;</button>
+   </div>
+   <div class="input-group">
+     <label>내 원두 선택 (선택)</label>
+     <select id="addRecipeBeanSelect"><option value="">선택 안 함</option></select>
+   </div>
+   <div class="input-group">
+     <label>클로드 레시피 붙여넣기</label>
+     <textarea class="paste-area" id="recipePasteArea" placeholder="클로드에서 받은 레시피를 여기에 붙여넣으세요..."></textarea>
+   </div>
+   <button class="btn btn-primary" onclick="parseAndSaveRecipe()">파싱해서 저장</button>
+ </div>
 </div>
 
 <!-- Recipe Edit Modal -->
 <div class="modal-overlay" id="editRecipeModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="editRecipeTitle">레시피 편집</span>
-      <button class="modal-close" onclick="closeModal('editRecipeModal')">&times;</button>
-    </div>
-    <div id="editMissingBanner"></div>
-    <div class="input-group"><label>내 원두 선택</label><select id="editBeanSelect" onchange="onEditBeanSelect()"><option value="">직접 입력</option></select></div>
-    <div class="input-group" id="eg-name"><label>원두명 <span class="required">*</span></label><input type="text" id="editName" placeholder="예: 파나마 프란세스치 게이샤"><div class="field-hint">필수 항목입니다</div></div>
-    <div class="input-group"><label>로스터리</label><input type="text" id="editRoastery" placeholder="예: 커넥츠커피" list="roasteryList"><datalist id="roasteryList"></datalist></div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;" id="eg-origin"><label>산지 <span class="required">*</span></label><input type="text" id="editOrigin"><div class="field-hint">필수 항목입니다</div></div>
-      <div class="input-group" style="flex:1;" id="eg-variety"><label>품종 <span class="required">*</span></label><input type="text" id="editVariety"><div class="field-hint">필수 항목입니다</div></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;" id="eg-processing"><label>프로세싱 <span class="required">*</span></label><input type="text" id="editProcessing" placeholder="워시드"><div class="field-hint">필수 항목입니다</div></div>
-      <div class="input-group" style="flex:1;" id="eg-roasting"><label>로스팅 <span class="required">*</span></label><input type="text" id="editRoasting" placeholder="라이트"><div class="field-hint">필수 항목입니다</div></div>
-    </div>
-    <div class="input-group" id="eg-notes"><label>예상 노트 <span class="required">*</span></label><input type="text" id="editNotes" placeholder="자스민, 복숭아, 라임 등"><div class="field-hint">필수 항목입니다</div></div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;" id="eg-dripper"><label>드리퍼 <span class="required">*</span></label><input type="text" id="editDripper" placeholder="Orea V4"><div class="field-hint">필수 항목입니다</div></div>
-      <div class="input-group" style="flex:1;" id="eg-grind"><label>클릭수 <span class="required">*</span></label><input type="number" id="editGrind"><div class="field-hint">필수 항목입니다</div></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;" id="eg-temp"><label>수온 (°C) <span class="required">*</span></label><input type="number" id="editTemp"><div class="field-hint">필수 항목입니다</div></div>
-      <div class="input-group" style="flex:1;" id="eg-ratio"><label>비율 <span class="required">*</span></label><input type="text" id="editRatio" placeholder="1:15"><div class="field-hint">필수 항목입니다</div></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;" id="eg-dose"><label>도즈 (g) <span class="required">*</span></label><input type="number" id="editDose"><div class="field-hint">필수 항목입니다</div></div>
-      <div class="input-group" style="flex:1;" id="eg-water"><label>물량 (g) <span class="required">*</span></label><input type="number" id="editWater"><div class="field-hint">필수 항목입니다</div></div>
-    </div>
-    <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('사용')">사용</button><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button></div><div class="field-hint">필수 항목입니다</div></div>
-    <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="editBrewTypeToggle"><button class="toggle-opt" onclick="setEditBrewType('핫')">핫</button><button class="toggle-opt" onclick="setEditBrewType('아이스')">아이스</button></div></div>
-    <div class="input-group"><label>바텀 추천</label><input type="text" id="editBottom" placeholder="open / closed"></div>
-    <div class="input-group"><label>목표 추출 시간</label><input type="text" id="editTargetTime" placeholder="3:00"></div>
-    <button class="btn btn-primary" onclick="saveEditedRecipe()">저장</button>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title" id="editRecipeTitle">레시피 편집</span>
+     <button class="modal-close" onclick="closeModal('editRecipeModal')">&times;</button>
+   </div>
+   <div id="editMissingBanner"></div>
+   <div class="input-group"><label>내 원두 선택</label><select id="editBeanSelect" onchange="onEditBeanSelect()"><option value="">직접 입력</option></select></div>
+   <div class="input-group" id="eg-name"><label>원두명 <span class="required">*</span></label><input type="text" id="editName" placeholder="예: 파나마 프란세스치 게이샤"><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group"><label>로스터리</label><input type="text" id="editRoastery" placeholder="예: 커넥츠커피" list="roasteryList"><datalist id="roasteryList"></datalist></div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;" id="eg-origin"><label>산지 <span class="required">*</span></label><input type="text" id="editOrigin"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-variety"><label>품종 <span class="required">*</span></label><input type="text" id="editVariety"><div class="field-hint">필수 항목입니다</div></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;" id="eg-processing"><label>프로세싱 <span class="required">*</span></label><input type="text" id="editProcessing" placeholder="워시드"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-roasting"><label>로스팅 <span class="required">*</span></label><input type="text" id="editRoasting" placeholder="라이트"><div class="field-hint">필수 항목입니다</div></div>
+   </div>
+   <div class="input-group" id="eg-notes"><label>예상 노트 <span class="required">*</span></label><input type="text" id="editNotes" placeholder="자스민, 복숭아, 라임 등"><div class="field-hint">필수 항목입니다</div></div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;" id="eg-dripper"><label>드리퍼 <span class="required">*</span></label><input type="text" id="editDripper" placeholder="Orea V4"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-grind"><label>클릭수 <span class="required">*</span></label><input type="number" id="editGrind"><div class="field-hint">필수 항목입니다</div></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;" id="eg-temp"><label>수온 (°C) <span class="required">*</span></label><input type="number" id="editTemp"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-ratio"><label>비율 <span class="required">*</span></label><input type="text" id="editRatio" placeholder="1:15"><div class="field-hint">필수 항목입니다</div></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;" id="eg-dose"><label>도즈 (g) <span class="required">*</span></label><input type="number" id="editDose"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-water"><label>물량 (g) <span class="required">*</span></label><input type="number" id="editWater"><div class="field-hint">필수 항목입니다</div></div>
+   </div>
+   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('사용')">사용</button><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button></div><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="editBrewTypeToggle"><button class="toggle-opt" onclick="setEditBrewType('핫')">핫</button><button class="toggle-opt" onclick="setEditBrewType('아이스')">아이스</button></div></div>
+   <div class="input-group"><label>바텀 추천</label><input type="text" id="editBottom" placeholder="open / closed"></div>
+   <div class="input-group"><label>목표 추출 시간</label><input type="text" id="editTargetTime" placeholder="3:00"></div>
+   <button class="btn btn-primary" onclick="saveEditedRecipe()">저장</button>
+ </div>
 </div>
 
 <!-- Recipe Detail Modal -->
 <div class="modal-overlay" id="recipeDetailModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="recipeDetailTitle">레시피 상세</span>
-      <button class="modal-close" onclick="closeModal('recipeDetailModal')">&times;</button>
-    </div>
-    <div id="recipeDetailContent"></div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <button class="btn btn-secondary btn-sm" onclick="editRecipe()" style="flex:1;">편집</button>
-      <button class="btn btn-primary btn-sm" onclick="brewFromRecipe()" style="flex:2;">이 레시피로 추출</button>
-    </div>
-    <div class="delete-zone"><button class="btn btn-danger" onclick="deleteRecipe()">삭제</button></div>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title" id="recipeDetailTitle">레시피 상세</span>
+     <button class="modal-close" onclick="closeModal('recipeDetailModal')">&times;</button>
+   </div>
+   <div id="recipeDetailContent"></div>
+   <div style="display:flex;gap:8px;margin-top:16px;">
+     <button class="btn btn-secondary btn-sm" onclick="editRecipe()" style="flex:1;">편집</button>
+     <button class="btn btn-primary btn-sm" onclick="brewFromRecipe()" style="flex:2;">이 레시피로 추출</button>
+   </div>
+   <div class="delete-zone"><button class="btn btn-danger" onclick="deleteRecipe()">삭제</button></div>
+ </div>
 </div>
 
 <!-- Add Brew Modal -->
 <div class="modal-overlay" id="addBrewModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">추출 기록</span>
-      <button class="modal-close" onclick="closeModal('addBrewModal')">&times;</button>
-    </div>
-    <div class="input-group"><label>레시피 선택</label><select id="brewRecipeSelect" onchange="onBrewRecipeSelect()"><option value="">직접 입력</option></select></div>
-    <div class="input-group"><label>내 원두 선택</label><select id="brewBeanSelect" onchange="onBrewBeanSelect()"><option value="">직접 입력</option></select></div>
-    <div id="brewBeanInfo" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span id="brewBeanInfoName" style="font-weight:600;"></span>
-        <span id="brewBeanInfoWeight" style="font-family:'DM Mono';color:var(--accent);font-weight:600;"></span>
-      </div>
-      <div id="brewBeanInfoDeduct" style="color:var(--text-secondary);margin-top:4px;"></div>
-    </div>
-    <div class="input-group"><label>원두명</label><input type="text" id="brewBean"></div>
-    <div class="input-group"><label>로스터리</label><input type="text" id="brewRoastery" placeholder="예: 커넥츠커피" list="brewRoasteryList"><datalist id="brewRoasteryList"></datalist></div>
-    <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="brewTypeToggle"><button class="toggle-opt active" onclick="setBrewType('핫')">핫</button><button class="toggle-opt" onclick="setBrewType('아이스')">아이스</button></div></div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>드리퍼</label><input type="text" id="brewDripper" placeholder="Orea V4"></div>
-      <div class="input-group" style="flex:1;"><label>클릭수</label><input type="number" id="brewClicks"></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>수온 (°C)</label><input type="number" id="brewTemp"></div>
-      <div class="input-group" style="flex:1;"><label>추출 시간</label><input type="text" id="brewTime" placeholder="3:00"></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <div class="input-group" style="flex:1;"><label>도즈 (g)</label><input type="number" id="brewDose" oninput="updateBrewBeanInfo()"></div>
-      <div class="input-group" style="flex:1;"><label>물량 (g)</label><input type="number" id="brewWater"></div>
-    </div>
-    <div class="input-group"><label>멜로드립</label><input type="text" id="brewMeloDrip" readonly placeholder="레시피에서 자동 입력"></div>
-    <div class="input-group"><label>날짜</label><input type="date" id="brewDate"></div>
-    <div class="input-group"><label>별점</label><div class="star-rating" id="brewStars"><span onclick="setBrewRating(1)">★</span><span onclick="setBrewRating(2)">★</span><span onclick="setBrewRating(3)">★</span><span onclick="setBrewRating(4)">★</span><span onclick="setBrewRating(5)">★</span></div></div>
-    <div class="input-group"><label>맛 메모</label><textarea id="brewNote" placeholder="맛, 향, 질감 등 자유롭게 기록..."></textarea></div>
-    <div class="input-group"><label>조정 사항</label><input type="text" id="brewAdjust" placeholder="예: 클릭수 1 줄임, 수온 1도 올림"></div>
-    <button class="btn btn-primary" onclick="saveBrew()">저장</button>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">추출 기록</span>
+     <button class="modal-close" onclick="closeModal('addBrewModal')">&times;</button>
+   </div>
+   <div class="input-group"><label>레시피 선택</label><select id="brewRecipeSelect" onchange="onBrewRecipeSelect()"><option value="">직접 입력</option></select></div>
+   <div class="input-group"><label>내 원두 선택</label><select id="brewBeanSelect" onchange="onBrewBeanSelect()"><option value="">직접 입력</option></select></div>
+   <div id="brewBeanInfo" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;">
+     <div style="display:flex;justify-content:space-between;align-items:center;">
+       <span id="brewBeanInfoName" style="font-weight:600;"></span>
+       <span id="brewBeanInfoWeight" style="font-family:'DM Mono';color:var(--accent);font-weight:600;"></span>
+     </div>
+     <div id="brewBeanInfoDeduct" style="color:var(--text-secondary);margin-top:4px;"></div>
+   </div>
+   <div class="input-group"><label>원두명</label><input type="text" id="brewBean"></div>
+   <div class="input-group"><label>로스터리</label><input type="text" id="brewRoastery" placeholder="예: 커넥츠커피" list="brewRoasteryList"><datalist id="brewRoasteryList"></datalist></div>
+   <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="brewTypeToggle"><button class="toggle-opt active" onclick="setBrewType('핫')">핫</button><button class="toggle-opt" onclick="setBrewType('아이스')">아이스</button></div></div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>드리퍼</label><input type="text" id="brewDripper" placeholder="Orea V4"></div>
+     <div class="input-group" style="flex:1;"><label>클릭수</label><input type="number" id="brewClicks"></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>수온 (°C)</label><input type="number" id="brewTemp"></div>
+     <div class="input-group" style="flex:1;"><label>추출 시간</label><input type="text" id="brewTime" placeholder="3:00"></div>
+   </div>
+   <div style="display:flex;gap:8px;">
+     <div class="input-group" style="flex:1;"><label>도즈 (g)</label><input type="number" id="brewDose" oninput="updateBrewBeanInfo()"></div>
+     <div class="input-group" style="flex:1;"><label>물량 (g)</label><input type="number" id="brewWater"></div>
+   </div>
+   <div class="input-group"><label>멜로드립</label><input type="text" id="brewMeloDrip" readonly placeholder="레시피에서 자동 입력"></div>
+   <div class="input-group"><label>날짜</label><input type="date" id="brewDate"></div>
+   <div class="input-group"><label>별점</label><div class="star-rating" id="brewStars"><span onclick="setBrewRating(1)">★</span><span onclick="setBrewRating(2)">★</span><span onclick="setBrewRating(3)">★</span><span onclick="setBrewRating(4)">★</span><span onclick="setBrewRating(5)">★</span></div></div>
+   <div class="input-group"><label>맛 메모</label><textarea id="brewNote" placeholder="맛, 향, 질감 등 자유롭게 기록..."></textarea></div>
+   <div class="input-group"><label>조정 사항</label><input type="text" id="brewAdjust" placeholder="예: 클릭수 1 줄임, 수온 1도 올림"></div>
+   <button class="btn btn-primary" onclick="saveBrew()">저장</button>
+ </div>
 </div>
 
 <!-- Brew Detail Modal -->
 <div class="modal-overlay" id="brewDetailModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">추출 상세</span>
-      <button class="modal-close" onclick="closeModal('brewDetailModal')">&times;</button>
-    </div>
-    <div id="brewDetailContent"></div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <button class="btn btn-secondary btn-sm" onclick="editBrewFromDetail()" style="flex:1;">편집</button>
-      <button class="btn btn-primary btn-sm" onclick="rebrewFromDetail()" style="flex:2;">같은 세팅으로 추출</button>
-    </div>
-    <div class="delete-zone"><button class="btn btn-danger" onclick="deleteBrew()">삭제</button></div>
-  </div>
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title">추출 상세</span>
+     <button class="modal-close" onclick="closeModal('brewDetailModal')">&times;</button>
+   </div>
+   <div id="brewDetailContent"></div>
+   <div style="display:flex;gap:8px;margin-top:16px;">
+     <button class="btn btn-secondary btn-sm" onclick="editBrewFromDetail()" style="flex:1;">편집</button>
+     <button class="btn btn-primary btn-sm" onclick="rebrewFromDetail()" style="flex:2;">같은 세팅으로 추출</button>
+   </div>
+   <div class="delete-zone"><button class="btn btn-danger" onclick="deleteBrew()">삭제</button></div>
+ </div>
 </div>
 
 
 <script>
 // ─── Required Fields Definition ───
 const REQUIRED_FIELDS = [
-  { key: 'name', label: '원두명', elId: 'eg-name' },
-  { key: 'origin', label: '산지', elId: 'eg-origin' },
-  { key: 'variety', label: '품종', elId: 'eg-variety' },
-  { key: 'processing', label: '프로세싱', elId: 'eg-processing' },
-  { key: 'roasting', label: '로스팅', elId: 'eg-roasting' },
-  { key: 'notes', label: '노트', elId: 'eg-notes' },
-  { key: 'dripper', label: '드리퍼', elId: 'eg-dripper' },
-  { key: 'grind', label: '클릭수', elId: 'eg-grind' },
-  { key: 'temp', label: '수온', elId: 'eg-temp' },
-  { key: 'ratio', label: '비율', elId: 'eg-ratio' },
-  { key: 'dose', label: '도즈', elId: 'eg-dose' },
-  { key: 'water', label: '물량', elId: 'eg-water' },
-  { key: 'meloDrip', label: '멜로드립', elId: 'eg-meloDrip' },
+ { key: 'name', label: '원두명', elId: 'eg-name' },
+ { key: 'origin', label: '산지', elId: 'eg-origin' },
+ { key: 'variety', label: '품종', elId: 'eg-variety' },
+ { key: 'processing', label: '프로세싱', elId: 'eg-processing' },
+ { key: 'roasting', label: '로스팅', elId: 'eg-roasting' },
+ { key: 'notes', label: '노트', elId: 'eg-notes' },
+ { key: 'dripper', label: '드리퍼', elId: 'eg-dripper' },
+ { key: 'grind', label: '클릭수', elId: 'eg-grind' },
+ { key: 'temp', label: '수온', elId: 'eg-temp' },
+ { key: 'ratio', label: '비율', elId: 'eg-ratio' },
+ { key: 'dose', label: '도즈', elId: 'eg-dose' },
+ { key: 'water', label: '물량', elId: 'eg-water' },
+ { key: 'meloDrip', label: '멜로드립', elId: 'eg-meloDrip' },
 ];
 
 function getMissingFields(recipe) {
-  return REQUIRED_FIELDS.filter(f => !recipe[f.key] || recipe[f.key].toString().trim() === '');
+ return REQUIRED_FIELDS.filter(f => !recipe[f.key] || recipe[f.key].toString().trim() === '');
 }
 
 // ─── Data Store ───
@@ -840,250 +840,250 @@ let beanFilter = 'active';
 let recipeTypeFilter = 'all';
 
 function loadData() {
-  const saved = localStorage.getItem(DB_KEY);
-  if (saved) {
-    const d = JSON.parse(saved);
-    if (!d.beans) d.beans = [];
-    if (!d.wishlist) d.wishlist = [];
-    // Migrate: strip 'g' suffix from bean weight
-    d.beans.forEach(b => { if (b.weight && typeof b.weight === 'string') b.weight = b.weight.replace(/\s*g$/i, ''); });
-    return d;
-  }
-  return { currentClicks: null, currentBean: '', clickRange: { min: 28, max: 34 }, clickHistory: [], recipes: [], brews: [], beans: [], wishlist: [] };
+ const saved = localStorage.getItem(DB_KEY);
+ if (saved) {
+   const d = JSON.parse(saved);
+   if (!d.beans) d.beans = [];
+   if (!d.wishlist) d.wishlist = [];
+   // Migrate: strip 'g' suffix from bean weight
+   d.beans.forEach(b => { if (b.weight && typeof b.weight === 'string') b.weight = b.weight.replace(/\s*g$/i, ''); });
+   return d;
+ }
+ return { currentClicks: null, currentBean: '', clickRange: { min: 28, max: 34 }, clickHistory: [], recipes: [], brews: [], beans: [], wishlist: [] };
 }
 
 function saveData() { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
 
 // ─── Tab Navigation ───
 function switchTab(el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('page-' + el.dataset.page).classList.add('active');
-  if (el.dataset.page === 'beans') renderBeans();
-  if (el.dataset.page === 'stats') renderStats();
-  if (el.dataset.page === 'recipes') renderRecipes();
-  if (el.dataset.page === 'brews') renderBrews();
-  if (el.dataset.page === 'picks') loadMonthlyPick();
+ document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+ document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+ el.classList.add('active');
+ document.getElementById('page-' + el.dataset.page).classList.add('active');
+ if (el.dataset.page === 'beans') renderBeans();
+ if (el.dataset.page === 'stats') renderStats();
+ if (el.dataset.page === 'recipes') renderRecipes();
+ if (el.dataset.page === 'brews') renderBrews();
+ if (el.dataset.page === 'picks') loadMonthlyPick();
 }
 
 // ─── Click Tracker ───
 function renderClickGrid() {
-  const grid = document.getElementById('clickGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  for (let i = data.clickRange.min; i <= data.clickRange.max; i++) {
-    const btn = document.createElement('button');
-    btn.className = 'click-btn' + (data.currentClicks === i ? ' active' : '');
-    btn.textContent = i;
-    btn.onclick = () => setClicks(i);
-    grid.appendChild(btn);
-  }
+ const grid = document.getElementById('clickGrid');
+ if (!grid) return;
+ grid.innerHTML = '';
+ for (let i = data.clickRange.min; i <= data.clickRange.max; i++) {
+   const btn = document.createElement('button');
+   btn.className = 'click-btn' + (data.currentClicks === i ? ' active' : '');
+   btn.textContent = i;
+   btn.onclick = () => setClicks(i);
+   grid.appendChild(btn);
+ }
 }
 
 function setClicks(n) {
-  const beanEl = document.getElementById('clickBeanInput');
-  const bean = beanEl ? beanEl.value.trim() : '';
-  data.currentClicks = n; data.currentBean = bean;
-  data.clickHistory.unshift({ clicks: n, bean, date: new Date().toISOString() });
-  if (data.clickHistory.length > 100) data.clickHistory.pop();
-  saveData(); updateClickBar(); renderClickGrid(); renderClickHistory();
+ const beanEl = document.getElementById('clickBeanInput');
+ const bean = beanEl ? beanEl.value.trim() : '';
+ data.currentClicks = n; data.currentBean = bean;
+ data.clickHistory.unshift({ clicks: n, bean, date: new Date().toISOString() });
+ if (data.clickHistory.length > 100) data.clickHistory.pop();
+ saveData(); updateClickBar(); renderClickGrid(); renderClickHistory();
 }
 
 function updateClickBar() {
-  document.getElementById('currentClickDisplay').textContent = data.currentClicks ?? '--';
+ document.getElementById('currentClickDisplay').textContent = data.currentClicks ?? '--';
 }
 
 function renderClickHistory() {
-  const c = document.getElementById('clickHistory');
-  if (!c) return;
-  if (!data.clickHistory.length) { c.innerHTML = '<div class="empty-state"><p>아직 기록이 없습니다</p></div>'; return; }
-  c.innerHTML = data.clickHistory.slice(0, 20).map(h => `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}</div><div class="click-history-date">${formatDate(h.date)}</div></div>`).join('');
+ const c = document.getElementById('clickHistory');
+ if (!c) return;
+ if (!data.clickHistory.length) { c.innerHTML = '<div class="empty-state"><p>아직 기록이 없습니다</p></div>'; return; }
+ c.innerHTML = data.clickHistory.slice(0, 20).map(h => `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}</div><div class="click-history-date">${formatDate(h.date)}</div></div>`).join('');
 }
 
 // ─── Bean Management ───
 function openAddBeanModal(editId) {
-  editingBeanId = editId || null;
-  const b = editId ? data.beans.find(x => x.id === editId) : null;
-  document.getElementById('beanName').value = b?.name || '';
-  document.getElementById('beanRoastery').value = b?.roastery || '';
-  document.getElementById('beanOrigin').value = b?.origin || '';
-  document.getElementById('beanProcessing').value = b?.processing || '';
-  document.getElementById('beanVariety').value = b?.variety || '';
-  document.getElementById('beanWeight').value = b?.weight || '';
-  document.getElementById('beanPurchaseDate').value = b?.purchaseDate || new Date().toISOString().split('T')[0];
-  document.getElementById('beanRoastDate').value = b?.roastDate || '';
-  document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
-  document.getElementById('beanMemo').value = b?.memo || '';
-  updateRoasteryList();
-  openModal('addBeanModal');
+ editingBeanId = editId || null;
+ const b = editId ? data.beans.find(x => x.id === editId) : null;
+ document.getElementById('beanName').value = b?.name || '';
+ document.getElementById('beanRoastery').value = b?.roastery || '';
+ document.getElementById('beanOrigin').value = b?.origin || '';
+ document.getElementById('beanProcessing').value = b?.processing || '';
+ document.getElementById('beanVariety').value = b?.variety || '';
+ document.getElementById('beanWeight').value = b?.weight || '';
+ document.getElementById('beanPurchaseDate').value = b?.purchaseDate || new Date().toISOString().split('T')[0];
+ document.getElementById('beanRoastDate').value = b?.roastDate || '';
+ document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
+ document.getElementById('beanMemo').value = b?.memo || '';
+ updateRoasteryList();
+ openModal('addBeanModal');
 }
 
 function saveBean() {
-  const name = document.getElementById('beanName').value.trim();
-  if (!name) { alert('원두명을 입력해주세요.'); return; }
-  const beanData = {
-    name, roastery: document.getElementById('beanRoastery').value.trim(),
-    origin: document.getElementById('beanOrigin').value.trim(),
-    processing: document.getElementById('beanProcessing').value.trim(),
-    variety: document.getElementById('beanVariety').value.trim(),
-    weight: document.getElementById('beanWeight').value.trim(),
-    purchaseDate: document.getElementById('beanPurchaseDate').value,
-    roastDate: document.getElementById('beanRoastDate').value,
-    roastLevel: document.getElementById('beanRoastLevel').value,
-    memo: document.getElementById('beanMemo').value.trim()
-  };
-  if (editingBeanId) {
-    const existing = data.beans.find(x => x.id === editingBeanId);
-    if (existing) Object.assign(existing, beanData);
-  } else {
-    beanData.id = Date.now().toString();
-    beanData.createdAt = new Date().toISOString();
-    data.beans.unshift(beanData);
-  }
-  saveData(); closeModal('addBeanModal'); renderBeans();
+ const name = document.getElementById('beanName').value.trim();
+ if (!name) { alert('원두명을 입력해주세요.'); return; }
+ const beanData = {
+   name, roastery: document.getElementById('beanRoastery').value.trim(),
+   origin: document.getElementById('beanOrigin').value.trim(),
+   processing: document.getElementById('beanProcessing').value.trim(),
+   variety: document.getElementById('beanVariety').value.trim(),
+   weight: document.getElementById('beanWeight').value.trim(),
+   purchaseDate: document.getElementById('beanPurchaseDate').value,
+   roastDate: document.getElementById('beanRoastDate').value,
+   roastLevel: document.getElementById('beanRoastLevel').value,
+   memo: document.getElementById('beanMemo').value.trim()
+ };
+ if (editingBeanId) {
+   const existing = data.beans.find(x => x.id === editingBeanId);
+   if (existing) Object.assign(existing, beanData);
+ } else {
+   beanData.id = Date.now().toString();
+   beanData.createdAt = new Date().toISOString();
+   data.beans.unshift(beanData);
+ }
+ saveData(); closeModal('addBeanModal'); renderBeans();
 }
 
 function renderBeans() {
-  const container = document.getElementById('beanList');
-  if (!container) return;
-  // Update filter tab active state
-  document.querySelectorAll('#beanFilterTabs .pick-source-tab').forEach(btn => {
-    btn.classList.toggle('active', (beanFilter === 'active' && btn.textContent === '남은 원두') || (beanFilter === 'finished' && btn.textContent === '다 마신 원두'));
-  });
-  const filtered = data.beans.filter(b => beanFilter === 'finished' ? b.finished : !b.finished);
-  if (!filtered.length) {
-    container.innerHTML = `<div class="empty-state"><p>${beanFilter === 'finished' ? '다 마신 원두가 없습니다' : '등록된 원두가 없습니다<br>+ 등록 버튼으로 원두를 추가하세요'}</p></div>`;
-    return;
-  }
-  // Sort: degassing done first (by days desc), then degassing in progress (by remaining days asc), then no roast date
-  const sorted = filtered.slice().sort((a, b) => {
-    const da = getDegassingInfo(a.roastDate);
-    const db = getDegassingInfo(b.roastDate);
-    if (!da && !db) return 0;
-    if (!da) return 1;
-    if (!db) return -1;
-    // Both done: more recent roast first (fewer days since roast)
-    if (da.done && db.done) return da.days - db.days;
-    // Done comes before not done
-    if (da.done && !db.done) return -1;
-    if (!da.done && db.done) return 1;
-    // Both not done: closer to done first (more days = closer)
-    return db.days - da.days;
-  });
-  container.innerHTML = sorted.map(b => {
-    const degassing = getDegassingInfo(b.roastDate);
-    const brewCount = data.brews.filter(br => br.beanId === b.id || br.bean === b.name).length;
-    return `<div class="card" style="cursor:pointer;" onclick="openBeanDetail('${b.id}')">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div style="flex:1;">
-          <div style="font-size:16px;font-weight:700;">${b.name}</div>
-          ${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${b.roastery}</div>` : ''}
-        </div>
-        <div style="text-align:right;">
-          ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? `<div style="font-size:11px;font-weight:500;color:var(--text-tertiary);">(D+${degassing.days})</div>` : ''}</div>` : ''}
-          ${brewCount > 0 ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${brewCount}회 추출</div>` : ''}
-        </div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
-        ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
-        ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
-        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
-        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
-        ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
-      </div>
-    </div>`;
-  }).join('');
+ const container = document.getElementById('beanList');
+ if (!container) return;
+ // Update filter tab active state
+ document.querySelectorAll('#beanFilterTabs .pick-source-tab').forEach(btn => {
+   btn.classList.toggle('active', (beanFilter === 'active' && btn.textContent === '남은 원두') || (beanFilter === 'finished' && btn.textContent === '다 마신 원두'));
+ });
+ const filtered = data.beans.filter(b => beanFilter === 'finished' ? b.finished : !b.finished);
+ if (!filtered.length) {
+   container.innerHTML = `<div class="empty-state"><p>${beanFilter === 'finished' ? '다 마신 원두가 없습니다' : '등록된 원두가 없습니다<br>+ 등록 버튼으로 원두를 추가하세요'}</p></div>`;
+   return;
+ }
+ // Sort: degassing done first (by days desc), then degassing in progress (by remaining days asc), then no roast date
+ const sorted = filtered.slice().sort((a, b) => {
+   const da = getDegassingInfo(a.roastDate);
+   const db = getDegassingInfo(b.roastDate);
+   if (!da && !db) return 0;
+   if (!da) return 1;
+   if (!db) return -1;
+   // Both done: more recent roast first (fewer days since roast)
+   if (da.done && db.done) return da.days - db.days;
+   // Done comes before not done
+   if (da.done && !db.done) return -1;
+   if (!da.done && db.done) return 1;
+   // Both not done: closer to done first (more days = closer)
+   return db.days - da.days;
+ });
+ container.innerHTML = sorted.map(b => {
+   const degassing = getDegassingInfo(b.roastDate);
+   const brewCount = data.brews.filter(br => br.beanId === b.id || br.bean === b.name || (br.bean && b.name && (br.bean.includes(b.name) || b.name.includes(br.bean)))).length;
+   return `<div class="card" style="cursor:pointer;" onclick="openBeanDetail('${b.id}')">
+     <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+       <div style="flex:1;">
+         <div style="font-size:16px;font-weight:700;">${b.name}</div>
+         ${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${b.roastery}</div>` : ''}
+       </div>
+       <div style="text-align:right;">
+         ${degassing ? `<div style="font-family:'DM Mono';font-size:13px;font-weight:600;color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? `<div style="font-size:11px;font-weight:500;color:var(--text-tertiary);">(D+${degassing.days})</div>` : ''}</div>` : ''}
+         ${brewCount > 0 ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${brewCount}회 추출</div>` : ''}
+       </div>
+     </div>
+     <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+       ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
+       ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
+       ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
+       ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
+       ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
+     </div>
+   </div>`;
+ }).join('');
 }
 
 function getDegassingInfo(roastDate) {
-  if (!roastDate) return null;
-  const roast = new Date(roastDate);
-  const now = new Date();
-  const diffDays = Math.floor((now - roast) / 86400000);
-  const target = 14;
-  if (diffDays >= target) return { done: true, label: '디게싱 완료', days: diffDays - target };
-  return { done: false, label: `D-${target - diffDays}`, days: diffDays };
+ if (!roastDate) return null;
+ const roast = new Date(roastDate);
+ const now = new Date();
+ const diffDays = Math.floor((now - roast) / 86400000);
+ const target = 14;
+ if (diffDays >= target) return { done: true, label: '디게싱 완료', days: diffDays - target };
+ return { done: false, label: `D-${target - diffDays}`, days: diffDays };
 }
 
 function openBeanDetail(id) {
-  selectedBeanId = id;
-  const b = data.beans.find(x => x.id === id); if (!b) return;
-  document.getElementById('beanDetailTitle').textContent = b.name;
-  const degassing = getDegassingInfo(b.roastDate);
-  let html = '<div class="recipe-detail-section"><h3>원두 정보</h3>';
-  [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
-    if (v) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span></div>`;
-  });
-  // 잔량 행 (수기 수정 가능)
-  html += `<div class="recipe-detail-row"><span class="recipe-detail-label">잔량</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:8px;"><span id="beanWeightDisplay">${b.weight ? b.weight + 'g' : '미입력'}</span><button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;width:auto;" onclick="editBeanWeight()">수정</button></span></div>`;
-  if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? ' (D+' + degassing.days + ')' : ' (' + degassing.days + '일차)'}</span></div>`;
-  if (b.memo) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">메모</span><span class="recipe-detail-value">${b.memo}</span></div>`;
-  html += '</div>';
-  // Show related brews
-  const relatedBrews = data.brews.filter(br => br.bean === b.name || br.beanId === b.id);
-  if (relatedBrews.length) {
-    html += `<div class="recipe-detail-section"><h3>추출 기록 (${relatedBrews.length}회)</h3>`;
-    relatedBrews.slice(0, 5).forEach(br => {
-      html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${br.date || ''} ${br.rating ? '★'.repeat(br.rating) : ''}</span><span class="recipe-detail-value">${br.clicks ? br.clicks + 'C' : ''} ${br.temp ? br.temp + '°C' : ''}</span></div>`;
-    });
-    html += '</div>';
-  }
-  document.getElementById('beanDetailContent').innerHTML = html;
-  // Update finish button
-  const finBtn = document.getElementById('beanFinishBtn');
-  if (b.finished) {
-    finBtn.textContent = '되돌리기 ↩';
-    finBtn.className = 'btn btn-secondary btn-sm';
-  } else {
-    finBtn.textContent = '다 마심 ✓';
-    finBtn.className = 'btn btn-primary btn-sm';
-  }
-  openModal('beanDetailModal');
+ selectedBeanId = id;
+ const b = data.beans.find(x => x.id === id); if (!b) return;
+ document.getElementById('beanDetailTitle').textContent = b.name;
+ const degassing = getDegassingInfo(b.roastDate);
+ let html = '<div class="recipe-detail-section"><h3>원두 정보</h3>';
+ [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
+   if (v) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span></div>`;
+ });
+ // 잔량 행 (수기 수정 가능)
+ html += `<div class="recipe-detail-row"><span class="recipe-detail-label">잔량</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:8px;"><span id="beanWeightDisplay">${b.weight ? b.weight + 'g' : '미입력'}</span><button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;width:auto;" onclick="editBeanWeight()">수정</button></span></div>`;
+ if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? ' (D+' + degassing.days + ')' : ' (' + degassing.days + '일차)'}</span></div>`;
+ if (b.memo) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">메모</span><span class="recipe-detail-value">${b.memo}</span></div>`;
+ html += '</div>';
+ // Show related brews
+ const relatedBrews = data.brews.filter(br => br.beanId === b.id || br.bean === b.name || (br.bean && b.name && (br.bean.includes(b.name) || b.name.includes(br.bean))));
+ if (relatedBrews.length) {
+   html += `<div class="recipe-detail-section"><h3>추출 기록 (${relatedBrews.length}회)</h3>`;
+   relatedBrews.slice(0, 5).forEach(br => {
+     html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${br.date || ''} ${br.rating ? '★'.repeat(br.rating) : ''}</span><span class="recipe-detail-value">${br.clicks ? br.clicks + 'C' : ''} ${br.temp ? br.temp + '°C' : ''}</span></div>`;
+   });
+   html += '</div>';
+ }
+ document.getElementById('beanDetailContent').innerHTML = html;
+ // Update finish button
+ const finBtn = document.getElementById('beanFinishBtn');
+ if (b.finished) {
+   finBtn.textContent = '되돌리기 ↩';
+   finBtn.className = 'btn btn-secondary btn-sm';
+ } else {
+   finBtn.textContent = '다 마심 ✓';
+   finBtn.className = 'btn btn-primary btn-sm';
+ }
+ openModal('beanDetailModal');
 }
 
 function toggleBeanFinished() {
-  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
-  b.finished = !b.finished;
-  saveData(); closeModal('beanDetailModal'); renderBeans();
+ const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
+ b.finished = !b.finished;
+ saveData(); closeModal('beanDetailModal'); renderBeans();
 }
 
 function editBeanFromDetail() { closeModal('beanDetailModal'); openAddBeanModal(selectedBeanId); }
 
 function editBeanWeight() {
-  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
-  const newWeight = prompt('잔량을 입력하세요 (g)', b.weight || '0');
-  if (newWeight === null) return;
-  const parsed = parseFloat(newWeight);
-  if (isNaN(parsed) || parsed < 0) { alert('올바른 숫자를 입력해주세요.'); return; }
-  b.weight = parsed.toString();
-  saveData();
-  document.getElementById('beanWeightDisplay').textContent = b.weight + 'g';
-  renderBeans();
+ const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
+ const newWeight = prompt('잔량을 입력하세요 (g)', b.weight || '0');
+ if (newWeight === null) return;
+ const parsed = parseFloat(newWeight);
+ if (isNaN(parsed) || parsed < 0) { alert('올바른 숫자를 입력해주세요.'); return; }
+ b.weight = parsed.toString();
+ saveData();
+ document.getElementById('beanWeightDisplay').textContent = b.weight + 'g';
+ renderBeans();
 }
 
 function deleteBean() {
-  if (!confirm('이 원두를 삭제할까요?')) return;
-  data.beans = data.beans.filter(b => b.id !== selectedBeanId);
-  saveData(); closeModal('beanDetailModal'); renderBeans();
+ if (!confirm('이 원두를 삭제할까요?')) return;
+ data.beans = data.beans.filter(b => b.id !== selectedBeanId);
+ saveData(); closeModal('beanDetailModal'); renderBeans();
 }
 
 function createRecipeFromBean() {
-  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
-  closeModal('beanDetailModal');
-  openAddRecipeModal();
-  // 원두 셀렉트 자동 선택
-  const beanSelect = document.getElementById('addRecipeBeanSelect');
-  if (beanSelect) {
-    beanSelect.value = selectedBeanId;
-  }
+ const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
+ closeModal('beanDetailModal');
+ openAddRecipeModal();
+ // 원두 셀렉트 자동 선택
+ const beanSelect = document.getElementById('addRecipeBeanSelect');
+ if (beanSelect) {
+   beanSelect.value = selectedBeanId;
+ }
 }
 
 // ─── Helper: Roastery autocomplete ───
 function updateRoasteryList() {
-  const roasteries = [...new Set([...data.beans.map(b => b.roastery), ...data.recipes.map(r => r.roastery), ...data.brews.map(b => b.roastery)].filter(Boolean))];
-  const opts = roasteries.map(r => `<option value="${r}">`).join('');
-  document.querySelectorAll('#roasteryList, #brewRoasteryList, #beanRoasteryList').forEach(el => { if (el) el.innerHTML = opts; });
+ const roasteries = [...new Set([...data.beans.map(b => b.roastery), ...data.recipes.map(r => r.roastery), ...data.brews.map(b => b.roastery)].filter(Boolean))];
+ const opts = roasteries.map(r => `<option value="${r}">`).join('');
+ document.querySelectorAll('#roasteryList, #brewRoasteryList, #beanRoasteryList').forEach(el => { if (el) el.innerHTML = opts; });
 }
 
 // ─── Helper: Brew type toggles ───
@@ -1092,644 +1092,644 @@ function setBrewType(val) { brewTypeValue = val; document.querySelectorAll('#bre
 
 // ─── Helper: Bean select in edit recipe ───
 function onEditBeanSelect() {
-  const id = document.getElementById('editBeanSelect').value; if (!id) return;
-  const b = data.beans.find(x => x.id === id); if (!b) return;
-  document.getElementById('editName').value = b.name || '';
-  document.getElementById('editRoastery').value = b.roastery || '';
-  document.getElementById('editOrigin').value = b.origin || '';
-  document.getElementById('editVariety').value = b.variety || '';
-  document.getElementById('editProcessing').value = b.processing || '';
-  if (b.roastLevel) document.getElementById('editRoasting').value = b.roastLevel;
+ const id = document.getElementById('editBeanSelect').value; if (!id) return;
+ const b = data.beans.find(x => x.id === id); if (!b) return;
+ document.getElementById('editName').value = b.name || '';
+ document.getElementById('editRoastery').value = b.roastery || '';
+ document.getElementById('editOrigin').value = b.origin || '';
+ document.getElementById('editVariety').value = b.variety || '';
+ document.getElementById('editProcessing').value = b.processing || '';
+ if (b.roastLevel) document.getElementById('editRoasting').value = b.roastLevel;
 }
 
 // ─── Recipe Parser ───
 function parseRecipeText(text) {
-  const recipe = { id: Date.now().toString(), raw: text, name: '', origin: '', variety: '', processing: '', roasting: '', notes: '', dripper: '', bottom: '', dose: '', water: '', ratio: '', temp: '', grind: '', meloDrip: '', targetTime: '', roastery: '', brewType: '핫', pourGuide: [], adjustments: [], createdAt: new Date().toISOString() };
-  const cleaned = text.replace(/\|/g, ' ').replace(/\*\*/g, '').replace(/[✅❌☕]/g, '').replace(/-{3,}/g, '').replace(/[ \t]+/g, ' ').replace(/^ +| +$/gm, '');
-  const m = re => { const x = cleaned.match(re); return x ? x[1].trim() : ''; };
-  const trimParen = s => s.replace(/\s*\(.*$/, '').trim();
-  const dashTitle = text.match(/레시피\s*[—\-–]+\s*(.+)/);
-  if (dashTitle) recipe.name = dashTitle[1].trim().replace(/\*\*/g, '');
-  else { const h2 = text.match(/^#{1,3}\s*(.+)/m); if (h2) recipe.name = h2[1].trim().replace(/\*\*/g, ''); }
-  recipe.origin = trimParen(m(/산지\s+(.+)/));
-  recipe.variety = trimParen(m(/품종\s+(.+)/));
-  recipe.processing = trimParen(m(/프로세싱\s+(.+)/));
-  recipe.roasting = trimParen(m(/로스팅\s*(?:레벨)?\s+(.+)/));
-  if (recipe.roasting.startsWith('레벨')) recipe.roasting = recipe.roasting.replace(/^레벨\s*/, '');
-  recipe.notes = m(/(?:예상\s*)?(?:플레이버\s*)?노트\s+(.+)/);
-  recipe.dripper = m(/드리퍼\s+(.+)/);
-  const bottomFromDripper = recipe.dripper.match(/(Fast|Open|Classic|Apex|Closed)/i);
-  if (bottomFromDripper) recipe.bottom = bottomFromDripper[1];
-  if (!recipe.bottom) recipe.bottom = m(/바텀\s*(?:추천)?[:\s]+(Fast|Open|Classic|Apex|Closed)/i);
-  recipe.dose = m(/도즈\s+(\d+)\s*g/);
-  recipe.water = m(/물량\s+(\d+)\s*g/);
-  const ratioM = cleaned.match(/1:(\d+(?:\.\d+)?)/); if (ratioM) recipe.ratio = '1:' + ratioM[1];
-  recipe.temp = m(/수온\s+(\d{2,3})\s*°?\s*C/);
-  const grindFinal = cleaned.match(/=\s*(\d{2,3})\s*클릭/);
-  if (grindFinal) recipe.grind = grindFinal[1];
-  else { recipe.grind = m(/(?:그라인드|클릭수?)\s+(\d{2,3})\s*(?:클릭)?/); if (!recipe.grind) { const gm = cleaned.match(/클릭수\s*계산[:\s]*(\d{2,3})/); if (gm) recipe.grind = gm[1]; } if (!recipe.grind) { const gm = cleaned.match(/(\d{2,3})\s*클릭/); if (gm) recipe.grind = gm[1]; } }
-  const meloMatch = cleaned.match(/멜로드립\s+(.+)/);
-  if (meloMatch) { const val = meloMatch[1].trim(); if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '사용'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; }
-  const timeMatch = cleaned.match(/(?:목표\s*)?(?:총\s*)?추출\s*(?:목표\s*)?시간\s+~?(\d+:\d+)/);
-  if (timeMatch) recipe.targetTime = timeMatch[1];
-  const lines = cleaned.split('\n');
-  const pourKeywords = ['블루밍', '1차 푸어', '2차 푸어', '3차 푸어', '4차 푸어', '드로우다운'];
-  lines.forEach(l => { if (pourKeywords.some(k => l.includes(k))) { const t = l.match(/(\d+:\d+)/); const a = l.match(/(\d+)\s*g/); if (t) recipe.pourGuide.push({ time: t[1], amount: a ? a[1] + 'g' : '', action: l.trim() }); } });
-  lines.forEach(l => { const am = l.match(/^(시다|쓰다[·]?텁텁하다|쓰다|텁텁하다|밍밍하다|너무\s*진하다)\s*(?:\(.*?\))?\s+(.+)/); if (am) recipe.adjustments.push({ symptom: am[1].trim(), fix: am[2].trim() }); });
-  if (!recipe.name && recipe.origin) recipe.name = [recipe.origin, recipe.variety, recipe.processing].filter(Boolean).join(' ');
-  return recipe;
+ const recipe = { id: Date.now().toString(), raw: text, name: '', origin: '', variety: '', processing: '', roasting: '', notes: '', dripper: '', bottom: '', dose: '', water: '', ratio: '', temp: '', grind: '', meloDrip: '', targetTime: '', roastery: '', brewType: '핫', pourGuide: [], adjustments: [], createdAt: new Date().toISOString() };
+ const cleaned = text.replace(/\|/g, ' ').replace(/\*\*/g, '').replace(/[✅❌☕]/g, '').replace(/-{3,}/g, '').replace(/[ \t]+/g, ' ').replace(/^ +| +$/gm, '');
+ const m = re => { const x = cleaned.match(re); return x ? x[1].trim() : ''; };
+ const trimParen = s => s.replace(/\s*\(.*$/, '').trim();
+ const dashTitle = text.match(/레시피\s*[—\-–]+\s*(.+)/);
+ if (dashTitle) recipe.name = dashTitle[1].trim().replace(/\*\*/g, '');
+ else { const h2 = text.match(/^#{1,3}\s*(.+)/m); if (h2) recipe.name = h2[1].trim().replace(/\*\*/g, ''); }
+ recipe.origin = trimParen(m(/산지\s+(.+)/));
+ recipe.variety = trimParen(m(/품종\s+(.+)/));
+ recipe.processing = trimParen(m(/프로세싱\s+(.+)/));
+ recipe.roasting = trimParen(m(/로스팅\s*(?:레벨)?\s+(.+)/));
+ if (recipe.roasting.startsWith('레벨')) recipe.roasting = recipe.roasting.replace(/^레벨\s*/, '');
+ recipe.notes = m(/(?:예상\s*)?(?:플레이버\s*)?노트\s+(.+)/);
+ recipe.dripper = m(/드리퍼\s+(.+)/);
+ const bottomFromDripper = recipe.dripper.match(/(Fast|Open|Classic|Apex|Closed)/i);
+ if (bottomFromDripper) recipe.bottom = bottomFromDripper[1];
+ if (!recipe.bottom) recipe.bottom = m(/바텀\s*(?:추천)?[:\s]+(Fast|Open|Classic|Apex|Closed)/i);
+ recipe.dose = m(/도즈\s+(\d+)\s*g/);
+ recipe.water = m(/물량\s+(\d+)\s*g/);
+ const ratioM = cleaned.match(/1:(\d+(?:\.\d+)?)/); if (ratioM) recipe.ratio = '1:' + ratioM[1];
+ recipe.temp = m(/수온\s+(\d{2,3})\s*°?\s*C/);
+ const grindFinal = cleaned.match(/=\s*(\d{2,3})\s*클릭/);
+ if (grindFinal) recipe.grind = grindFinal[1];
+ else { recipe.grind = m(/(?:그라인드|클릭수?)\s+(\d{2,3})\s*(?:클릭)?/); if (!recipe.grind) { const gm = cleaned.match(/클릭수\s*계산[:\s]*(\d{2,3})/); if (gm) recipe.grind = gm[1]; } if (!recipe.grind) { const gm = cleaned.match(/(\d{2,3})\s*클릭/); if (gm) recipe.grind = gm[1]; } }
+ const meloMatch = cleaned.match(/멜로드립\s+(.+)/);
+ if (meloMatch) { const val = meloMatch[1].trim(); if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '사용'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; }
+ const timeMatch = cleaned.match(/(?:목표\s*)?(?:총\s*)?추출\s*(?:목표\s*)?시간\s+~?(\d+:\d+)/);
+ if (timeMatch) recipe.targetTime = timeMatch[1];
+ const lines = cleaned.split('\n');
+ const pourKeywords = ['블루밍', '1차 푸어', '2차 푸어', '3차 푸어', '4차 푸어', '드로우다운'];
+ lines.forEach(l => { if (pourKeywords.some(k => l.includes(k))) { const t = l.match(/(\d+:\d+)/); const a = l.match(/(\d+)\s*g/); if (t) recipe.pourGuide.push({ time: t[1], amount: a ? a[1] + 'g' : '', action: l.trim() }); } });
+ lines.forEach(l => { const am = l.match(/^(시다|쓰다[·]?텁텁하다|쓰다|텁텁하다|밍밍하다|너무\s*진하다)\s*(?:\(.*?\))?\s+(.+)/); if (am) recipe.adjustments.push({ symptom: am[1].trim(), fix: am[2].trim() }); });
+ if (!recipe.name && recipe.origin) recipe.name = [recipe.origin, recipe.variety, recipe.processing].filter(Boolean).join(' ');
+ return recipe;
 }
 
 function openAddRecipeModal() {
-  document.getElementById('recipePasteArea').value = '';
-  const beanSelect = document.getElementById('addRecipeBeanSelect');
-  const activeBeans = data.beans.filter(b => !b.finished);
-  beanSelect.innerHTML = '<option value="">선택 안 함</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
-  beanSelect.value = '';
-  openModal('addRecipeModal');
+ document.getElementById('recipePasteArea').value = '';
+ const beanSelect = document.getElementById('addRecipeBeanSelect');
+ const activeBeans = data.beans.filter(b => !b.finished);
+ beanSelect.innerHTML = '<option value="">선택 안 함</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
+ beanSelect.value = '';
+ openModal('addRecipeModal');
 }
 
 function parseAndSaveRecipe() {
-  const text = document.getElementById('recipePasteArea').value.trim();
-  if (!text) return;
-  const recipe = parseRecipeText(text);
-  // 선택된 원두 정보로 비어있는 항목만 채우기
-  const beanId = document.getElementById('addRecipeBeanSelect').value;
-  if (beanId) {
-    const b = data.beans.find(x => x.id === beanId);
-    if (b) {
-      recipe.beanId = beanId;
-      if (!recipe.name && b.name) recipe.name = b.name;
-      if (!recipe.roastery && b.roastery) recipe.roastery = b.roastery;
-      if (!recipe.origin && b.origin) recipe.origin = b.origin;
-      if (!recipe.variety && b.variety) recipe.variety = b.variety;
-      if (!recipe.processing && b.processing) recipe.processing = b.processing;
-      if (!recipe.roasting && b.roastLevel) recipe.roasting = b.roastLevel;
-    }
-  }
-  data.recipes.unshift(recipe); saveData(); closeModal('addRecipeModal');
-  if (recipe.grind) { data.currentClicks = parseInt(recipe.grind); data.currentBean = recipe.name; updateClickBar(); renderClickGrid(); }
-  const missing = getMissingFields(recipe);
-  renderRecipes();
-  if (missing.length > 0) openEditRecipeModal(recipe.id, true);
+ const text = document.getElementById('recipePasteArea').value.trim();
+ if (!text) return;
+ const recipe = parseRecipeText(text);
+ // 선택된 원두 정보로 비어있는 항목만 채우기
+ const beanId = document.getElementById('addRecipeBeanSelect').value;
+ if (beanId) {
+   const b = data.beans.find(x => x.id === beanId);
+   if (b) {
+     recipe.beanId = beanId;
+     if (!recipe.name && b.name) recipe.name = b.name;
+     if (!recipe.roastery && b.roastery) recipe.roastery = b.roastery;
+     if (!recipe.origin && b.origin) recipe.origin = b.origin;
+     if (!recipe.variety && b.variety) recipe.variety = b.variety;
+     if (!recipe.processing && b.processing) recipe.processing = b.processing;
+     if (!recipe.roasting && b.roastLevel) recipe.roasting = b.roastLevel;
+   }
+ }
+ data.recipes.unshift(recipe); saveData(); closeModal('addRecipeModal');
+ if (recipe.grind) { data.currentClicks = parseInt(recipe.grind); data.currentBean = recipe.name; updateClickBar(); renderClickGrid(); }
+ const missing = getMissingFields(recipe);
+ renderRecipes();
+ if (missing.length > 0) openEditRecipeModal(recipe.id, true);
 }
 
 // ─── Recipe Edit ───
 function openEditRecipeModal(id, fromParse) {
-  editingRecipeId = id;
-  const r = data.recipes.find(x => x.id === id); if (!r) return;
-  document.getElementById('editRecipeTitle').textContent = fromParse ? '레시피 확인 — 빠진 항목을 채워주세요' : '레시피 편집';
-  // Bean select
-  const beanSelect = document.getElementById('editBeanSelect');
-  beanSelect.innerHTML = '<option value="">직접 입력</option>' + data.beans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
-  beanSelect.value = r.beanId || '';
-  document.getElementById('editName').value = r.name || '';
-  document.getElementById('editRoastery').value = r.roastery || '';
-  document.getElementById('editOrigin').value = r.origin || '';
-  document.getElementById('editVariety').value = r.variety || '';
-  document.getElementById('editProcessing').value = r.processing || '';
-  document.getElementById('editRoasting').value = r.roasting || '';
-  document.getElementById('editNotes').value = r.notes || '';
-  document.getElementById('editDripper').value = r.dripper || '';
-  document.getElementById('editGrind').value = r.grind || '';
-  document.getElementById('editTemp').value = r.temp || '';
-  document.getElementById('editRatio').value = r.ratio || '';
-  document.getElementById('editDose').value = r.dose || '';
-  document.getElementById('editWater').value = r.water || '';
-  document.getElementById('editBottom').value = r.bottom || '';
-  document.getElementById('editTargetTime').value = r.targetTime || '';
-  editMeloDripValue = r.meloDrip || ''; updateMeloDripToggle();
-  editBrewTypeValue = r.brewType || '핫'; setEditBrewType(editBrewTypeValue);
-  updateRoasteryList();
-  const missing = getMissingFields(r);
-  REQUIRED_FIELDS.forEach(f => { const el = document.getElementById(f.elId); if (el) el.classList.toggle('missing', missing.some(m => m.key === f.key)); });
-  const banner = document.getElementById('editMissingBanner');
-  banner.innerHTML = missing.length > 0 ? `<div class="missing-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>${missing.length}개 필수 항목이 비어있습니다: ${missing.map(m => m.label).join(', ')}</span></div>` : '';
-  openModal('editRecipeModal');
+ editingRecipeId = id;
+ const r = data.recipes.find(x => x.id === id); if (!r) return;
+ document.getElementById('editRecipeTitle').textContent = fromParse ? '레시피 확인 — 빠진 항목을 채워주세요' : '레시피 편집';
+ // Bean select
+ const beanSelect = document.getElementById('editBeanSelect');
+ beanSelect.innerHTML = '<option value="">직접 입력</option>' + data.beans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
+ beanSelect.value = r.beanId || '';
+ document.getElementById('editName').value = r.name || '';
+ document.getElementById('editRoastery').value = r.roastery || '';
+ document.getElementById('editOrigin').value = r.origin || '';
+ document.getElementById('editVariety').value = r.variety || '';
+ document.getElementById('editProcessing').value = r.processing || '';
+ document.getElementById('editRoasting').value = r.roasting || '';
+ document.getElementById('editNotes').value = r.notes || '';
+ document.getElementById('editDripper').value = r.dripper || '';
+ document.getElementById('editGrind').value = r.grind || '';
+ document.getElementById('editTemp').value = r.temp || '';
+ document.getElementById('editRatio').value = r.ratio || '';
+ document.getElementById('editDose').value = r.dose || '';
+ document.getElementById('editWater').value = r.water || '';
+ document.getElementById('editBottom').value = r.bottom || '';
+ document.getElementById('editTargetTime').value = r.targetTime || '';
+ editMeloDripValue = r.meloDrip || ''; updateMeloDripToggle();
+ editBrewTypeValue = r.brewType || '핫'; setEditBrewType(editBrewTypeValue);
+ updateRoasteryList();
+ const missing = getMissingFields(r);
+ REQUIRED_FIELDS.forEach(f => { const el = document.getElementById(f.elId); if (el) el.classList.toggle('missing', missing.some(m => m.key === f.key)); });
+ const banner = document.getElementById('editMissingBanner');
+ banner.innerHTML = missing.length > 0 ? `<div class="missing-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>${missing.length}개 필수 항목이 비어있습니다: ${missing.map(m => m.label).join(', ')}</span></div>` : '';
+ openModal('editRecipeModal');
 }
 
 function setMeloDrip(val) { editMeloDripValue = val; updateMeloDripToggle(); }
 function updateMeloDripToggle() { document.querySelectorAll('#editMeloDripToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === editMeloDripValue)); }
 
 function saveEditedRecipe() {
-  const r = data.recipes.find(x => x.id === editingRecipeId); if (!r) return;
-  r.beanId = document.getElementById('editBeanSelect').value || '';
-  r.name = document.getElementById('editName').value.trim();
-  // 원두명이 비어있으면 선택된 원두 이름으로 보충
-  if (!r.name && r.beanId) {
-    const linkedBean = data.beans.find(x => x.id === r.beanId);
-    if (linkedBean) r.name = linkedBean.name;
-  }
-  r.roastery = document.getElementById('editRoastery').value.trim();
-  r.origin = document.getElementById('editOrigin').value.trim();
-  r.variety = document.getElementById('editVariety').value.trim();
-  r.processing = document.getElementById('editProcessing').value.trim();
-  r.roasting = document.getElementById('editRoasting').value.trim();
-  r.notes = document.getElementById('editNotes').value.trim();
-  r.dripper = document.getElementById('editDripper').value.trim();
-  r.grind = document.getElementById('editGrind').value.trim();
-  r.temp = document.getElementById('editTemp').value.trim();
-  r.ratio = document.getElementById('editRatio').value.trim();
-  r.dose = document.getElementById('editDose').value.trim();
-  r.water = document.getElementById('editWater').value.trim();
-  r.bottom = document.getElementById('editBottom').value.trim();
-  r.targetTime = document.getElementById('editTargetTime').value.trim();
-  r.meloDrip = editMeloDripValue;
-  r.brewType = editBrewTypeValue;
-  const missing = getMissingFields(r);
-  if (missing.length > 0 && !confirm(`아직 ${missing.length}개 항목이 비어있습니다 (${missing.map(m => m.label).join(', ')}). 그래도 저장할까요?`)) return;
-  if (r.grind) { data.currentClicks = parseInt(r.grind); data.currentBean = r.name; updateClickBar(); renderClickGrid(); }
-  saveData(); closeModal('editRecipeModal'); renderRecipes();
+ const r = data.recipes.find(x => x.id === editingRecipeId); if (!r) return;
+ r.beanId = document.getElementById('editBeanSelect').value || '';
+ r.name = document.getElementById('editName').value.trim();
+ // 원두명이 비어있으면 선택된 원두 이름으로 보충
+ if (!r.name && r.beanId) {
+   const linkedBean = data.beans.find(x => x.id === r.beanId);
+   if (linkedBean) r.name = linkedBean.name;
+ }
+ r.roastery = document.getElementById('editRoastery').value.trim();
+ r.origin = document.getElementById('editOrigin').value.trim();
+ r.variety = document.getElementById('editVariety').value.trim();
+ r.processing = document.getElementById('editProcessing').value.trim();
+ r.roasting = document.getElementById('editRoasting').value.trim();
+ r.notes = document.getElementById('editNotes').value.trim();
+ r.dripper = document.getElementById('editDripper').value.trim();
+ r.grind = document.getElementById('editGrind').value.trim();
+ r.temp = document.getElementById('editTemp').value.trim();
+ r.ratio = document.getElementById('editRatio').value.trim();
+ r.dose = document.getElementById('editDose').value.trim();
+ r.water = document.getElementById('editWater').value.trim();
+ r.bottom = document.getElementById('editBottom').value.trim();
+ r.targetTime = document.getElementById('editTargetTime').value.trim();
+ r.meloDrip = editMeloDripValue;
+ r.brewType = editBrewTypeValue;
+ const missing = getMissingFields(r);
+ if (missing.length > 0 && !confirm(`아직 ${missing.length}개 항목이 비어있습니다 (${missing.map(m => m.label).join(', ')}). 그래도 저장할까요?`)) return;
+ if (r.grind) { data.currentClicks = parseInt(r.grind); data.currentBean = r.name; updateClickBar(); renderClickGrid(); }
+ saveData(); closeModal('editRecipeModal'); renderRecipes();
 }
 
 function editRecipe() { closeModal('recipeDetailModal'); openEditRecipeModal(selectedRecipeId, false); }
 
 // ─── Recipe List ───
 function renderRecipes() {
-  const container = document.getElementById('recipeList');
-  if (!container) return;
-  // Update type tab active state
-  document.querySelectorAll('#recipeTypeTabs .pick-source-tab').forEach(btn => {
-    const map = { '전체': 'all', 'HOT': '핫', 'ICE': '아이스' };
-    btn.classList.toggle('active', map[btn.textContent] === recipeTypeFilter);
-  });
-  const search = (document.getElementById('recipeSearch')?.value || '').toLowerCase();
-  let filtered = data.recipes.filter(r => {
-    // HOT/ICE filter
-    if (recipeTypeFilter === '핫' && r.brewType === '아이스') return false;
-    if (recipeTypeFilter === '아이스' && r.brewType !== '아이스') return false;
-    const sm = !search || [r.name, r.origin, r.variety, r.processing, r.dripper, r.roastery].some(f => (f || '').toLowerCase().includes(search));
-    if (activeRecipeFilter === 'all') return sm;
-    const allProcs = data.recipes.map(x => x.processing).filter(Boolean);
-    if (allProcs.includes(activeRecipeFilter)) return sm && r.processing === activeRecipeFilter;
-    if (data.recipes.some(x => x.roastery === activeRecipeFilter)) return sm && r.roastery === activeRecipeFilter;
-    return sm && (r.dripper || '').includes(activeRecipeFilter);
-  });
-  const filters = document.getElementById('recipeFilters');
-  const procs = [...new Set(data.recipes.map(r => r.processing).filter(Boolean))];
-  const roasteries = [...new Set(data.recipes.map(r => r.roastery).filter(Boolean))];
-  const drips = [...new Set(data.recipes.map(r => r.dripper?.split('—')[0]?.trim()).filter(Boolean))];
-  filters.innerHTML = `<button class="filter-chip ${activeRecipeFilter === 'all' ? 'active' : ''}" onclick="activeRecipeFilter='all';renderRecipes()">전체</button>${roasteries.map(r => `<button class="filter-chip ${activeRecipeFilter === r ? 'active' : ''}" onclick="activeRecipeFilter='${r}';renderRecipes()">${r}</button>`).join('')}${procs.map(p => `<button class="filter-chip ${activeRecipeFilter === p ? 'active' : ''}" onclick="activeRecipeFilter='${p}';renderRecipes()">${p}</button>`).join('')}${drips.map(d => `<button class="filter-chip ${activeRecipeFilter === d ? 'active' : ''}" onclick="activeRecipeFilter='${d}';renderRecipes()">${d}</button>`).join('')}`;
-  if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>레시피가 없습니다<br>클로드에서 받은 레시피를 붙여넣어 추가하세요</p></div>'; return; }
-  container.innerHTML = filtered.map(r => {
-    const missing = getMissingFields(r);
-    return `<div class="card recipe-card" onclick="openRecipeDetail('${r.id}')"><div class="recipe-card-header"><div class="recipe-card-name">${r.name || '이름 없음'}</div>${r.grind ? `<div style="font-family:'DM Mono';font-size:16px;font-weight:600;color:var(--accent);">${r.grind}C</div>` : ''}</div>${r.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">${r.roastery}</div>` : ''}<div class="recipe-card-tags">${r.processing ? `<span class="tag">${r.processing}</span>` : ''}${r.roasting ? `<span class="tag">${r.roasting}</span>` : ''}${r.brewType === '아이스' ? '<span class="tag">🧊아이스</span>' : ''}${r.dripper ? `<span class="tag">${r.dripper.split('—')[0].trim()}</span>` : ''}${r.ratio ? `<span class="tag">${r.ratio}</span>` : ''}${r.meloDrip ? `<span class="tag">멜로드립 ${r.meloDrip}</span>` : ''}</div>${r.notes ? `<div class="recipe-card-meta">${r.notes}</div>` : ''}${missing.length ? `<div class="recipe-card-missing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>${missing.length}개 항목 미입력</div>` : ''}</div>`;
-  }).join('');
+ const container = document.getElementById('recipeList');
+ if (!container) return;
+ // Update type tab active state
+ document.querySelectorAll('#recipeTypeTabs .pick-source-tab').forEach(btn => {
+   const map = { '전체': 'all', 'HOT': '핫', 'ICE': '아이스' };
+   btn.classList.toggle('active', map[btn.textContent] === recipeTypeFilter);
+ });
+ const search = (document.getElementById('recipeSearch')?.value || '').toLowerCase();
+ let filtered = data.recipes.filter(r => {
+   // HOT/ICE filter
+   if (recipeTypeFilter === '핫' && r.brewType === '아이스') return false;
+   if (recipeTypeFilter === '아이스' && r.brewType !== '아이스') return false;
+   const sm = !search || [r.name, r.origin, r.variety, r.processing, r.dripper, r.roastery].some(f => (f || '').toLowerCase().includes(search));
+   if (activeRecipeFilter === 'all') return sm;
+   const allProcs = data.recipes.map(x => x.processing).filter(Boolean);
+   if (allProcs.includes(activeRecipeFilter)) return sm && r.processing === activeRecipeFilter;
+   if (data.recipes.some(x => x.roastery === activeRecipeFilter)) return sm && r.roastery === activeRecipeFilter;
+   return sm && (r.dripper || '').includes(activeRecipeFilter);
+ });
+ const filters = document.getElementById('recipeFilters');
+ const procs = [...new Set(data.recipes.map(r => r.processing).filter(Boolean))];
+ const roasteries = [...new Set(data.recipes.map(r => r.roastery).filter(Boolean))];
+ const drips = [...new Set(data.recipes.map(r => r.dripper?.split('—')[0]?.trim()).filter(Boolean))];
+ filters.innerHTML = `<button class="filter-chip ${activeRecipeFilter === 'all' ? 'active' : ''}" onclick="activeRecipeFilter='all';renderRecipes()">전체</button>${roasteries.map(r => `<button class="filter-chip ${activeRecipeFilter === r ? 'active' : ''}" onclick="activeRecipeFilter='${r}';renderRecipes()">${r}</button>`).join('')}${procs.map(p => `<button class="filter-chip ${activeRecipeFilter === p ? 'active' : ''}" onclick="activeRecipeFilter='${p}';renderRecipes()">${p}</button>`).join('')}${drips.map(d => `<button class="filter-chip ${activeRecipeFilter === d ? 'active' : ''}" onclick="activeRecipeFilter='${d}';renderRecipes()">${d}</button>`).join('')}`;
+ if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>레시피가 없습니다<br>클로드에서 받은 레시피를 붙여넣어 추가하세요</p></div>'; return; }
+ container.innerHTML = filtered.map(r => {
+   const missing = getMissingFields(r);
+   return `<div class="card recipe-card" onclick="openRecipeDetail('${r.id}')"><div class="recipe-card-header"><div class="recipe-card-name">${r.name || '이름 없음'}</div>${r.grind ? `<div style="font-family:'DM Mono';font-size:16px;font-weight:600;color:var(--accent);">${r.grind}C</div>` : ''}</div>${r.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">${r.roastery}</div>` : ''}<div class="recipe-card-tags">${r.processing ? `<span class="tag">${r.processing}</span>` : ''}${r.roasting ? `<span class="tag">${r.roasting}</span>` : ''}${r.brewType === '아이스' ? '<span class="tag">🧊아이스</span>' : ''}${r.dripper ? `<span class="tag">${r.dripper.split('—')[0].trim()}</span>` : ''}${r.ratio ? `<span class="tag">${r.ratio}</span>` : ''}${r.meloDrip ? `<span class="tag">멜로드립 ${r.meloDrip}</span>` : ''}</div>${r.notes ? `<div class="recipe-card-meta">${r.notes}</div>` : ''}${missing.length ? `<div class="recipe-card-missing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>${missing.length}개 항목 미입력</div>` : ''}</div>`;
+ }).join('');
 }
 
 function openRecipeDetail(id) {
-  selectedRecipeId = id;
-  const r = data.recipes.find(x => x.id === id); if (!r) return;
-  document.getElementById('recipeDetailTitle').textContent = r.name || '레시피 상세';
-  const missing = getMissingFields(r);
-  let html = '';
-  if (missing.length > 0) html += `<div class="missing-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>${missing.length}개 필수 항목 미입력 — 편집 버튼을 눌러 채워주세요</span></div>`;
-  html += '<div class="recipe-detail-section"><h3>원두 정보</h3>';
-  [['로스터리', r.roastery], ['산지', r.origin], ['품종', r.variety], ['프로세싱', r.processing], ['로스팅', r.roasting], ['예상 노트', r.notes]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
-  html += '</div><div class="recipe-detail-section"><h3>레시피</h3>';
-  [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
-  html += '</div>';
-  if (r.pourGuide?.length) { html += '<div class="recipe-detail-section"><h3>푸어링 가이드</h3>'; r.pourGuide.forEach(p => html += `<div class="pour-step"><div class="pour-step-time">${p.time}</div><div class="pour-step-amount">${p.amount}</div><div class="pour-step-action">${p.action}</div></div>`); html += '</div>'; }
-  if (r.adjustments?.length) { html += '<div class="recipe-detail-section"><h3>미세 조정</h3>'; r.adjustments.forEach(a => html += `<div class="adjust-row"><span class="adjust-symptom">${a.symptom}</span><span class="adjust-fix">${a.fix}</span></div>`); html += '</div>'; }
-  document.getElementById('recipeDetailContent').innerHTML = html;
-  openModal('recipeDetailModal');
+ selectedRecipeId = id;
+ const r = data.recipes.find(x => x.id === id); if (!r) return;
+ document.getElementById('recipeDetailTitle').textContent = r.name || '레시피 상세';
+ const missing = getMissingFields(r);
+ let html = '';
+ if (missing.length > 0) html += `<div class="missing-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>${missing.length}개 필수 항목 미입력 — 편집 버튼을 눌러 채워주세요</span></div>`;
+ html += '<div class="recipe-detail-section"><h3>원두 정보</h3>';
+ [['로스터리', r.roastery], ['산지', r.origin], ['품종', r.variety], ['프로세싱', r.processing], ['로스팅', r.roasting], ['예상 노트', r.notes]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
+ html += '</div><div class="recipe-detail-section"><h3>레시피</h3>';
+ [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
+ html += '</div>';
+ if (r.pourGuide?.length) { html += '<div class="recipe-detail-section"><h3>푸어링 가이드</h3>'; r.pourGuide.forEach(p => html += `<div class="pour-step"><div class="pour-step-time">${p.time}</div><div class="pour-step-amount">${p.amount}</div><div class="pour-step-action">${p.action}</div></div>`); html += '</div>'; }
+ if (r.adjustments?.length) { html += '<div class="recipe-detail-section"><h3>미세 조정</h3>'; r.adjustments.forEach(a => html += `<div class="adjust-row"><span class="adjust-symptom">${a.symptom}</span><span class="adjust-fix">${a.fix}</span></div>`); html += '</div>'; }
+ document.getElementById('recipeDetailContent').innerHTML = html;
+ openModal('recipeDetailModal');
 }
 
 function deleteRecipe() { if (!confirm('이 레시피를 삭제할까요?')) return; data.recipes = data.recipes.filter(r => r.id !== selectedRecipeId); saveData(); closeModal('recipeDetailModal'); renderRecipes(); }
 
 // ─── Brew Log ───
 function openAddBrewModal(recipeId) {
-  editingBrewId = null;
-  currentBrewRating = 0; renderBrewStars();
-  brewTypeValue = '핫'; setBrewType('핫');
-  const select = document.getElementById('brewRecipeSelect');
-  select.innerHTML = '<option value="">직접 입력</option>' + data.recipes.map(r => `<option value="${r.id}">${r.name || r.origin || '이름 없음'}</option>`).join('');
-  const beanSelect = document.getElementById('brewBeanSelect');
-  const activeBeans = data.beans.filter(b => !b.finished);
-  beanSelect.innerHTML = '<option value="">직접 입력</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.weight ? ' (' + b.weight + 'g 남음)' : ''}${b.roastery ? ' - ' + b.roastery : ''}</option>`).join('');
-  beanSelect.value = '';
-  document.getElementById('brewBeanInfo').style.display = 'none';
-  document.getElementById('brewBean').value = '';
-  document.getElementById('brewRoastery').value = '';
-  document.getElementById('brewDripper').value = '';
-  document.getElementById('brewClicks').value = data.currentClicks || ''; document.getElementById('brewTemp').value = '';
-  document.getElementById('brewTime').value = ''; document.getElementById('brewDose').value = '';
-  document.getElementById('brewWater').value = ''; document.getElementById('brewMeloDrip').value = '';
-  document.getElementById('brewDate').value = new Date().toISOString().split('T')[0];
-  document.getElementById('brewNote').value = ''; document.getElementById('brewAdjust').value = '';
-  updateRoasteryList();
-  if (recipeId) {
-    select.value = recipeId; onBrewRecipeSelect();
-    // Auto-select linked bean if not already set by onBrewRecipeSelect
-    if (!document.getElementById('brewBeanSelect').value) {
-      const recipe = data.recipes.find(r => r.id === recipeId);
-      if (recipe?.beanId && activeBeans.some(b => b.id === recipe.beanId)) {
-        beanSelect.value = recipe.beanId; onBrewBeanSelect();
-      }
-    }
-  }
-  openModal('addBrewModal');
+ editingBrewId = null;
+ currentBrewRating = 0; renderBrewStars();
+ brewTypeValue = '핫'; setBrewType('핫');
+ const select = document.getElementById('brewRecipeSelect');
+ select.innerHTML = '<option value="">직접 입력</option>' + data.recipes.map(r => `<option value="${r.id}">${r.name || r.origin || '이름 없음'}</option>`).join('');
+ const beanSelect = document.getElementById('brewBeanSelect');
+ const activeBeans = data.beans.filter(b => !b.finished);
+ beanSelect.innerHTML = '<option value="">직접 입력</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.weight ? ' (' + b.weight + 'g 남음)' : ''}${b.roastery ? ' - ' + b.roastery : ''}</option>`).join('');
+ beanSelect.value = '';
+ document.getElementById('brewBeanInfo').style.display = 'none';
+ document.getElementById('brewBean').value = '';
+ document.getElementById('brewRoastery').value = '';
+ document.getElementById('brewDripper').value = '';
+ document.getElementById('brewClicks').value = data.currentClicks || ''; document.getElementById('brewTemp').value = '';
+ document.getElementById('brewTime').value = ''; document.getElementById('brewDose').value = '';
+ document.getElementById('brewWater').value = ''; document.getElementById('brewMeloDrip').value = '';
+ document.getElementById('brewDate').value = new Date().toISOString().split('T')[0];
+ document.getElementById('brewNote').value = ''; document.getElementById('brewAdjust').value = '';
+ updateRoasteryList();
+ if (recipeId) {
+   select.value = recipeId; onBrewRecipeSelect();
+   // Auto-select linked bean if not already set by onBrewRecipeSelect
+   if (!document.getElementById('brewBeanSelect').value) {
+     const recipe = data.recipes.find(r => r.id === recipeId);
+     if (recipe?.beanId && activeBeans.some(b => b.id === recipe.beanId)) {
+       beanSelect.value = recipe.beanId; onBrewBeanSelect();
+     }
+   }
+ }
+ openModal('addBrewModal');
 }
 
 function onBrewBeanSelect() {
-  const id = document.getElementById('brewBeanSelect').value;
-  if (!id) { document.getElementById('brewBeanInfo').style.display = 'none'; return; }
-  const b = data.beans.find(x => x.id === id); if (!b) return;
-  document.getElementById('brewBean').value = b.name || '';
-  document.getElementById('brewRoastery').value = b.roastery || '';
-  updateBrewBeanInfo();
+ const id = document.getElementById('brewBeanSelect').value;
+ if (!id) { document.getElementById('brewBeanInfo').style.display = 'none'; return; }
+ const b = data.beans.find(x => x.id === id); if (!b) return;
+ document.getElementById('brewBean').value = b.name || '';
+ document.getElementById('brewRoastery').value = b.roastery || '';
+ updateBrewBeanInfo();
 }
 
 function updateBrewBeanInfo() {
-  const beanId = document.getElementById('brewBeanSelect').value;
-  const infoEl = document.getElementById('brewBeanInfo');
-  if (!beanId) { infoEl.style.display = 'none'; return; }
-  const b = data.beans.find(x => x.id === beanId);
-  if (!b) { infoEl.style.display = 'none'; return; }
-  const dose = parseFloat(document.getElementById('brewDose').value) || 0;
-  const currentWeight = parseFloat(b.weight) || 0;
-  document.getElementById('brewBeanInfoName').textContent = b.name;
-  document.getElementById('brewBeanInfoWeight').textContent = currentWeight ? currentWeight + 'g 남음' : '중량 미입력';
-  if (dose > 0 && currentWeight > 0) {
-    const remaining = Math.max(0, currentWeight - dose);
-    const shots = Math.floor(currentWeight / dose);
-    document.getElementById('brewBeanInfoDeduct').textContent = `${dose}g 차감 → ${remaining}g 남음 (약 ${shots}잔 가능)`;
-    document.getElementById('brewBeanInfoDeduct').style.color = remaining < dose ? 'var(--warning)' : 'var(--text-secondary)';
-  } else {
-    document.getElementById('brewBeanInfoDeduct').textContent = dose ? '' : '도즈 입력 시 차감량 표시';
-  }
-  infoEl.style.display = 'block';
+ const beanId = document.getElementById('brewBeanSelect').value;
+ const infoEl = document.getElementById('brewBeanInfo');
+ if (!beanId) { infoEl.style.display = 'none'; return; }
+ const b = data.beans.find(x => x.id === beanId);
+ if (!b) { infoEl.style.display = 'none'; return; }
+ const dose = parseFloat(document.getElementById('brewDose').value) || 0;
+ const currentWeight = parseFloat(b.weight) || 0;
+ document.getElementById('brewBeanInfoName').textContent = b.name;
+ document.getElementById('brewBeanInfoWeight').textContent = currentWeight ? currentWeight + 'g 남음' : '중량 미입력';
+ if (dose > 0 && currentWeight > 0) {
+   const remaining = Math.max(0, currentWeight - dose);
+   const shots = Math.floor(currentWeight / dose);
+   document.getElementById('brewBeanInfoDeduct').textContent = `${dose}g 차감 → ${remaining}g 남음 (약 ${shots}잔 가능)`;
+   document.getElementById('brewBeanInfoDeduct').style.color = remaining < dose ? 'var(--warning)' : 'var(--text-secondary)';
+ } else {
+   document.getElementById('brewBeanInfoDeduct').textContent = dose ? '' : '도즈 입력 시 차감량 표시';
+ }
+ infoEl.style.display = 'block';
 }
 
 function brewFromRecipe() { closeModal('recipeDetailModal'); openAddBrewModal(selectedRecipeId); }
 
 function onBrewRecipeSelect() {
-  const id = document.getElementById('brewRecipeSelect').value; if (!id) return;
-  const r = data.recipes.find(x => x.id === id); if (!r) return;
-  document.getElementById('brewBean').value = r.name || '';
-  document.getElementById('brewRoastery').value = r.roastery || '';
-  if (r.brewType) { brewTypeValue = r.brewType; setBrewType(r.brewType); }
-  document.getElementById('brewDripper').value = (r.dripper || '').split('—')[0].trim();
-  document.getElementById('brewClicks').value = r.grind || '';
-  document.getElementById('brewTemp').value = r.temp || '';
-  document.getElementById('brewTime').value = r.targetTime || '';
-  document.getElementById('brewDose').value = r.dose || '';
-  document.getElementById('brewWater').value = r.water || '';
-  document.getElementById('brewMeloDrip').value = r.meloDrip || '';
-  // Auto-select linked bean
-  const beanSelect = document.getElementById('brewBeanSelect');
-  const activeBeans = data.beans.filter(b => !b.finished);
-  if (r.beanId && activeBeans.some(b => b.id === r.beanId)) {
-    beanSelect.value = r.beanId; onBrewBeanSelect();
-  } else {
-    const match = activeBeans.find(b => b.name === r.name);
-    if (match) { beanSelect.value = match.id; onBrewBeanSelect(); }
-    else updateBrewBeanInfo();
-  }
+ const id = document.getElementById('brewRecipeSelect').value; if (!id) return;
+ const r = data.recipes.find(x => x.id === id); if (!r) return;
+ document.getElementById('brewBean').value = r.name || '';
+ document.getElementById('brewRoastery').value = r.roastery || '';
+ if (r.brewType) { brewTypeValue = r.brewType; setBrewType(r.brewType); }
+ document.getElementById('brewDripper').value = (r.dripper || '').split('—')[0].trim();
+ document.getElementById('brewClicks').value = r.grind || '';
+ document.getElementById('brewTemp').value = r.temp || '';
+ document.getElementById('brewTime').value = r.targetTime || '';
+ document.getElementById('brewDose').value = r.dose || '';
+ document.getElementById('brewWater').value = r.water || '';
+ document.getElementById('brewMeloDrip').value = r.meloDrip || '';
+ // Auto-select linked bean
+ const beanSelect = document.getElementById('brewBeanSelect');
+ const activeBeans = data.beans.filter(b => !b.finished);
+ if (r.beanId && activeBeans.some(b => b.id === r.beanId)) {
+   beanSelect.value = r.beanId; onBrewBeanSelect();
+ } else {
+   const match = activeBeans.find(b => b.name === r.name);
+   if (match) { beanSelect.value = match.id; onBrewBeanSelect(); }
+   else updateBrewBeanInfo();
+ }
 }
 
 function setBrewRating(n) { currentBrewRating = n; renderBrewStars(); }
 function renderBrewStars() { document.querySelectorAll('#brewStars span').forEach((s, i) => s.classList.toggle('filled', i < currentBrewRating)); }
 
 function saveBrew() {
-  const bean = document.getElementById('brewBean').value.trim();
-  if (!bean) { alert('원두명을 입력해주세요.'); return; }
-  const recipeId = document.getElementById('brewRecipeSelect').value;
-  const beanId = document.getElementById('brewBeanSelect').value;
-  const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
-  const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
+ const bean = document.getElementById('brewBean').value.trim();
+ if (!bean) { alert('원두명을 입력해주세요.'); return; }
+ const recipeId = document.getElementById('brewRecipeSelect').value;
+ const beanId = document.getElementById('brewBeanSelect').value;
+ const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
+ const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
 
-  if (editingBrewId) {
-    // 편집 모드: 기존 기록 업데이트
-    const existing = data.brews.find(b => b.id === editingBrewId);
-    if (existing) {
-      // 원두 잔량 조정: 이전 도즈 복원 후 새 도즈 차감
-      if (existing.beanId && existing.dose) {
-        const oldBean = data.beans.find(b => b.id === existing.beanId);
-        if (oldBean) oldBean.weight = ((parseFloat(oldBean.weight) || 0) + parseFloat(existing.dose)).toString();
-      }
-      Object.assign(existing, brewData);
-      // 새 도즈 차감
-      if (beanId && brewData.dose) {
-        const beanObj = data.beans.find(b => b.id === beanId);
-        if (beanObj && beanObj.weight) {
-          const remaining = parseFloat(beanObj.weight) - parseFloat(brewData.dose);
-          beanObj.weight = Math.max(0, remaining).toString();
-        }
-      }
-    }
-    editingBrewId = null;
-  } else {
-    // 신규 추가
-    const brew = { id: Date.now().toString(), ...brewData };
-    data.brews.unshift(brew);
-    // 원두 잔량 차감
-    if (beanId && brew.dose) {
-      const beanObj = data.beans.find(b => b.id === beanId);
-      if (beanObj && beanObj.weight) {
-        const remaining = parseFloat(beanObj.weight) - parseFloat(brew.dose);
-        beanObj.weight = Math.max(0, remaining).toString();
-        if (remaining <= 0 && !beanObj.finished) {
-          if (confirm(`${beanObj.name} 원두가 다 소진되었어요. '다 마심'으로 변경할까요?`)) beanObj.finished = true;
-        }
-      }
-    }
-    if (brewData.clicks) { data.currentClicks = parseInt(brewData.clicks); data.currentBean = brewData.bean; data.clickHistory.unshift({ clicks: parseInt(brewData.clicks), bean: brewData.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
-  }
-  saveData(); closeModal('addBrewModal'); renderBrews(); renderBeans();
+ if (editingBrewId) {
+   // 편집 모드: 기존 기록 업데이트
+   const existing = data.brews.find(b => b.id === editingBrewId);
+   if (existing) {
+     // 원두 잔량 조정: 이전 도즈 복원 후 새 도즈 차감
+     if (existing.beanId && existing.dose) {
+       const oldBean = data.beans.find(b => b.id === existing.beanId);
+       if (oldBean) oldBean.weight = ((parseFloat(oldBean.weight) || 0) + parseFloat(existing.dose)).toString();
+     }
+     Object.assign(existing, brewData);
+     // 새 도즈 차감
+     if (beanId && brewData.dose) {
+       const beanObj = data.beans.find(b => b.id === beanId);
+       if (beanObj && beanObj.weight) {
+         const remaining = parseFloat(beanObj.weight) - parseFloat(brewData.dose);
+         beanObj.weight = Math.max(0, remaining).toString();
+       }
+     }
+   }
+   editingBrewId = null;
+ } else {
+   // 신규 추가
+   const brew = { id: Date.now().toString(), ...brewData };
+   data.brews.unshift(brew);
+   // 원두 잔량 차감
+   if (beanId && brew.dose) {
+     const beanObj = data.beans.find(b => b.id === beanId);
+     if (beanObj && beanObj.weight) {
+       const remaining = parseFloat(beanObj.weight) - parseFloat(brew.dose);
+       beanObj.weight = Math.max(0, remaining).toString();
+       if (remaining <= 0 && !beanObj.finished) {
+         if (confirm(`${beanObj.name} 원두가 다 소진되었어요. '다 마심'으로 변경할까요?`)) beanObj.finished = true;
+       }
+     }
+   }
+   if (brewData.clicks) { data.currentClicks = parseInt(brewData.clicks); data.currentBean = brewData.bean; data.clickHistory.unshift({ clicks: parseInt(brewData.clicks), bean: brewData.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
+ }
+ saveData(); closeModal('addBrewModal'); renderBrews(); renderBeans();
 }
 
 function renderBrews() {
-  const container = document.getElementById('brewList');
-  if (!container) return;
-  const search = (document.getElementById('brewSearch')?.value || '').toLowerCase();
-  let filtered = data.brews.filter(b => {
-    const sm = !search || [b.bean, b.dripper, b.origin, b.note, b.roastery].some(f => (f || '').toLowerCase().includes(search));
-    if (!sm) return false;
-    if (activeBrewFilter !== 'all' && !(b.dripper || '').includes(activeBrewFilter)) return false;
-    if (activeBrewStarFilter > 0 && (b.rating || 0) < activeBrewStarFilter) return false;
-    return true;
-  });
-  // 별점 필터
-  const starFilters = document.getElementById('brewStarFilters');
-  starFilters.innerHTML = `<button class="filter-chip ${activeBrewStarFilter === 0 ? 'active' : ''}" onclick="activeBrewStarFilter=0;renderBrews()">전체</button><button class="filter-chip ${activeBrewStarFilter === 4 ? 'active' : ''}" onclick="activeBrewStarFilter=4;renderBrews()">★4+</button><button class="filter-chip ${activeBrewStarFilter === 5 ? 'active' : ''}" onclick="activeBrewStarFilter=5;renderBrews()">★5</button>`;
-  const filters = document.getElementById('brewFilters');
-  const drippers = [...new Set(data.brews.map(b => b.dripper).filter(Boolean))];
-  filters.innerHTML = `<button class="filter-chip ${activeBrewFilter === 'all' ? 'active' : ''}" onclick="activeBrewFilter='all';renderBrews()">전체</button>${drippers.map(d => `<button class="filter-chip ${activeBrewFilter === d ? 'active' : ''}" onclick="activeBrewFilter='${d}';renderBrews()">${d}</button>`).join('')}`;
-  if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>추출 기록이 없습니다</p></div>'; return; }
-  const groups = {};
-  filtered.forEach(b => { const key = b.date ? b.date.substring(0, 7) : 'unknown'; if (!groups[key]) groups[key] = []; groups[key].push(b); });
-  let html = '';
-  Object.keys(groups).sort().reverse().forEach(key => {
-    if (key !== 'unknown') { const [y, m] = key.split('-'); html += `<div class="group-header">${y}년 ${parseInt(m)}월</div>`; } else html += `<div class="group-header">날짜 없음</div>`;
-    groups[key].forEach(b => {
-      html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + b.meloDrip : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
-    });
-  });
-  container.innerHTML = html;
+ const container = document.getElementById('brewList');
+ if (!container) return;
+ const search = (document.getElementById('brewSearch')?.value || '').toLowerCase();
+ let filtered = data.brews.filter(b => {
+   const sm = !search || [b.bean, b.dripper, b.origin, b.note, b.roastery].some(f => (f || '').toLowerCase().includes(search));
+   if (!sm) return false;
+   if (activeBrewFilter !== 'all' && !(b.dripper || '').includes(activeBrewFilter)) return false;
+   if (activeBrewStarFilter > 0 && (b.rating || 0) < activeBrewStarFilter) return false;
+   return true;
+ });
+ // 별점 필터
+ const starFilters = document.getElementById('brewStarFilters');
+ starFilters.innerHTML = `<button class="filter-chip ${activeBrewStarFilter === 0 ? 'active' : ''}" onclick="activeBrewStarFilter=0;renderBrews()">전체</button><button class="filter-chip ${activeBrewStarFilter === 4 ? 'active' : ''}" onclick="activeBrewStarFilter=4;renderBrews()">★4+</button><button class="filter-chip ${activeBrewStarFilter === 5 ? 'active' : ''}" onclick="activeBrewStarFilter=5;renderBrews()">★5</button>`;
+ const filters = document.getElementById('brewFilters');
+ const drippers = [...new Set(data.brews.map(b => b.dripper).filter(Boolean))];
+ filters.innerHTML = `<button class="filter-chip ${activeBrewFilter === 'all' ? 'active' : ''}" onclick="activeBrewFilter='all';renderBrews()">전체</button>${drippers.map(d => `<button class="filter-chip ${activeBrewFilter === d ? 'active' : ''}" onclick="activeBrewFilter='${d}';renderBrews()">${d}</button>`).join('')}`;
+ if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>추출 기록이 없습니다</p></div>'; return; }
+ const groups = {};
+ filtered.forEach(b => { const key = b.date ? b.date.substring(0, 7) : 'unknown'; if (!groups[key]) groups[key] = []; groups[key].push(b); });
+ let html = '';
+ Object.keys(groups).sort().reverse().forEach(key => {
+   if (key !== 'unknown') { const [y, m] = key.split('-'); html += `<div class="group-header">${y}년 ${parseInt(m)}월</div>`; } else html += `<div class="group-header">날짜 없음</div>`;
+   groups[key].forEach(b => {
+     html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + b.meloDrip : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
+   });
+ });
+ container.innerHTML = html;
 }
 
 function openBrewDetail(id) {
-  selectedBrewId = id;
-  const b = data.brews.find(x => x.id === id); if (!b) return;
-  let html = `<div class="recipe-detail-section"><h3>추출 정보</h3><div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>${b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : ''}${b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : ''}${b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : ''}${b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : ''}${b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : ''}${b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : ''}${b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : ''}${b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : ''}${b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : ''}${b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${b.meloDrip}</span></div>` : ''}</div>${b.rating ? `<div class="recipe-detail-section"><h3>평가</h3><div style="color:var(--star);font-size:24px;">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div></div>` : ''}${b.note ? `<div class="recipe-detail-section"><h3>맛 메모</h3><p style="font-size:14px;line-height:1.6;color:var(--text-secondary);">${b.note}</p></div>` : ''}${b.adjust ? `<div class="recipe-detail-section"><h3>조정 사항</h3><p style="font-size:14px;color:var(--text-secondary);">${b.adjust}</p></div>` : ''}`;
-  document.getElementById('brewDetailContent').innerHTML = html;
-  openModal('brewDetailModal');
+ selectedBrewId = id;
+ const b = data.brews.find(x => x.id === id); if (!b) return;
+ let html = `<div class="recipe-detail-section"><h3>추출 정보</h3><div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>${b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : ''}${b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : ''}${b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : ''}${b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : ''}${b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : ''}${b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : ''}${b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : ''}${b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : ''}${b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : ''}${b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${b.meloDrip}</span></div>` : ''}</div>${b.rating ? `<div class="recipe-detail-section"><h3>평가</h3><div style="color:var(--star);font-size:24px;">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div></div>` : ''}${b.note ? `<div class="recipe-detail-section"><h3>맛 메모</h3><p style="font-size:14px;line-height:1.6;color:var(--text-secondary);">${b.note}</p></div>` : ''}${b.adjust ? `<div class="recipe-detail-section"><h3>조정 사항</h3><p style="font-size:14px;color:var(--text-secondary);">${b.adjust}</p></div>` : ''}`;
+ document.getElementById('brewDetailContent').innerHTML = html;
+ openModal('brewDetailModal');
 }
 
 function deleteBrew() {
-  if (!confirm('이 추출 기록을 삭제할까요?')) return;
-  const brew = data.brews.find(b => b.id === selectedBrewId);
-  if (brew && brew.beanId && brew.dose) {
-    const bean = data.beans.find(b => b.id === brew.beanId);
-    if (bean) {
-      const restored = (parseFloat(bean.weight) || 0) + parseFloat(brew.dose);
-      bean.weight = restored.toString();
-      if (bean.finished && restored > 0) bean.finished = false;
-    }
-  }
-  data.brews = data.brews.filter(b => b.id !== selectedBrewId);
-  saveData(); closeModal('brewDetailModal'); renderBrews(); renderBeans();
+ if (!confirm('이 추출 기록을 삭제할까요?')) return;
+ const brew = data.brews.find(b => b.id === selectedBrewId);
+ if (brew && brew.beanId && brew.dose) {
+   const bean = data.beans.find(b => b.id === brew.beanId);
+   if (bean) {
+     const restored = (parseFloat(bean.weight) || 0) + parseFloat(brew.dose);
+     bean.weight = restored.toString();
+     if (bean.finished && restored > 0) bean.finished = false;
+   }
+ }
+ data.brews = data.brews.filter(b => b.id !== selectedBrewId);
+ saveData(); closeModal('brewDetailModal'); renderBrews(); renderBeans();
 }
 
 function editBrewFromDetail() {
-  const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
-  closeModal('brewDetailModal');
-  openAddBrewModal();
-  // 기존 값 채우기
-  document.getElementById('brewRecipeSelect').value = b.recipeId || '';
-  const beanSelect = document.getElementById('brewBeanSelect');
-  if (b.beanId) { beanSelect.value = b.beanId; updateBrewBeanInfo(); }
-  document.getElementById('brewBean').value = b.bean || '';
-  document.getElementById('brewRoastery').value = b.roastery || '';
-  if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
-  document.getElementById('brewDripper').value = b.dripper || '';
-  document.getElementById('brewClicks').value = b.clicks || '';
-  document.getElementById('brewTemp').value = b.temp || '';
-  document.getElementById('brewTime').value = b.time || '';
-  document.getElementById('brewDose').value = b.dose || '';
-  document.getElementById('brewWater').value = b.water || '';
-  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
-  document.getElementById('brewDate').value = b.date || '';
-  document.getElementById('brewNote').value = b.note || '';
-  document.getElementById('brewAdjust').value = b.adjust || '';
-  currentBrewRating = b.rating || 0; renderBrewStars();
-  updateBrewBeanInfo();
-  // 편집 모드 표시 — 저장 시 기존 기록 교체
-  editingBrewId = selectedBrewId;
+ const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
+ closeModal('brewDetailModal');
+ openAddBrewModal();
+ // 기존 값 채우기
+ document.getElementById('brewRecipeSelect').value = b.recipeId || '';
+ const beanSelect = document.getElementById('brewBeanSelect');
+ if (b.beanId) { beanSelect.value = b.beanId; updateBrewBeanInfo(); }
+ document.getElementById('brewBean').value = b.bean || '';
+ document.getElementById('brewRoastery').value = b.roastery || '';
+ if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
+ document.getElementById('brewDripper').value = b.dripper || '';
+ document.getElementById('brewClicks').value = b.clicks || '';
+ document.getElementById('brewTemp').value = b.temp || '';
+ document.getElementById('brewTime').value = b.time || '';
+ document.getElementById('brewDose').value = b.dose || '';
+ document.getElementById('brewWater').value = b.water || '';
+ document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+ document.getElementById('brewDate').value = b.date || '';
+ document.getElementById('brewNote').value = b.note || '';
+ document.getElementById('brewAdjust').value = b.adjust || '';
+ currentBrewRating = b.rating || 0; renderBrewStars();
+ updateBrewBeanInfo();
+ // 편집 모드 표시 — 저장 시 기존 기록 교체
+ editingBrewId = selectedBrewId;
 }
 
 function rebrewFromDetail() {
-  const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
-  closeModal('brewDetailModal');
-  openAddBrewModal(b.recipeId || null);
-  // 기존 세팅 복사 (날짜/메모/별점은 새로)
-  if (b.beanId) {
-    document.getElementById('brewBeanSelect').value = b.beanId;
-    onBrewBeanSelect();
-  }
-  document.getElementById('brewBean').value = b.bean || '';
-  document.getElementById('brewRoastery').value = b.roastery || '';
-  if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
-  document.getElementById('brewDripper').value = b.dripper || '';
-  document.getElementById('brewClicks').value = b.clicks || '';
-  document.getElementById('brewTemp').value = b.temp || '';
-  document.getElementById('brewDose').value = b.dose || '';
-  document.getElementById('brewWater').value = b.water || '';
-  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+ const b = data.brews.find(x => x.id === selectedBrewId); if (!b) return;
+ closeModal('brewDetailModal');
+ openAddBrewModal(b.recipeId || null);
+ // 기존 세팅 복사 (날짜/메모/별점은 새로)
+ if (b.beanId) {
+   document.getElementById('brewBeanSelect').value = b.beanId;
+   onBrewBeanSelect();
+ }
+ document.getElementById('brewBean').value = b.bean || '';
+ document.getElementById('brewRoastery').value = b.roastery || '';
+ if (b.brewType) { brewTypeValue = b.brewType; setBrewType(b.brewType); }
+ document.getElementById('brewDripper').value = b.dripper || '';
+ document.getElementById('brewClicks').value = b.clicks || '';
+ document.getElementById('brewTemp').value = b.temp || '';
+ document.getElementById('brewDose').value = b.dose || '';
+ document.getElementById('brewWater').value = b.water || '';
+ document.getElementById('brewMeloDrip').value = b.meloDrip || '';
 }
 
 // ─── Helper: brew의 roastery를 레시피/원두에서 가져오기 ───
 function getBrewRoastery(b) {
-  if (b.roastery) return b.roastery;
-  if (b.recipeId) { const r = data.recipes.find(x => x.id === b.recipeId); if (r?.roastery) return r.roastery; }
-  if (b.beanId) { const bn = data.beans.find(x => x.id === b.beanId); if (bn?.roastery) return bn.roastery; }
-  // 원두명으로 매칭 시도
-  if (b.bean) {
-    const matchBean = data.beans.find(x => x.name === b.bean);
-    if (matchBean?.roastery) return matchBean.roastery;
-    const matchRecipe = data.recipes.find(x => x.name === b.bean);
-    if (matchRecipe?.roastery) return matchRecipe.roastery;
-  }
-  return '';
+ if (b.roastery) return b.roastery;
+ if (b.recipeId) { const r = data.recipes.find(x => x.id === b.recipeId); if (r?.roastery) return r.roastery; }
+ if (b.beanId) { const bn = data.beans.find(x => x.id === b.beanId); if (bn?.roastery) return bn.roastery; }
+ // 원두명으로 매칭 시도
+ if (b.bean) {
+   const matchBean = data.beans.find(x => x.name === b.bean);
+   if (matchBean?.roastery) return matchBean.roastery;
+   const matchRecipe = data.recipes.find(x => x.name === b.bean);
+   if (matchRecipe?.roastery) return matchRecipe.roastery;
+ }
+ return '';
 }
 
 // ─── Stats ───
 function renderStats() {
-  const year = parseInt(document.getElementById('statYear').value);
-  const month = document.getElementById('statMonth').value;
-  let filtered = data.brews.filter(b => { if (!b.date) return false; const d = new Date(b.date); if (d.getFullYear() !== year) return false; if (month !== 'all' && (d.getMonth() + 1) !== parseInt(month)) return false; return true; });
-  const c = document.getElementById('statsContent');
-  if (!data.brews.length) { c.innerHTML = '<div class="empty-state"><p>추출 기록이 없어 통계를 표시할 수 없습니다</p></div>'; return; }
-  const total = filtered.length, rated = filtered.filter(b => b.rating), avg = rated.length ? (rated.reduce((s, b) => s + b.rating, 0) / rated.length).toFixed(1) : '-';
-  // 베스트 추출
-  const best = rated.length ? rated.reduce((a, b) => (b.rating > a.rating || (b.rating === a.rating && b.date > a.date)) ? b : a) : null;
-  let html = `<div class="stat-grid"><div class="stat-card"><div class="stat-number">${total}</div><div class="stat-label">총 추출</div></div><div class="stat-card"><div class="stat-number">${avg}</div><div class="stat-label">평균 별점</div></div></div>`;
-  if (best) {
-    html += `<div class="card" style="cursor:pointer;" onclick="openBrewDetail('${best.id}')"><h3 style="font-size:14px;font-weight:600;margin-bottom:8px;">⭐ 베스트 추출</h3><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;">${best.bean}</div><div style="font-size:13px;color:var(--text-secondary);margin-top:2px;">${[best.dripper, best.clicks ? best.clicks + 'C' : '', best.temp ? best.temp + '°C' : ''].filter(Boolean).join(' · ')}</div></div><div style="color:var(--star);font-size:18px;">${'★'.repeat(best.rating)}</div></div>${best.note ? `<div style="font-size:13px;color:var(--text-tertiary);margin-top:6px;font-style:italic;">${best.note.length > 80 ? best.note.substring(0, 80) + '...' : best.note}</div>` : ''}</div>`;
-  }
-  if (month === 'all') { html += '<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">월별 추출</h3>'; const mo = Array(12).fill(0); filtered.forEach(b => mo[new Date(b.date).getMonth()]++); const mx = Math.max(...mo, 1); for (let i = 0; i < 12; i++) html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${i + 1}월</span><span>${mo[i]}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(mo[i] / mx) * 100}%"></div></div></div>`; html += '</div>'; }
-  // roastery는 fallback 사용, origin/processing은 정규화
-  html += renderStatCategory(filtered, 'roastery', '로스터리별', { fallback: true }) + renderStatCategory(filtered, 'origin', '산지별', { normalize: 'origin' }) + renderStatCategory(filtered, 'processing', '프로세싱별', { normalize: 'processing' }) + renderStatCategory(filtered, 'dripper', '드리퍼별');
-  c.innerHTML = html;
+ const year = parseInt(document.getElementById('statYear').value);
+ const month = document.getElementById('statMonth').value;
+ let filtered = data.brews.filter(b => { if (!b.date) return false; const d = new Date(b.date); if (d.getFullYear() !== year) return false; if (month !== 'all' && (d.getMonth() + 1) !== parseInt(month)) return false; return true; });
+ const c = document.getElementById('statsContent');
+ if (!data.brews.length) { c.innerHTML = '<div class="empty-state"><p>추출 기록이 없어 통계를 표시할 수 없습니다</p></div>'; return; }
+ const total = filtered.length, rated = filtered.filter(b => b.rating), avg = rated.length ? (rated.reduce((s, b) => s + b.rating, 0) / rated.length).toFixed(1) : '-';
+ // 베스트 추출
+ const best = rated.length ? rated.reduce((a, b) => (b.rating > a.rating || (b.rating === a.rating && b.date > a.date)) ? b : a) : null;
+ let html = `<div class="stat-grid"><div class="stat-card"><div class="stat-number">${total}</div><div class="stat-label">총 추출</div></div><div class="stat-card"><div class="stat-number">${avg}</div><div class="stat-label">평균 별점</div></div></div>`;
+ if (best) {
+   html += `<div class="card" style="cursor:pointer;" onclick="openBrewDetail('${best.id}')"><h3 style="font-size:14px;font-weight:600;margin-bottom:8px;">⭐ 베스트 추출</h3><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-weight:600;">${best.bean}</div><div style="font-size:13px;color:var(--text-secondary);margin-top:2px;">${[best.dripper, best.clicks ? best.clicks + 'C' : '', best.temp ? best.temp + '°C' : ''].filter(Boolean).join(' · ')}</div></div><div style="color:var(--star);font-size:18px;">${'★'.repeat(best.rating)}</div></div>${best.note ? `<div style="font-size:13px;color:var(--text-tertiary);margin-top:6px;font-style:italic;">${best.note.length > 80 ? best.note.substring(0, 80) + '...' : best.note}</div>` : ''}</div>`;
+ }
+ if (month === 'all') { html += '<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">월별 추출</h3>'; const mo = Array(12).fill(0); filtered.forEach(b => mo[new Date(b.date).getMonth()]++); const mx = Math.max(...mo, 1); for (let i = 0; i < 12; i++) html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${i + 1}월</span><span>${mo[i]}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(mo[i] / mx) * 100}%"></div></div></div>`; html += '</div>'; }
+ // roastery는 fallback 사용, origin/processing은 정규화
+ html += renderStatCategory(filtered, 'roastery', '로스터리별', { fallback: true }) + renderStatCategory(filtered, 'origin', '산지별', { normalize: 'origin' }) + renderStatCategory(filtered, 'processing', '프로세싱별', { normalize: 'processing' }) + renderStatCategory(filtered, 'dripper', '드리퍼별');
+ c.innerHTML = html;
 }
 
 // ─── 통계 정규화 ───
 const PROCESSING_MAP = {
-  '네츄럴': '내추럴', '네추럴': '내추럴', 'natural': '내추럴', 'Natural': '내추럴',
-  '워싯': '워시드', '워쉬드': '워시드', 'washed': '워시드', 'Washed': '워시드',
-  '허니': '허니', 'honey': '허니', 'Honey': '허니',
-  '펄프드내추럴': '펄프드 내추럴', '펄프드 네츄럴': '펄프드 내추럴', '펄프드 네추럴': '펄프드 내추럴',
-  '애나로빅': '애나로빅', '에나로빅': '애나로빅', '안에어로빅': '애나로빅', 'anaerobic': '애나로빅',
-  '애나로빅 내추럴': '애나로빅 내추럴', '애나로빅 네츄럴': '애나로빅 내추럴', '애나로빅 네추럴': '애나로빅 내추럴',
-  '애나로빅 워시드': '애나로빅 워시드', '애나로빅 워싯': '애나로빅 워시드',
+ '네츄럴': '내추럴', '네추럴': '내추럴', 'natural': '내추럴', 'Natural': '내추럴',
+ '워싯': '워시드', '워쉬드': '워시드', 'washed': '워시드', 'Washed': '워시드',
+ '허니': '허니', 'honey': '허니', 'Honey': '허니',
+ '펄프드내추럴': '펄프드 내추럴', '펄프드 네츄럴': '펄프드 내추럴', '펄프드 네추럴': '펄프드 내추럴',
+ '애나로빅': '애나로빅', '에나로빅': '애나로빅', '안에어로빅': '애나로빅', 'anaerobic': '애나로빅',
+ '애나로빅 내추럴': '애나로빅 내추럴', '애나로빅 네츄럴': '애나로빅 내추럴', '애나로빅 네추럴': '애나로빅 내추럴',
+ '애나로빅 워시드': '애나로빅 워시드', '애나로빅 워싯': '애나로빅 워시드',
 };
 
 function normalizeProcessing(val) {
-  if (!val) return '';
-  const trimmed = val.trim();
-  return PROCESSING_MAP[trimmed] || trimmed;
+ if (!val) return '';
+ const trimmed = val.trim();
+ return PROCESSING_MAP[trimmed] || trimmed;
 }
 
 function normalizeOrigin(val) {
-  if (!val) return '';
-  // 첫 단어(국가명)만 추출
-  return val.trim().split(/\s+/)[0];
+ if (!val) return '';
+ // 첫 단어(국가명)만 추출
+ return val.trim().split(/\s+/)[0];
 }
 
 function renderStatCategory(brews, field, title, opts) {
-  opts = opts || {};
-  const counts = {};
-  brews.forEach(b => {
-    let v = opts.fallback && field === 'roastery' ? getBrewRoastery(b) : b[field];
-    if (!v) return;
-    if (opts.normalize === 'origin') v = normalizeOrigin(v);
-    else if (opts.normalize === 'processing') v = normalizeProcessing(v);
-    counts[v] = (counts[v] || 0) + 1;
-  });
-  const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]); if (!entries.length) return '';
-  const max = entries[0][1]; let html = `<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">${title}</h3>`;
-  entries.forEach(([n, c]) => html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${n}</span><span>${c}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(c / max) * 100}%"></div></div></div>`);
-  return html + '</div>';
+ opts = opts || {};
+ const counts = {};
+ brews.forEach(b => {
+   let v = opts.fallback && field === 'roastery' ? getBrewRoastery(b) : b[field];
+   if (!v) return;
+   if (opts.normalize === 'origin') v = normalizeOrigin(v);
+   else if (opts.normalize === 'processing') v = normalizeProcessing(v);
+   counts[v] = (counts[v] || 0) + 1;
+ });
+ const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]); if (!entries.length) return '';
+ const max = entries[0][1]; let html = `<div class="card"><h3 style="font-size:14px;font-weight:600;margin-bottom:12px;">${title}</h3>`;
+ entries.forEach(([n, c]) => html += `<div class="chart-bar-container"><div class="chart-bar-label"><span>${n}</span><span>${c}잔</span></div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:${(c / max) * 100}%"></div></div></div>`);
+ return html + '</div>';
 }
 
 function initStatYears() { const s = document.getElementById('statYear'), y = new Date().getFullYear(); for (let i = y; i >= y - 3; i--) s.innerHTML += `<option value="${i}">${i}년</option>`; }
 
 // ─── Monthly Pick ───
 function initPickMonths() {
-  const s = document.getElementById('pickMonth');
-  const now = new Date();
-  for (let i = 0; i < 6; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    const label = `${d.getFullYear()}년 ${d.getMonth() + 1}월`;
-    s.innerHTML += `<option value="${val}">${label}</option>`;
-  }
+ const s = document.getElementById('pickMonth');
+ const now = new Date();
+ for (let i = 0; i < 6; i++) {
+   const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+   const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+   const label = `${d.getFullYear()}년 ${d.getMonth() + 1}월`;
+   s.innerHTML += `<option value="${val}">${label}</option>`;
+ }
 }
 
 async function loadMonthlyPick() {
-  const month = document.getElementById('pickMonth').value;
-  const list = document.getElementById('pickList');
-  if (pickCache[month]) { pickData = pickCache[month]; renderPick(); return; }
-  list.innerHTML = '<div class="pick-loading">데이터를 불러오는 중...</div>';
-  document.getElementById('pickSourceTabs').innerHTML = '';
-  document.getElementById('pickCategoryTabs').innerHTML = '';
-  try {
-    const res = await fetch(GITHUB_BASE + month + '.json');
-    if (!res.ok) throw new Error('not found');
-    pickData = await res.json();
-    pickCache[month] = pickData;
-    renderPick();
-  } catch (e) {
-    list.innerHTML = `<div class="pick-error">${month} 데이터가 아직 없습니다</div>`;
-  }
+ const month = document.getElementById('pickMonth').value;
+ const list = document.getElementById('pickList');
+ if (pickCache[month]) { pickData = pickCache[month]; renderPick(); return; }
+ list.innerHTML = '<div class="pick-loading">데이터를 불러오는 중...</div>';
+ document.getElementById('pickSourceTabs').innerHTML = '';
+ document.getElementById('pickCategoryTabs').innerHTML = '';
+ try {
+   const res = await fetch(GITHUB_BASE + month + '.json');
+   if (!res.ok) throw new Error('not found');
+   pickData = await res.json();
+   pickCache[month] = pickData;
+   renderPick();
+ } catch (e) {
+   list.innerHTML = `<div class="pick-error">${month} 데이터가 아직 없습니다</div>`;
+ }
 }
 
 function renderPick() {
-  if (!pickData) return;
-  const sources = pickData.sources || [];
-  const beans = pickData.beans || [];
-  const srcTabs = document.getElementById('pickSourceTabs');
-  srcTabs.innerHTML = sources.map(s => `<button class="pick-source-tab${pickSource === s.id ? ' active' : ''}" onclick="pickSource='${s.id}';pickCategory='all';renderPick()">${s.name}</button>`).join('');
-  const sourceBeans = beans.filter(b => b.source === pickSource);
-  const categories = [...new Set(sourceBeans.map(b => b.category))];
-  const catTabs = document.getElementById('pickCategoryTabs');
-  if (categories.length > 1) {
-    const catLabels = { single: '싱글 오리진', special: '스페셜 오리진', monthly: '이달의 커피' };
-    catTabs.innerHTML = `<button class="pick-category-tab${pickCategory === 'all' ? ' active' : ''}" onclick="pickCategory='all';renderPick()">전체</button>${categories.map(c => `<button class="pick-category-tab${pickCategory === c ? ' active' : ''}" onclick="pickCategory='${c}';renderPick()">${catLabels[c] || c}</button>`).join('')}`;
-  } else { catTabs.innerHTML = ''; }
-  let filtered = pickCategory === 'all' ? sourceBeans : sourceBeans.filter(b => b.category === pickCategory);
-  const wishlist = data.wishlist || [];
-  filtered = filtered.slice().sort((a, b) => { const aw = wishlist.includes(a.id) ? 0 : 1; const bw = wishlist.includes(b.id) ? 0 : 1; return aw - bw; });
-  const list = document.getElementById('pickList');
-  if (!filtered.length) { list.innerHTML = '<div class="empty-state"><p>원두가 없습니다</p></div>'; return; }
-  list.innerHTML = filtered.map(b => {
-    const isWished = wishlist.includes(b.id);
-    const isSoldout = b.status === 'soldout';
-    const isAlmost = b.status === 'almost';
-    const openStr = b.openDate ? formatOpenDate(b.openDate) : '';
-    const sourceData = (pickData.sources || []).find(s => s.id === b.source);
-    const buyUrl = b.productUrl || (sourceData ? sourceData.url : '');
-    return `<div class="pick-bean-card${isSoldout ? ' soldout' : ''}${isWished ? ' wishlisted' : ''}">
-      <button class="pick-bean-wish${isWished ? ' active' : ''}" onclick="toggleWish('${b.id}')">♥</button>
-      <div class="pick-bean-name">${b.name}</div>
-      <div class="pick-bean-tags">
-        ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
-        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
-        ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
-        ${b.weight ? `<span class="tag">${b.weight}</span>` : ''}
-      </div>
-      <div class="pick-bean-price">
-        ${b.salePrice < b.price ? `<span class="original">₩${b.price.toLocaleString()}</span>` : ''}
-        <span class="sale">₩${(b.salePrice || b.price).toLocaleString()}</span>
-      </div>
-      ${openStr ? `<div class="pick-bean-open">📅 ${openStr}</div>` : ''}
-      ${isSoldout ? '<div class="pick-bean-status soldout">SOLD OUT</div>' : ''}
-      ${isAlmost ? '<div class="pick-bean-status almost">품절 임박</div>' : ''}
-      ${buyUrl ? `<a class="pick-buy-link" href="${buyUrl}" target="_blank" rel="noopener">구매하기 →</a>` : ''}
-    </div>`;
-  }).join('');
+ if (!pickData) return;
+ const sources = pickData.sources || [];
+ const beans = pickData.beans || [];
+ const srcTabs = document.getElementById('pickSourceTabs');
+ srcTabs.innerHTML = sources.map(s => `<button class="pick-source-tab${pickSource === s.id ? ' active' : ''}" onclick="pickSource='${s.id}';pickCategory='all';renderPick()">${s.name}</button>`).join('');
+ const sourceBeans = beans.filter(b => b.source === pickSource);
+ const categories = [...new Set(sourceBeans.map(b => b.category))];
+ const catTabs = document.getElementById('pickCategoryTabs');
+ if (categories.length > 1) {
+   const catLabels = { single: '싱글 오리진', special: '스페셜 오리진', monthly: '이달의 커피' };
+   catTabs.innerHTML = `<button class="pick-category-tab${pickCategory === 'all' ? ' active' : ''}" onclick="pickCategory='all';renderPick()">전체</button>${categories.map(c => `<button class="pick-category-tab${pickCategory === c ? ' active' : ''}" onclick="pickCategory='${c}';renderPick()">${catLabels[c] || c}</button>`).join('')}`;
+ } else { catTabs.innerHTML = ''; }
+ let filtered = pickCategory === 'all' ? sourceBeans : sourceBeans.filter(b => b.category === pickCategory);
+ const wishlist = data.wishlist || [];
+ filtered = filtered.slice().sort((a, b) => { const aw = wishlist.includes(a.id) ? 0 : 1; const bw = wishlist.includes(b.id) ? 0 : 1; return aw - bw; });
+ const list = document.getElementById('pickList');
+ if (!filtered.length) { list.innerHTML = '<div class="empty-state"><p>원두가 없습니다</p></div>'; return; }
+ list.innerHTML = filtered.map(b => {
+   const isWished = wishlist.includes(b.id);
+   const isSoldout = b.status === 'soldout';
+   const isAlmost = b.status === 'almost';
+   const openStr = b.openDate ? formatOpenDate(b.openDate) : '';
+   const sourceData = (pickData.sources || []).find(s => s.id === b.source);
+   const buyUrl = b.productUrl || (sourceData ? sourceData.url : '');
+   return `<div class="pick-bean-card${isSoldout ? ' soldout' : ''}${isWished ? ' wishlisted' : ''}">
+     <button class="pick-bean-wish${isWished ? ' active' : ''}" onclick="toggleWish('${b.id}')">♥</button>
+     <div class="pick-bean-name">${b.name}</div>
+     <div class="pick-bean-tags">
+       ${b.origin ? `<span class="tag">${b.origin}</span>` : ''}
+       ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
+       ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
+       ${b.weight ? `<span class="tag">${b.weight}</span>` : ''}
+     </div>
+     <div class="pick-bean-price">
+       ${b.salePrice < b.price ? `<span class="original">₩${b.price.toLocaleString()}</span>` : ''}
+       <span class="sale">₩${(b.salePrice || b.price).toLocaleString()}</span>
+     </div>
+     ${openStr ? `<div class="pick-bean-open">📅 ${openStr}</div>` : ''}
+     ${isSoldout ? '<div class="pick-bean-status soldout">SOLD OUT</div>' : ''}
+     ${isAlmost ? '<div class="pick-bean-status almost">품절 임박</div>' : ''}
+     ${buyUrl ? `<a class="pick-buy-link" href="${buyUrl}" target="_blank" rel="noopener">구매하기 →</a>` : ''}
+   </div>`;
+ }).join('');
 }
 
 function formatOpenDate(dateStr) {
-  const d = new Date(dateStr);
-  const now = new Date();
-  const diff = d - now;
-  const days = Math.ceil(diff / 86400000);
-  const dateLabel = `${d.getMonth() + 1}/${d.getDate()}`;
-  if (days > 0) return `${dateLabel} 오픈 (D-${days})`;
-  if (days === 0) return `${dateLabel} 오늘 오픈!`;
-  return `${dateLabel} 오픈됨`;
+ const d = new Date(dateStr);
+ const now = new Date();
+ const diff = d - now;
+ const days = Math.ceil(diff / 86400000);
+ const dateLabel = `${d.getMonth() + 1}/${d.getDate()}`;
+ if (days > 0) return `${dateLabel} 오픈 (D-${days})`;
+ if (days === 0) return `${dateLabel} 오늘 오픈!`;
+ return `${dateLabel} 오픈됨`;
 }
 
 function toggleWish(beanId) {
-  if (!data.wishlist) data.wishlist = [];
-  const idx = data.wishlist.indexOf(beanId);
-  if (idx === -1) data.wishlist.push(beanId);
-  else data.wishlist.splice(idx, 1);
-  saveData();
-  renderPick();
+ if (!data.wishlist) data.wishlist = [];
+ const idx = data.wishlist.indexOf(beanId);
+ if (idx === -1) data.wishlist.push(beanId);
+ else data.wishlist.splice(idx, 1);
+ saveData();
+ renderPick();
 }
 
 // ─── Backup / Restore ───
 function exportData() {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href = url; a.download = `filtercoffee-backup-${new Date().toISOString().split('T')[0]}.json`;
-  a.click(); URL.revokeObjectURL(url);
+ const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+ const url = URL.createObjectURL(blob); const a = document.createElement('a');
+ a.href = url; a.download = `filtercoffee-backup-${new Date().toISOString().split('T')[0]}.json`;
+ a.click(); URL.revokeObjectURL(url);
 }
 
 function importData(event) {
-  const file = event.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => { try { const imp = JSON.parse(e.target.result); if (confirm(`레시피 ${imp.recipes?.length || 0}개, 추출 기록 ${imp.brews?.length || 0}개를 가져올까요? 기존 데이터는 덮어씌워집니다.`)) { data = imp; if (!data.beans) data.beans = []; if (!data.wishlist) data.wishlist = []; saveData(); location.reload(); } } catch (err) { alert('유효하지 않은 파일입니다.'); } };
-  reader.readAsText(file);
+ const file = event.target.files[0]; if (!file) return;
+ const reader = new FileReader();
+ reader.onload = (e) => { try { const imp = JSON.parse(e.target.result); if (confirm(`레시피 ${imp.recipes?.length || 0}개, 추출 기록 ${imp.brews?.length || 0}개를 가져올까요? 기존 데이터는 덮어씌워집니다.`)) { data = imp; if (!data.beans) data.beans = []; if (!data.wishlist) data.wishlist = []; saveData(); location.reload(); } } catch (err) { alert('유효하지 않은 파일입니다.'); } };
+ reader.readAsText(file);
 }
 
 function saveClickRange() {
-  data.clickRange.min = parseInt(document.getElementById('clickMin').value) || 28;
-  data.clickRange.max = parseInt(document.getElementById('clickMax').value) || 34;
-  saveData(); renderClickGrid();
+ data.clickRange.min = parseInt(document.getElementById('clickMin').value) || 28;
+ data.clickRange.max = parseInt(document.getElementById('clickMax').value) || 34;
+ saveData(); renderClickGrid();
 }
 
 function confirmClearData() { if (confirm('모든 데이터를 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) { localStorage.removeItem(DB_KEY); location.reload(); } }
@@ -1745,14 +1745,14 @@ function formatDateShort(s) { const d = new Date(s); return `${d.getMonth() + 1}
 
 // ─── Init ───
 function init() {
-  document.getElementById('clickMin').value = data.clickRange.min;
-  document.getElementById('clickMax').value = data.clickRange.max;
-  if (!data.beans) { data.beans = []; saveData(); }
-  if (!data.wishlist) { data.wishlist = []; saveData(); }
-  updateClickBar(); renderClickGrid(); renderClickHistory();
-  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
-  // iOS PWA viewport fix — force layout recalculation on load
-  requestAnimationFrame(() => { window.scrollTo(0, 0); });
+ document.getElementById('clickMin').value = data.clickRange.min;
+ document.getElementById('clickMax').value = data.clickRange.max;
+ if (!data.beans) { data.beans = []; saveData(); }
+ if (!data.wishlist) { data.wishlist = []; saveData(); }
+ updateClickBar(); renderClickGrid(); renderClickHistory();
+ renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
+ // iOS PWA viewport fix — force layout recalculation on load
+ requestAnimationFrame(() => { window.scrollTo(0, 0); });
 }
 init();
 
