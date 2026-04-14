@@ -1793,8 +1793,15 @@ function checkPatchNotes() {
  if (seen === APP_VERSION) return;
  const current = PATCH_NOTES.find(p => p.version === APP_VERSION);
  if (!current) return;
- // 첫 사용자(seen이 null)면 패치노트 안 띄움
- if (!seen) { localStorage.setItem('fc_lastSeenVersion', APP_VERSION); return; }
+ // 첫 사용자(seen이 null)인데 데이터가 있으면 기존 사용자 → 패치노트 보여주기
+ if (!seen) {
+   if (data.brews.length || data.recipes.length || data.beans.length) {
+     // 기존 사용자: 패치노트 표시
+   } else {
+     // 진짜 첫 사용자: 스킵
+     localStorage.setItem('fc_lastSeenVersion', APP_VERSION); return;
+   }
+ }
  showPatchNotes(current);
 }
 
