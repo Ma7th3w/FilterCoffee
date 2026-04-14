@@ -436,6 +436,24 @@ body {
 .pick-buy-link:active { opacity: 0.8; }
 .pick-loading { text-align: center; padding: 40px 20px; color: var(--text-tertiary); font-size: 14px; }
 .pick-error { text-align: center; padding: 40px 20px; color: var(--danger); font-size: 14px; }
+
+/* ─── Patch Notes ─── */
+.patch-version { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+.patch-date { font-size: 13px; color: var(--text-tertiary); margin-bottom: 16px; }
+.patch-item {
+ display: flex; gap: 10px; padding: 10px 0;
+ border-bottom: 1px solid var(--border-light); font-size: 14px; line-height: 1.5;
+}
+.patch-item:last-child { border-bottom: none; }
+.patch-badge {
+ flex-shrink: 0; padding: 2px 8px; border-radius: 6px;
+ font-size: 11px; font-weight: 700; height: fit-content; margin-top: 2px;
+ text-transform: uppercase; letter-spacing: 0.3px;
+}
+.patch-badge.new { background: var(--accent); color: #fff; }
+.patch-badge.fix { background: var(--success); color: #fff; }
+.patch-badge.improve { background: var(--warning); color: #fff; }
+.patch-badge.remove { background: var(--text-tertiary); color: #fff; }
 </style>
 </head>
 <body>
@@ -656,7 +674,7 @@ body {
      <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
    </div>
    <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-     FilterCoffee v2.1<br>Made with Matthew
+     FilterCoffee v2.2<br>Made with Matthew
    </div>
  </div>
 </div>
@@ -793,6 +811,19 @@ body {
 </div>
 
 
+<!-- Patch Notes Modal -->
+<div class="modal-overlay" id="patchNotesModal">
+ <div class="modal" style="max-height:80dvh;">
+   <div class="modal-header">
+     <span class="modal-title" id="patchNotesTitle">업데이트</span>
+     <button class="modal-close" onclick="closePatchNotes()">&times;</button>
+   </div>
+   <div id="patchNotesContent"></div>
+   <button class="btn btn-primary" style="margin-top:20px;" onclick="closePatchNotes()">확인</button>
+ </div>
+</div>
+
+
 <script>
 // ─── Required Fields Definition ───
 const REQUIRED_FIELDS = [
@@ -898,7 +929,7 @@ function renderClickHistory() {
  const c = document.getElementById('clickHistory');
  if (!c) return;
  if (!data.clickHistory.length) { c.innerHTML = '<div class="empty-state"><p>아직 기록이 없습니다</p></div>'; return; }
- c.innerHTML = data.clickHistory.slice(0, 20).map(h => `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}</div><div class="click-history-date">${formatDate(h.date)}</div></div>`).join('');
+ c.innerHTML = data.clickHistory.slice(0, 20).map(h => `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}</div><div class="click-history-date">${formatDateTime(h.date)}</div></div>`).join('');
 }
 
 // ─── Bean Management ───
@@ -1168,7 +1199,6 @@ function parseAndSaveRecipe() {
    }
  }
  data.recipes.unshift(recipe); saveData(); closeModal('addRecipeModal');
- if (recipe.grind) { data.currentClicks = parseInt(recipe.grind); data.currentBean = recipe.name; updateClickBar(); renderClickGrid(); }
  const missing = getMissingFields(recipe);
  renderRecipes();
  if (missing.length > 0) openEditRecipeModal(recipe.id, true);
@@ -1238,7 +1268,6 @@ function saveEditedRecipe() {
  r.brewType = editBrewTypeValue;
  const missing = getMissingFields(r);
  if (missing.length > 0 && !confirm(`아직 ${missing.length}개 항목이 비어있습니다 (${missing.map(m => m.label).join(', ')}). 그래도 저장할까요?`)) return;
- if (r.grind) { data.currentClicks = parseInt(r.grind); data.currentBean = r.name; updateClickBar(); renderClickGrid(); }
  saveData(); closeModal('editRecipeModal'); renderRecipes();
 }
 
@@ -1434,7 +1463,6 @@ function saveBrew() {
        }
      }
    }
-   if (brewData.clicks) { data.currentClicks = parseInt(brewData.clicks); data.currentBean = brewData.bean; data.clickHistory.unshift({ clicks: parseInt(brewData.clicks), bean: brewData.bean, date: new Date().toISOString() }); updateClickBar(); renderClickGrid(); }
  }
  saveData(); closeModal('addBrewModal'); renderBrews(); renderBeans();
 }
@@ -1742,6 +1770,53 @@ document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('cli
 // ─── Utilities ───
 function formatDate(iso) { const d = new Date(iso), now = new Date(), diff = now - d; if (diff < 60000) return '방금'; if (diff < 3600000) return Math.floor(diff / 60000) + '분 전'; if (diff < 86400000) return Math.floor(diff / 3600000) + '시간 전'; if (diff < 604800000) return Math.floor(diff / 86400000) + '일 전'; return `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; }
 function formatDateShort(s) { const d = new Date(s); return `${d.getMonth() + 1}/${d.getDate()}`; }
+function formatDateTime(iso) { const d = new Date(iso); return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+
+// ─── Patch Notes ───
+const APP_VERSION = 'v2.2';
+const PATCH_NOTES = [
+ {
+   version: 'v2.2',
+   date: '2025.04.14',
+   items: [
+     { type: 'fix', text: '레시피 편집/저장 시 클릭수가 자동으로 바뀌던 문제 수정' },
+     { type: 'fix', text: '추출 기록 저장 시 클릭수 히스토리가 자동 추가되던 문제 수정' },
+     { type: 'improve', text: '클릭수 히스토리에 정확한 날짜·시간 표시' },
+     { type: 'new', text: '앱 업데이트 시 패치노트 공지 표시' },
+   ]
+ }
+];
+
+function checkPatchNotes() {
+ const seen = localStorage.getItem('fc_lastSeenVersion');
+ if (seen === APP_VERSION) return;
+ const current = PATCH_NOTES.find(p => p.version === APP_VERSION);
+ if (!current) return;
+ // 첫 사용자(seen이 null)면 패치노트 안 띄움
+ if (!seen) { localStorage.setItem('fc_lastSeenVersion', APP_VERSION); return; }
+ showPatchNotes(current);
+}
+
+function showPatchNotes(notes) {
+ const badgeLabel = { new: 'NEW', fix: 'FIX', improve: '개선', remove: '제거' };
+ document.getElementById('patchNotesTitle').textContent = `업데이트 ${notes.version}`;
+ document.getElementById('patchNotesContent').innerHTML = `
+   <div class="patch-version">${notes.version}</div>
+   <div class="patch-date">${notes.date}</div>
+   ${notes.items.map(item => `
+     <div class="patch-item">
+       <span class="patch-badge ${item.type}">${badgeLabel[item.type] || item.type}</span>
+       <span>${item.text}</span>
+     </div>
+   `).join('')}
+ `;
+ openModal('patchNotesModal');
+}
+
+function closePatchNotes() {
+ localStorage.setItem('fc_lastSeenVersion', APP_VERSION);
+ closeModal('patchNotesModal');
+}
 
 // ─── Init ───
 function init() {
@@ -1753,6 +1828,8 @@ function init() {
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
  // iOS PWA viewport fix — force layout recalculation on load
  requestAnimationFrame(() => { window.scrollTo(0, 0); });
+ // Show patch notes if version updated
+ checkPatchNotes();
 }
 init();
 
