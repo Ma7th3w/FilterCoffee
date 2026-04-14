@@ -1113,6 +1113,7 @@ function renderBeans() {
  container.innerHTML = sorted.map(b => {
    const degassing = getDegassingInfo(b.roastDate);
    const brewCount = data.brews.filter(br => br.beanId === b.id || br.bean === b.name || (br.bean && b.name && (br.bean.includes(b.name) || b.name.includes(br.bean)))).length;
+   const remainShots = b.weight ? Math.floor(parseFloat(b.weight) / 18) : null;
    return `<div class="card" style="cursor:pointer;" onclick="openBeanDetail('${b.id}')">
      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
        <div style="flex:1;">
@@ -1130,6 +1131,7 @@ function renderBeans() {
        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
        ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
+       ${remainShots !== null ? `<span class="tag" style="${remainShots <= 1 ? 'color:var(--warning);' : ''}">약 ${remainShots}잔 남음</span>` : ''}
      </div>
    </div>`;
  }).join('');
@@ -1983,14 +1985,15 @@ function buildTimerSteps(recipe) {
    else if (stage.match(/(\d+)차\s*푸어/)) displayStage = stage.match(/(\d+)차\s*푸어/)[0];
    // Amount for display
    let amount = p.amount || '';
-   // TTS text
+   // TTS text — replace 'g' with '그람' for natural speech
+   let ttsAmount = amount.replace(/g$/i, '그람');
    let ttsText = '';
    if (displayStage.includes('블루밍')) {
-     ttsText = amount ? `블루밍, ${amount}` : '블루밍';
+     ttsText = ttsAmount ? `블루밍, ${ttsAmount}` : '블루밍';
    } else if (displayStage.includes('드로우다운')) {
      ttsText = '드로우다운';
    } else {
-     ttsText = amount ? `${displayStage}, ${amount}까지` : displayStage;
+     ttsText = ttsAmount ? `${displayStage}, ${ttsAmount}까지` : displayStage;
    }
    steps.push({ time: sec, stage: displayStage, amount, ttsText, preAnnounced: false });
  });
@@ -2193,6 +2196,7 @@ const PATCH_NOTES = [
    items: [
      { type: 'new', text: '추출 타이머 — 푸어링 가이드 따라 TTS 음성 안내 + 10초 전 예고' },
      { type: 'new', text: '추출 캘린더 히트맵 — 통계 탭에서 월별 추출 현황을 한눈에' },
+     { type: 'new', text: '원두 카드에 남은 잔수 표시 (18g 기준)' },
      { type: 'fix', text: '레시피 편집/저장 시 클릭수가 자동으로 바뀌던 문제 수정' },
      { type: 'fix', text: '추출 기록 저장 시 클릭수 히스토리가 자동 추가되던 문제 수정' },
      { type: 'improve', text: '클릭수 히스토리에 정확한 날짜·시간 표시' },
