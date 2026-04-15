@@ -512,7 +512,7 @@ body {
  position: relative; width: 280px; height: 280px;
 }
 .timer-ring-svg {
- width: 100%; height: 100%; transform: rotate(-90deg);
+ width: 100%; height: 100%;
 }
 .timer-ring-bg {
  fill: none; stroke: var(--bg-input); stroke-width: 30;
@@ -2187,65 +2187,52 @@ function buildTimerRing(steps, totalTime) {
  svg.querySelectorAll('.timer-ring-segment, .timer-ring-label, .timer-ring-progress-arc, .timer-ring-tick, defs').forEach(el => el.remove());
  if (!steps.length || !totalTime) return;
  const R = 124, C = 2 * Math.PI * R;
+ // Quarter offset: SVG circle starts at 3 o'clock, shift to 12 o'clock
+ const Q = C / 4;
  window._timerRingMeta = { R, C, totalTime, steps };
 
- // Draw colored segments for each step (light background showing structure)
+ // Colored segments (light background)
  for (let i = 0; i < steps.length; i++) {
    const start = steps[i].time;
    const end = (i + 1 < steps.length) ? steps[i + 1].time : totalTime;
    const startFrac = start / totalTime;
    const endFrac = end / totalTime;
    const len = (endFrac - startFrac) * C;
-   const offset = -(startFrac * C);
    const seg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
    seg.setAttribute('cx', '140'); seg.setAttribute('cy', '140'); seg.setAttribute('r', String(R));
    seg.setAttribute('class', 'timer-ring-segment');
    seg.setAttribute('stroke', RING_COLORS[i % RING_COLORS.length]);
    seg.setAttribute('stroke-dasharray', `${len} ${C - len}`);
-   seg.setAttribute('stroke-dashoffset', String(offset));
+   seg.setAttribute('stroke-dashoffset', String(Q - startFrac * C));
    svg.appendChild(seg);
-
-   // Tick mark at step boundary (skip first)
-   if (i > 0) {
-     const bAngle = startFrac * 2 * Math.PI - Math.PI / 2;
-     const iR = R - 17, oR = R + 17;
-     const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-     tick.setAttribute('x1', 140 + iR * Math.cos(bAngle)); tick.setAttribute('y1', 140 + iR * Math.sin(bAngle));
-     tick.setAttribute('x2', 140 + oR * Math.cos(bAngle)); tick.setAttribute('y2', 140 + oR * Math.sin(bAngle));
-     tick.setAttribute('class', 'timer-ring-tick');
-     svg.appendChild(tick);
-   }
  }
 
- // Progress arc — bold accent ribbon growing clockwise (on top of segments)
+ // Progress arc (starts at 12 o'clock)
  const arc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
  arc.setAttribute('cx', '140'); arc.setAttribute('cy', '140'); arc.setAttribute('r', String(R));
  arc.setAttribute('class', 'timer-ring-progress-arc');
  arc.setAttribute('stroke', 'var(--accent)');
  arc.setAttribute('stroke-dasharray', `0 ${C}`);
- arc.setAttribute('stroke-dashoffset', '0');
+ arc.setAttribute('stroke-dashoffset', String(Q));
  arc.id = 'timerProgressArc';
  svg.appendChild(arc);
 
- // Labels along the arc using textPath (on top of everything)
- // SVG has CSS rotate(-90deg), so 0deg in SVG = visual 12 o'clock
- // We create a hidden arc path for each label and use textPath
- let defs = svg.querySelector('defs');
- if (!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); svg.prepend(defs); }
+ // Labels using textPath — text follows the arc curve
+ const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+ svg.prepend(defs);
  for (let i = 0; i < steps.length; i++) {
    const start = steps[i].time;
    const end = (i + 1 < steps.length) ? steps[i + 1].time : totalTime;
    const startFrac = start / totalTime;
    const endFrac = end / totalTime;
    const midFrac = (startFrac + endFrac) / 2;
-   // Create a small arc segment for the text to follow
-   // Arc from (midFrac - delta) to (midFrac + delta) on the circle
+   // Arc path for textPath: small arc centered on midpoint, offset by -PI/2 for 12 o'clock
    const delta = 0.06;
-   const a1 = (midFrac - delta) * 2 * Math.PI;
-   const a2 = (midFrac + delta) * 2 * Math.PI;
+   const a1 = (midFrac - delta) * 2 * Math.PI - Math.PI / 2;
+   const a2 = (midFrac + delta) * 2 * Math.PI - Math.PI / 2;
    const x1 = 140 + R * Math.cos(a1), y1 = 140 + R * Math.sin(a1);
    const x2 = 140 + R * Math.cos(a2), y2 = 140 + R * Math.sin(a2);
-   const pathId = `timerLabelPath${i}`;
+   const pathId = `timerLP${i}`;
    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
    path.id = pathId;
    path.setAttribute('d', `M ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2}`);
@@ -2263,18 +2250,18 @@ function buildTimerRing(steps, totalTime) {
  }
 }
 
-function updateTimerRing(currentStepIdx) {
- // Progress arc handles visual feedback
-}
+function updateTimerRing(currentStepIdx) {}
 
 function updateTimerProgressArc(seconds) {
  const meta = window._timerRingMeta;
  if (!meta) return;
  const { C, totalTime } = meta;
+ const Q = C / 4;
  const frac = Math.min(seconds / totalTime, 1);
  const arc = document.getElementById('timerProgressArc');
  if (arc) {
    arc.setAttribute('stroke-dasharray', `${frac * C} ${C - frac * C}`);
+   arc.setAttribute('stroke-dashoffset', String(Q));
  }
 }
 
