@@ -506,25 +506,49 @@ body {
  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .timer-body {
- flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+ flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+}
+.timer-ring-container {
+ position: relative; width: 280px; height: 280px;
+}
+.timer-ring-svg {
+ width: 100%; height: 100%; transform: rotate(-90deg);
+}
+.timer-ring-bg {
+ fill: none; stroke: var(--bg-input); stroke-width: 12;
+}
+.timer-ring-segment {
+ fill: none; stroke-width: 12; stroke-linecap: butt;
+ transition: opacity 0.3s;
+}
+.timer-ring-segment.active { opacity: 1; }
+.timer-ring-segment.inactive { opacity: 0.3; }
+.timer-ring-segment.future { opacity: 0.15; }
+.timer-ring-label {
+ font-size: 9px; fill: var(--text-tertiary); font-weight: 600; font-family: 'DM Sans';
+}
+.timer-ring-center {
+ position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+ text-align: center; pointer-events: none;
 }
 .timer-time {
- font-family: 'DM Mono', monospace; font-size: 80px; font-weight: 500;
+ font-family: 'DM Mono', monospace; font-size: 48px; font-weight: 500;
  color: var(--text); line-height: 1; letter-spacing: -2px;
 }
-.timer-stage {
- font-size: 24px; font-weight: 700; color: var(--accent);
- text-align: center;
-}
 .timer-amount {
- font-family: 'DM Mono', monospace; font-size: 36px; font-weight: 600;
- color: var(--text); text-align: center;
+ font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 600;
+ color: var(--accent); text-align: center; margin-top: 4px;
+}
+.timer-stage {
+ font-size: 20px; font-weight: 700; color: var(--accent);
+ text-align: center; margin-top: 8px;
 }
 .timer-next {
- font-size: 14px; color: var(--text-tertiary); text-align: center; margin-top: 8px;
+ font-size: 14px; color: var(--text-tertiary); text-align: center; margin-top: 4px;
 }
 .timer-progress {
  height: 6px; background: var(--bg-input); border-radius: 3px; margin: 20px 0; overflow: hidden;
+ display: none;
 }
 .timer-progress-bar {
  height: 100%; background: var(--accent); border-radius: 3px;
@@ -537,6 +561,25 @@ body {
  font-family: 'DM Mono', monospace; font-size: 120px; font-weight: 600;
  color: var(--accent); text-align: center;
 }
+/* Radar Chart */
+.radar-chart-container { display: flex; justify-content: center; margin: 12px 0; }
+.radar-axis-btn { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-input); border-radius: 10px; margin-bottom: 6px; }
+.radar-axis-label { font-size: 14px; font-weight: 600; color: var(--text); }
+.radar-axis-dots { display: flex; gap: 6px; }
+.radar-axis-dot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); background: transparent; color: var(--text-tertiary); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.radar-axis-dot.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* Brew adjust touch controls */
+.adjust-touch-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+.adjust-touch-label { font-size: 14px; font-weight: 600; color: var(--text); min-width: 60px; }
+.adjust-touch-btns { display: flex; align-items: center; gap: 8px; }
+.adjust-touch-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); background: transparent; color: var(--text); font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.adjust-touch-btn:active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.adjust-touch-val { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 600; min-width: 50px; text-align: center; color: var(--text); }
+.adjust-touch-val.positive { color: var(--danger); }
+.adjust-touch-val.negative { color: #4a90d9; }
+.adjust-result-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.adjust-result-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.adjust-result-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
 </style>
 </head>
 <body>
@@ -752,12 +795,20 @@ body {
        </div>
      </div>
    </div>
+   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">멜로드립 설정</h3>
+     <div class="input-group" style="margin-bottom:0;">
+       <label>장착형 멜로드립 무게 (g)</label>
+       <input type="number" id="meloDripWeight" placeholder="예: 30" onchange="saveMeloDripWeight()">
+       <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;">장착형 사용 시 블루밍 이후 누적 그람수에 자동 반영됩니다</div>
+     </div>
+   </div>
    <div style="border-top:1px solid var(--border);padding-top:16px;">
      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 초기화</h3>
      <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
    </div>
    <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-     FilterCoffee v2.4<br>Made with Matthew
+     FilterCoffee v2.5<br>Made with Matthew
      <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
    </div>
  </div>
@@ -814,7 +865,7 @@ body {
      <div class="input-group" style="flex:1;" id="eg-dose"><label>도즈 (g) <span class="required">*</span></label><input type="number" id="editDose"><div class="field-hint">필수 항목입니다</div></div>
      <div class="input-group" style="flex:1;" id="eg-water"><label>물량 (g) <span class="required">*</span></label><input type="number" id="editWater"><div class="field-hint">필수 항목입니다</div></div>
    </div>
-   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('사용')">사용</button><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button></div><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button><button class="toggle-opt" onclick="setMeloDrip('그립형')">그립형</button><button class="toggle-opt" onclick="setMeloDrip('장착형')">장착형</button></div><div class="field-hint">필수 항목입니다</div></div>
    <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="editBrewTypeToggle"><button class="toggle-opt" onclick="setEditBrewType('핫')">핫</button><button class="toggle-opt" onclick="setEditBrewType('아이스')">아이스</button></div></div>
    <div class="input-group"><label>바텀 추천</label><input type="text" id="editBottom" placeholder="open / closed"></div>
    <div class="input-group"><label>목표 추출 시간</label><input type="text" id="editTargetTime" placeholder="3:00"></div>
@@ -871,10 +922,48 @@ body {
      <div class="input-group" style="flex:1;"><label>물량 (g)</label><input type="number" id="brewWater"></div>
    </div>
    <div class="input-group"><label>멜로드립</label><input type="text" id="brewMeloDrip" readonly placeholder="레시피에서 자동 입력"></div>
+   <div class="input-group"><label>물 정보</label><input type="text" id="brewWaterType" placeholder="삼다수, 백산수, 수돗물..." list="waterTypeList"><datalist id="waterTypeList"><option value="삼다수"><option value="백산수"><option value="아이시스"><option value="에비앙"><option value="볼빅"><option value="수돗물 정수"><option value="브리타 정수"></datalist></div>
    <div class="input-group"><label>날짜</label><input type="date" id="brewDate"></div>
    <div class="input-group"><label>별점</label><div class="star-rating" id="brewStars"><span onclick="setBrewRating(1)">★</span><span onclick="setBrewRating(2)">★</span><span onclick="setBrewRating(3)">★</span><span onclick="setBrewRating(4)">★</span><span onclick="setBrewRating(5)">★</span></div></div>
+   <div class="input-group">
+     <label>맛 평가</label>
+     <div id="brewRadarInput">
+       <div class="radar-axis-btn"><span class="radar-axis-label">산미</span><div class="radar-axis-dots" id="radarAcidity"></div></div>
+       <div class="radar-axis-btn"><span class="radar-axis-label">단맛</span><div class="radar-axis-dots" id="radarSweetness"></div></div>
+       <div class="radar-axis-btn"><span class="radar-axis-label">바디</span><div class="radar-axis-dots" id="radarBody"></div></div>
+       <div class="radar-axis-btn"><span class="radar-axis-label">향</span><div class="radar-axis-dots" id="radarAroma"></div></div>
+       <div class="radar-axis-btn"><span class="radar-axis-label">클린컵</span><div class="radar-axis-dots" id="radarCleanCup"></div></div>
+     </div>
+   </div>
    <div class="input-group"><label>맛 메모</label><textarea id="brewNote" placeholder="맛, 향, 질감 등 자유롭게 기록..."></textarea></div>
-   <div class="input-group"><label>조정 사항</label><input type="text" id="brewAdjust" placeholder="예: 클릭수 1 줄임, 수온 1도 올림"></div>
+   <div class="input-group">
+     <label>레시피 대비 조정</label>
+     <div class="adjust-touch-row">
+       <span class="adjust-touch-label">수온</span>
+       <div class="adjust-touch-btns">
+         <button class="adjust-touch-btn" onclick="adjustTempDelta(-1)">−</button>
+         <span class="adjust-touch-val" id="adjustTempVal">0°C</span>
+         <button class="adjust-touch-btn" onclick="adjustTempDelta(+1)">+</button>
+       </div>
+     </div>
+     <div class="adjust-touch-row">
+       <span class="adjust-touch-label">클릭수</span>
+       <div class="adjust-touch-btns">
+         <button class="adjust-touch-btn" onclick="adjustClickDelta(-1)">−</button>
+         <span class="adjust-touch-val" id="adjustClickVal">0</span>
+         <button class="adjust-touch-btn" onclick="adjustClickDelta(+1)">+</button>
+       </div>
+     </div>
+     <div style="margin-top:8px;">
+       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px;">추출 결과</div>
+       <div class="adjust-result-group" id="adjustResultGroup">
+         <button class="adjust-result-btn" onclick="setAdjustResult('과소추출')">과소추출</button>
+         <button class="adjust-result-btn" onclick="setAdjustResult('적정')">적정</button>
+         <button class="adjust-result-btn" onclick="setAdjustResult('과다추출')">과다추출</button>
+       </div>
+     </div>
+   </div>
+   <div class="input-group"><label>조정 메모</label><input type="text" id="brewAdjust" placeholder="기타 조정사항 메모"></div>
    <button class="btn btn-primary" onclick="saveBrew()">저장</button>
  </div>
 </div>
@@ -933,9 +1022,16 @@ body {
      <div class="timer-recipe-name" id="timerRecipeName"></div>
    </div>
    <div class="timer-body">
-     <div class="timer-time" id="timerDisplay">0:00</div>
+     <div class="timer-ring-container">
+       <svg class="timer-ring-svg" viewBox="0 0 280 280" id="timerRingSvg">
+         <circle class="timer-ring-bg" cx="140" cy="140" r="124"/>
+       </svg>
+       <div class="timer-ring-center">
+         <div class="timer-time" id="timerDisplay">0:00</div>
+         <div class="timer-amount" id="timerAmount"></div>
+       </div>
+     </div>
      <div class="timer-stage" id="timerStage">준비</div>
-     <div class="timer-amount" id="timerAmount"></div>
      <div class="timer-next" id="timerNext"></div>
    </div>
    <div class="timer-progress">
@@ -1286,7 +1382,7 @@ function parseRecipeText(text) {
  if (grindFinal) recipe.grind = grindFinal[1];
  else { recipe.grind = m(/(?:그라인드|클릭수?)\s+(\d{2,3})\s*(?:클릭)?/); if (!recipe.grind) { const gm = cleaned.match(/클릭수\s*계산[:\s]*(\d{2,3})/); if (gm) recipe.grind = gm[1]; } if (!recipe.grind) { const gm = cleaned.match(/(\d{2,3})\s*클릭/); if (gm) recipe.grind = gm[1]; } }
  const meloMatch = cleaned.match(/멜로드립\s+(.+)/);
- if (meloMatch) { const val = meloMatch[1].trim(); if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '사용'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; }
+ if (meloMatch) { const val = meloMatch[1].trim(); if (/장착/.test(val)) recipe.meloDrip = '장착형'; else if (/그립/.test(val)) recipe.meloDrip = '그립형'; else if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '그립형'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; }
  const timeMatch = cleaned.match(/(?:목표\s*)?(?:총\s*)?추출\s*(?:목표\s*)?시간\s+~?(\d+:\d+)/);
  if (timeMatch) recipe.targetTime = timeMatch[1];
  const lines = cleaned.split('\n');
@@ -1470,8 +1566,10 @@ function openAddBrewModal(recipeId) {
  document.getElementById('brewClicks').value = data.currentClicks || ''; document.getElementById('brewTemp').value = '';
  document.getElementById('brewTime').value = ''; document.getElementById('brewDose').value = '';
  document.getElementById('brewWater').value = ''; document.getElementById('brewMeloDrip').value = '';
+ document.getElementById('brewWaterType').value = '';
  document.getElementById('brewDate').value = new Date().toISOString().split('T')[0];
  document.getElementById('brewNote').value = ''; document.getElementById('brewAdjust').value = '';
+ resetBrewAdjustments();
  updateRoasteryList();
  if (recipeId) {
    select.value = recipeId; onBrewRecipeSelect();
@@ -1552,7 +1650,7 @@ function saveBrew() {
  const recipeId = document.getElementById('brewRecipeSelect').value;
  const beanId = document.getElementById('brewBeanSelect').value;
  const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
- const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
+ const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), waterType: document.getElementById('brewWaterType').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, radar: { ...currentRadar }, adjustTempDelta: currentAdjustTemp, adjustClickDelta: currentAdjustClick, adjustResult: currentAdjustResult, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
 
  if (editingBrewId) {
    // 편집 모드: 기존 기록 업데이트
@@ -1617,7 +1715,7 @@ function renderBrews() {
  Object.keys(groups).sort().reverse().forEach(key => {
    if (key !== 'unknown') { const [y, m] = key.split('-'); html += `<div class="group-header">${y}년 ${parseInt(m)}월</div>`; } else html += `<div class="group-header">날짜 없음</div>`;
    groups[key].forEach(b => {
-     html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + b.meloDrip : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
+     html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + b.meloDrip : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${(b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${[b.adjustTempDelta ? `수온${b.adjustTempDelta > 0 ? '+' : ''}${b.adjustTempDelta}°C` : '', b.adjustClickDelta ? `클릭${b.adjustClickDelta > 0 ? '+' : ''}${b.adjustClickDelta}` : '', b.adjustResult || ''].filter(Boolean).join(' · ')}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
    });
  });
  container.innerHTML = html;
@@ -1626,9 +1724,30 @@ function renderBrews() {
 function openBrewDetail(id) {
  selectedBrewId = id;
  const b = data.brews.find(x => x.id === id); if (!b) return;
- let html = `<div class="recipe-detail-section"><h3>추출 정보</h3><div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>${b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : ''}${b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : ''}${b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : ''}${b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : ''}${b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : ''}${b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : ''}${b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : ''}${b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : ''}${b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : ''}${b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${b.meloDrip}</span></div>` : ''}</div>${b.rating ? `<div class="recipe-detail-section"><h3>평가</h3><div style="color:var(--star);font-size:24px;">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div></div>` : ''}${b.note ? `<div class="recipe-detail-section"><h3>맛 메모</h3><p style="font-size:14px;line-height:1.6;color:var(--text-secondary);">${b.note}</p></div>` : ''}${b.adjust ? `<div class="recipe-detail-section"><h3>조정 사항</h3><p style="font-size:14px;color:var(--text-secondary);">${b.adjust}</p></div>` : ''}`;
+ let html = `<div class="recipe-detail-section"><h3>추출 정보</h3><div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>${b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : ''}${b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : ''}${b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : ''}${b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : ''}${b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : ''}${b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : ''}${b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : ''}${b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : ''}${b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : ''}${b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${b.meloDrip}</span></div>` : ''}${b.waterType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물</span><span class="recipe-detail-value">${b.waterType}</span></div>` : ''}</div>`;
+ // 평가
+ if (b.rating) html += `<div class="recipe-detail-section"><h3>평가</h3><div style="color:var(--star);font-size:24px;">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div></div>`;
+ // 레이더 차트
+ if (b.radar && Object.values(b.radar).some(v => v > 0)) {
+   html += `<div class="recipe-detail-section"><h3>맛 평가</h3><div class="radar-chart-container"><canvas id="brewRadarCanvas" width="220" height="220"></canvas></div></div>`;
+ }
+ // 조정 정보
+ const hasAdjust = b.adjustTempDelta || b.adjustClickDelta || b.adjustResult;
+ if (hasAdjust) {
+   html += `<div class="recipe-detail-section"><h3>레시피 대비 조정</h3>`;
+   if (b.adjustTempDelta) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value" style="color:${b.adjustTempDelta > 0 ? 'var(--danger)' : '#4a90d9'}">${b.adjustTempDelta > 0 ? '+' : ''}${b.adjustTempDelta}°C</span></div>`;
+   if (b.adjustClickDelta) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value" style="color:${b.adjustClickDelta > 0 ? 'var(--danger)' : '#4a90d9'}">${b.adjustClickDelta > 0 ? '+' : ''}${b.adjustClickDelta}</span></div>`;
+   if (b.adjustResult) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">결과</span><span class="recipe-detail-value">${b.adjustResult}</span></div>`;
+   html += `</div>`;
+ }
+ if (b.note) html += `<div class="recipe-detail-section"><h3>맛 메모</h3><p style="font-size:14px;line-height:1.6;color:var(--text-secondary);">${b.note}</p></div>`;
+ if (b.adjust) html += `<div class="recipe-detail-section"><h3>조정 메모</h3><p style="font-size:14px;color:var(--text-secondary);">${b.adjust}</p></div>`;
  document.getElementById('brewDetailContent').innerHTML = html;
  openModal('brewDetailModal');
+ // Draw radar chart after DOM update
+ if (b.radar && Object.values(b.radar).some(v => v > 0)) {
+   requestAnimationFrame(() => drawRadarChart('brewRadarCanvas', b.radar));
+ }
 }
 
 function deleteBrew() {
@@ -1664,10 +1783,19 @@ function editBrewFromDetail() {
  document.getElementById('brewDose').value = b.dose || '';
  document.getElementById('brewWater').value = b.water || '';
  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+ document.getElementById('brewWaterType').value = b.waterType || '';
  document.getElementById('brewDate').value = b.date || '';
  document.getElementById('brewNote').value = b.note || '';
  document.getElementById('brewAdjust').value = b.adjust || '';
  currentBrewRating = b.rating || 0; renderBrewStars();
+ // Load radar values
+ currentRadar = b.radar ? { ...b.radar } : { acidity: 0, sweetness: 0, body: 0, aroma: 0, cleanCup: 0 };
+ renderRadarInputs();
+ // Load adjustment values
+ currentAdjustTemp = b.adjustTempDelta || 0;
+ currentAdjustClick = b.adjustClickDelta || 0;
+ currentAdjustResult = b.adjustResult || '';
+ updateAdjustDisplay();
  updateBrewBeanInfo();
  // 편집 모드 표시 — 저장 시 기존 기록 교체
  editingBrewId = selectedBrewId;
@@ -1691,6 +1819,7 @@ function rebrewFromDetail() {
  document.getElementById('brewDose').value = b.dose || '';
  document.getElementById('brewWater').value = b.water || '';
  document.getElementById('brewMeloDrip').value = b.meloDrip || '';
+ document.getElementById('brewWaterType').value = b.waterType || '';
 }
 
 // ─── Helper: brew의 roastery를 레시피/원두에서 가져오기 ───
@@ -1977,45 +2106,102 @@ function formatTimerTime(sec) {
  return `${m}:${String(s).padStart(2, '0')}`;
 }
 
-function speak(text) {
+function speak(text, onEnd) {
  if ('speechSynthesis' in window) {
    speechSynthesis.cancel();
    const u = new SpeechSynthesisUtterance(text);
    u.lang = 'ko-KR';
    u.rate = 1.0;
+   if (onEnd) u.onend = onEnd;
    speechSynthesis.speak(u);
- }
+ } else if (onEnd) onEnd();
 }
 
 function buildTimerSteps(recipe) {
  const steps = [];
  if (!recipe.pourGuide || !recipe.pourGuide.length) return steps;
+ // Calculate cumulative amounts
+ let cumulative = 0;
+ const meloDripType = recipe.meloDrip || '';
+ const meloDripWeight = (meloDripType === '장착형') ? (parseFloat(localStorage.getItem('fc_meloDripWeight')) || 0) : 0;
  recipe.pourGuide.forEach((p, i) => {
    const sec = parseTimeToSeconds(p.time);
-   // Determine stage name
    let stage = p.action || '';
-   // Clean up action text for display
    let displayStage = stage;
    if (stage.includes('블루밍')) displayStage = '블루밍';
    else if (stage.includes('드로우다운')) displayStage = '드로우다운';
    else if (stage.match(/(\d+)차\s*푸어/)) displayStage = stage.match(/(\d+)차\s*푸어/)[0];
-   // Amount for display
-   let amount = p.amount || '';
-   // TTS text — replace 'g' with '그람' for natural speech
-   let ttsAmount = amount.replace(/g$/i, '그람');
+   // Parse individual pour amount
+   let pourAmount = parseInt((p.amount || '').replace(/[^0-9]/g, '')) || 0;
+   let isDrawdown = displayStage.includes('드로우다운');
+   if (!isDrawdown && pourAmount > 0) {
+     cumulative += pourAmount;
+   }
+   // Add meloDrip offset after blooming (for 장착형)
+   let displayCumulative = cumulative;
+   if (meloDripWeight > 0 && !displayStage.includes('블루밍') && !isDrawdown && cumulative > 0) {
+     displayCumulative = cumulative + meloDripWeight;
+   }
+   let amount = isDrawdown ? '' : displayCumulative + 'g';
+   let ttsAmount = isDrawdown ? '' : displayCumulative + '그람';
    let ttsText = '';
    if (displayStage.includes('블루밍')) {
-     ttsText = ttsAmount ? `블루밍, ${ttsAmount}` : '블루밍';
-   } else if (displayStage.includes('드로우다운')) {
+     ttsText = ttsAmount ? `블루밍, ${ttsAmount}까지` : '블루밍';
+   } else if (isDrawdown) {
      ttsText = '드로우다운';
    } else {
      ttsText = ttsAmount ? `${displayStage}, ${ttsAmount}까지` : displayStage;
    }
    steps.push({ time: sec, stage: displayStage, amount, ttsText, preAnnounced: false });
  });
- // Sort by time
  steps.sort((a, b) => a.time - b.time);
  return steps;
+}
+
+// Timer ring rendering
+const RING_COLORS = ['#c45e3a', '#e8a838', '#4a9e6a', '#4a90d9', '#9b59b6', '#e67e22', '#1abc9c'];
+
+function buildTimerRing(steps, totalTime) {
+ const svg = document.getElementById('timerRingSvg');
+ // Remove old segments and labels
+ svg.querySelectorAll('.timer-ring-segment, .timer-ring-label').forEach(el => el.remove());
+ if (!steps.length || !totalTime) return;
+ const R = 124, C = 2 * Math.PI * R;
+ // Build segments: each step occupies time from its start to next step start (or totalTime)
+ for (let i = 0; i < steps.length; i++) {
+   const start = steps[i].time;
+   const end = (i + 1 < steps.length) ? steps[i + 1].time : totalTime;
+   const startFrac = start / totalTime;
+   const endFrac = end / totalTime;
+   const len = (endFrac - startFrac) * C;
+   const offset = C - startFrac * C;
+   const seg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+   seg.setAttribute('cx', '140'); seg.setAttribute('cy', '140'); seg.setAttribute('r', String(R));
+   seg.setAttribute('class', 'timer-ring-segment future');
+   seg.setAttribute('data-idx', String(i));
+   seg.setAttribute('stroke', RING_COLORS[i % RING_COLORS.length]);
+   seg.setAttribute('stroke-dasharray', `${len} ${C - len}`);
+   seg.setAttribute('stroke-dashoffset', String(offset));
+   svg.appendChild(seg);
+   // Label on the ring
+   const midFrac = (startFrac + Math.min(startFrac + 0.08, endFrac)) / 2;
+   const angle = midFrac * 2 * Math.PI - Math.PI / 2;
+   const lx = 140 + (R + 18) * Math.cos(angle);
+   const ly = 140 + (R + 18) * Math.sin(angle);
+   const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+   label.setAttribute('x', String(lx)); label.setAttribute('y', String(ly));
+   label.setAttribute('class', 'timer-ring-label');
+   label.setAttribute('text-anchor', 'middle'); label.setAttribute('dominant-baseline', 'middle');
+   label.textContent = steps[i].stage.replace(/\s*푸어/, 'P');
+   svg.appendChild(label);
+ }
+}
+
+function updateTimerRing(currentStepIdx) {
+ document.querySelectorAll('.timer-ring-segment').forEach(seg => {
+   const idx = parseInt(seg.getAttribute('data-idx'));
+   seg.setAttribute('class', 'timer-ring-segment ' + (idx < currentStepIdx ? 'active' : idx === currentStepIdx ? 'active' : 'future'));
+ });
 }
 
 function startTimerBrew() {
@@ -2040,7 +2226,9 @@ function startTimerBrew() {
  } else {
    document.getElementById('timerNext').textContent = '';
  }
- document.getElementById('timerProgressBar').style.width = '0%';
+ // Build ring
+ const endTime = recipe.targetTime ? parseTimeToSeconds(recipe.targetTime) : (timerSteps.length ? timerSteps[timerSteps.length - 1].time + 60 : 180);
+ buildTimerRing(timerSteps, endTime);
  document.getElementById('timerStartBtn').textContent = '시작';
  document.getElementById('timerModal').classList.add('active');
  document.body.style.overflow = 'hidden';
@@ -2048,13 +2236,11 @@ function startTimerBrew() {
 
 function toggleTimer() {
  if (timerRunning) {
-   // Pause
    clearInterval(timerInterval);
    timerRunning = false;
    document.getElementById('timerStartBtn').textContent = '계속';
    releaseWakeLock();
  } else {
-   // Check if this is initial start (need countdown)
    if (timerSeconds === 0 && timerCurrentStepIdx === -1) {
      startCountdown();
    } else {
@@ -2070,22 +2256,22 @@ function startCountdown() {
  document.getElementById('timerAmount').textContent = '';
  document.getElementById('timerNext').textContent = '';
  document.getElementById('timerDisplay').innerHTML = `<span style="color:var(--accent);">${count}</span>`;
- speak(String(count));
- timerCountdownInterval = setInterval(() => {
-   count--;
-   if (count > 0) {
-     document.getElementById('timerDisplay').innerHTML = `<span style="color:var(--accent);">${count}</span>`;
-     speak(String(count));
-   } else {
-     clearInterval(timerCountdownInterval);
-     document.getElementById('timerDisplay').textContent = '0:00';
-     document.getElementById('timerStartBtn').style.display = '';
-     document.getElementById('timerStartBtn').textContent = '일시정지';
-     resumeTimer();
-     // Trigger first step immediately
-     processTimerStep();
-   }
- }, 1000);
+ function sayNext() {
+   speak(String(count), () => {
+     count--;
+     if (count > 0) {
+       document.getElementById('timerDisplay').innerHTML = `<span style="color:var(--accent);">${count}</span>`;
+       sayNext();
+     } else {
+       document.getElementById('timerDisplay').textContent = '0:00';
+       document.getElementById('timerStartBtn').style.display = '';
+       document.getElementById('timerStartBtn').textContent = '일시정지';
+       resumeTimer();
+       processTimerStep();
+     }
+   });
+ }
+ sayNext();
 }
 
 async function acquireWakeLock() {
@@ -2114,7 +2300,6 @@ function resumeTimer() {
 
 function processTimerStep() {
  if (!timerSteps.length) return;
- // Check for 10-second pre-announcement
  for (let i = 0; i < timerSteps.length; i++) {
    const step = timerSteps[i];
    if (!step.preAnnounced && timerSeconds === step.time - 10 && step.time > 10) {
@@ -2122,14 +2307,13 @@ function processTimerStep() {
      speak(`10초 후 ${step.stage}`);
    }
  }
- // Check for step trigger
  for (let i = 0; i < timerSteps.length; i++) {
    if (timerSeconds === timerSteps[i].time && timerCurrentStepIdx < i) {
      timerCurrentStepIdx = i;
      const step = timerSteps[i];
      document.getElementById('timerStage').textContent = step.stage;
      document.getElementById('timerAmount').textContent = step.amount;
-     // Show next step info
+     updateTimerRing(i);
      if (i + 1 < timerSteps.length) {
        const next = timerSteps[i + 1];
        document.getElementById('timerNext').textContent = `다음: ${next.stage} ${next.amount} @ ${formatTimerTime(next.time)}`;
@@ -2140,10 +2324,8 @@ function processTimerStep() {
      break;
    }
  }
- // Check for completion (after last step + some buffer)
  const lastStep = timerSteps[timerSteps.length - 1];
  if (timerCurrentStepIdx === timerSteps.length - 1) {
-   // If targetTime exists, use that; otherwise wait 60s after last pour
    const endTime = timerRecipe.targetTime ? parseTimeToSeconds(timerRecipe.targetTime) : lastStep.time + 60;
    if (timerSeconds >= endTime) {
      finishTimer();
@@ -2274,7 +2456,9 @@ function generateShareCard() {
  if (b.temp) rows++;
  if (b.dose && b.water) rows++;
  if (b.meloDrip) rows++;
+ if (b.waterType) rows++;
  if (targetTime || b.time) rows++;
+ if (b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) rows++;
  h += rows * 36 + 8;
  if (b.note) {
    h += 44; // divider
@@ -2352,8 +2536,16 @@ function generateShareCard() {
  if (b.temp) row('수온', `${b.temp}°C`);
  if (b.dose && b.water) { const r = '1:' + (parseFloat(b.water) / parseFloat(b.dose)).toFixed(1); row('도즈 / 물량', `${b.dose}g → ${b.water}g (${r})`); }
  if (b.meloDrip) row('멜로드립', b.meloDrip);
+ if (b.waterType) row('물', b.waterType);
  if (targetTime) row('목표 시간', targetTime);
  if (b.time && b.time !== targetTime) row('실제 시간', b.time);
+ if (b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) {
+   const parts = [];
+   if (b.adjustTempDelta) parts.push(`수온 ${b.adjustTempDelta > 0 ? '+' : ''}${b.adjustTempDelta}°C`);
+   if (b.adjustClickDelta) parts.push(`클릭 ${b.adjustClickDelta > 0 ? '+' : ''}${b.adjustClickDelta}`);
+   if (b.adjustResult) parts.push(b.adjustResult);
+   row('조정', parts.join(' · '));
+ }
 
  // ── Tasting note ──
  if (b.note) {
@@ -2399,9 +2591,175 @@ async function shareShareCard() {
  } catch (e) { if (e.name !== 'AbortError') saveShareCard(); }
 }
 
+// ─── Radar Chart ───
+let currentRadar = { acidity: 0, sweetness: 0, body: 0, aroma: 0, cleanCup: 0 };
+const RADAR_AXES = [
+ { key: 'acidity', label: '산미', elId: 'radarAcidity' },
+ { key: 'sweetness', label: '단맛', elId: 'radarSweetness' },
+ { key: 'body', label: '바디', elId: 'radarBody' },
+ { key: 'aroma', label: '향', elId: 'radarAroma' },
+ { key: 'cleanCup', label: '클린컵', elId: 'radarCleanCup' },
+];
+
+function renderRadarInputs() {
+ RADAR_AXES.forEach(axis => {
+   const container = document.getElementById(axis.elId);
+   if (!container) return;
+   container.innerHTML = '';
+   for (let i = 1; i <= 5; i++) {
+     const dot = document.createElement('button');
+     dot.className = 'radar-axis-dot' + (currentRadar[axis.key] >= i ? ' active' : '');
+     dot.textContent = i;
+     dot.onclick = () => { currentRadar[axis.key] = currentRadar[axis.key] === i ? 0 : i; renderRadarInputs(); };
+     container.appendChild(dot);
+   }
+ });
+}
+
+function drawRadarChart(canvasId, radar) {
+ const canvas = document.getElementById(canvasId);
+ if (!canvas) return;
+ const ctx = canvas.getContext('2d');
+ const W = canvas.width, H = canvas.height;
+ const cx = W / 2, cy = H / 2, R = Math.min(cx, cy) - 30;
+ ctx.clearRect(0, 0, W, H);
+ const labels = ['산미', '단맛', '바디', '향', '클린컵'];
+ const keys = ['acidity', 'sweetness', 'body', 'aroma', 'cleanCup'];
+ const n = 5;
+ function getPoint(i, r) {
+   const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
+   return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+ }
+ // Grid
+ const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+ ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)';
+ ctx.lineWidth = 1;
+ for (let ring = 1; ring <= 5; ring++) {
+   ctx.beginPath();
+   for (let i = 0; i <= n; i++) {
+     const [x, y] = getPoint(i % n, R * ring / 5);
+     i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+   }
+   ctx.closePath(); ctx.stroke();
+ }
+ // Axes
+ for (let i = 0; i < n; i++) {
+   const [x, y] = getPoint(i, R);
+   ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+ }
+ // Data polygon
+ const values = keys.map(k => radar[k] || 0);
+ ctx.beginPath();
+ values.forEach((v, i) => {
+   const [x, y] = getPoint(i, R * v / 5);
+   i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+ });
+ ctx.closePath();
+ ctx.fillStyle = 'rgba(196, 94, 58, 0.25)';
+ ctx.fill();
+ ctx.strokeStyle = '#c45e3a';
+ ctx.lineWidth = 2;
+ ctx.stroke();
+ // Dots
+ values.forEach((v, i) => {
+   if (v > 0) {
+     const [x, y] = getPoint(i, R * v / 5);
+     ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
+     ctx.fillStyle = '#c45e3a'; ctx.fill();
+   }
+ });
+ // Labels
+ ctx.fillStyle = isDark ? '#e8e2da' : '#1a1a1a';
+ ctx.font = '600 11px DM Sans, sans-serif';
+ ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+ labels.forEach((lbl, i) => {
+   const [x, y] = getPoint(i, R + 18);
+   ctx.fillText(lbl, x, y);
+ });
+}
+
+// ─── Brew Adjustment Touch Controls ───
+let currentAdjustTemp = 0;
+let currentAdjustClick = 0;
+let currentAdjustResult = '';
+
+function adjustTempDelta(d) {
+ currentAdjustTemp += d;
+ updateAdjustDisplay();
+}
+function adjustClickDelta(d) {
+ currentAdjustClick += d;
+ updateAdjustDisplay();
+}
+function setAdjustResult(val) {
+ currentAdjustResult = currentAdjustResult === val ? '' : val;
+ updateAdjustDisplay();
+}
+function updateAdjustDisplay() {
+ const tempEl = document.getElementById('adjustTempVal');
+ const clickEl = document.getElementById('adjustClickVal');
+ if (tempEl) {
+   tempEl.textContent = (currentAdjustTemp > 0 ? '+' : '') + currentAdjustTemp + '°C';
+   tempEl.className = 'adjust-touch-val' + (currentAdjustTemp > 0 ? ' positive' : currentAdjustTemp < 0 ? ' negative' : '');
+ }
+ if (clickEl) {
+   clickEl.textContent = (currentAdjustClick > 0 ? '+' : '') + currentAdjustClick;
+   clickEl.className = 'adjust-touch-val' + (currentAdjustClick > 0 ? ' positive' : currentAdjustClick < 0 ? ' negative' : '');
+ }
+ document.querySelectorAll('.adjust-result-btn').forEach(btn => {
+   btn.classList.toggle('active', btn.textContent === currentAdjustResult);
+ });
+}
+
+function resetBrewAdjustments() {
+ currentRadar = { acidity: 0, sweetness: 0, body: 0, aroma: 0, cleanCup: 0 };
+ currentAdjustTemp = 0;
+ currentAdjustClick = 0;
+ currentAdjustResult = '';
+ renderRadarInputs();
+ updateAdjustDisplay();
+}
+
+// ─── MeloDrip Weight Setting ───
+function saveMeloDripWeight() {
+ const val = document.getElementById('meloDripWeight').value;
+ localStorage.setItem('fc_meloDripWeight', val || '');
+}
+function loadMeloDripWeight() {
+ const val = localStorage.getItem('fc_meloDripWeight') || '';
+ const el = document.getElementById('meloDripWeight');
+ if (el) el.value = val;
+}
+
+// ─── MeloDrip type migration ───
+function migrateMeloDripValues() {
+ // Convert old '사용'/'미사용' to new '그립형'/'미사용'
+ data.recipes.forEach(r => {
+   if (r.meloDrip === '사용') r.meloDrip = '그립형';
+ });
+ data.brews.forEach(b => {
+   if (b.meloDrip === '사용') b.meloDrip = '그립형';
+ });
+}
+
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.4';
+const APP_VERSION = 'v2.5';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5',
+   date: '2025.04.15',
+   items: [
+     { type: 'new', text: '타이머 원형 프로그레스 — 구간별 단계가 링 위에 표시됩니다' },
+     { type: 'new', text: '타이머 그람수 누적 표시 — 저울에 보이는 누적값 기준으로 안내' },
+     { type: 'new', text: '맛 평가 레이더 차트 — 산미/단맛/바디/향/클린컵 5축 오각형' },
+     { type: 'new', text: '레시피 대비 조정 기록 — 수온 ±, 클릭수 ± 터치로 기록' },
+     { type: 'new', text: '추출 결과 기록 — 과소추출/적정/과다추출 선택' },
+     { type: 'new', text: '물 정보 필드 — 삼다수, 백산수 등 자동완성' },
+     { type: 'new', text: '멜로드립 장착형 지원 — 미사용/그립형/장착형 3단 선택' },
+     { type: 'new', text: '설정에 멜로드립 장착형 무게 고정값 저장' },
+     { type: 'improve', text: '카운트다운 3-2-1 TTS 겹침 수정 (순차 발화)' },
+   ]
+ },
  {
    version: 'v2.4',
    date: '2025.04.14',
@@ -2478,6 +2836,8 @@ function init() {
  document.getElementById('clickMax').value = data.clickRange.max;
  if (!data.beans) { data.beans = []; saveData(); }
  if (!data.wishlist) { data.wishlist = []; saveData(); }
+ migrateMeloDripValues();
+ loadMeloDripWeight();
  updateClickBar(); renderClickGrid(); renderClickHistory();
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
  // iOS PWA viewport fix — force layout recalculation on load
