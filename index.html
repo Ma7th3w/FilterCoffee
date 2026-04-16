@@ -869,7 +869,7 @@ body {
    </div>
    <div class="input-group" id="eg-notes"><label>예상 노트 <span class="required">*</span></label><input type="text" id="editNotes" placeholder="자스민, 복숭아, 라임 등"><div class="field-hint">필수 항목입니다</div></div>
    <div style="display:flex;gap:8px;">
-     <div class="input-group" style="flex:1;" id="eg-dripper"><label>드리퍼 <span class="required">*</span></label><input type="text" id="editDripper" placeholder="Orea V4"><div class="field-hint">필수 항목입니다</div></div>
+     <div class="input-group" style="flex:1;" id="eg-dripper"><label>드리퍼 <span class="required">*</span></label><input type="text" id="editDripper" placeholder="Orea V4" oninput="toggleBottomField()"><div class="field-hint">필수 항목입니다</div></div>
      <div class="input-group" style="flex:1;" id="eg-grind"><label>클릭수 <span class="required">*</span></label><input type="number" id="editGrind"><div class="field-hint">필수 항목입니다</div></div>
    </div>
    <div style="display:flex;gap:8px;">
@@ -880,9 +880,10 @@ body {
      <div class="input-group" style="flex:1;" id="eg-dose"><label>도즈 (g) <span class="required">*</span></label><input type="number" id="editDose"><div class="field-hint">필수 항목입니다</div></div>
      <div class="input-group" style="flex:1;" id="eg-water"><label>물량 (g) <span class="required">*</span></label><input type="number" id="editWater"><div class="field-hint">필수 항목입니다</div></div>
    </div>
-   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button><button class="toggle-opt" onclick="setMeloDrip('오레아 멜로드립')">오레아</button><button class="toggle-opt" onclick="setMeloDrip('멜로드립')">멜로드립</button></div><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button><button class="toggle-opt" onclick="setMeloDrip('오레아 멜로드립')">오레아</button><button class="toggle-opt" onclick="setMeloDrip('핸들 멜로드립')">핸들</button><button class="toggle-opt" onclick="setMeloDrip('멜로드립')">멜로드립</button></div><div class="field-hint">필수 항목입니다</div></div>
    <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="editBrewTypeToggle"><button class="toggle-opt" onclick="setEditBrewType('핫')">핫</button><button class="toggle-opt" onclick="setEditBrewType('아이스')">아이스</button></div></div>
-   <div class="input-group"><label>바텀 추천</label><input type="text" id="editBottom" placeholder="open / closed"></div>
+   <div class="input-group" id="eg-bottom" style="display:none;"><label>바텀</label><div class="toggle-group" id="editBottomToggle"><button class="toggle-opt" onclick="setEditBottom('Classic')">Classic</button><button class="toggle-opt" onclick="setEditBottom('Open')">Open</button><button class="toggle-opt" onclick="setEditBottom('Apex')">Apex</button><button class="toggle-opt" onclick="setEditBottom('Fast')">Fast</button></div></div>
+   <input type="hidden" id="editBottom">
    <div class="input-group"><label>목표 추출 시간</label><input type="text" id="editTargetTime" placeholder="3:00"></div>
    <button class="btn btn-primary" onclick="saveEditedRecipe()">저장</button>
  </div>
@@ -1387,9 +1388,16 @@ function parseRecipeText(text) {
  if (recipe.roasting.startsWith('레벨')) recipe.roasting = recipe.roasting.replace(/^레벨\s*/, '');
  recipe.notes = m(/(?:예상\s*)?(?:플레이버\s*)?노트\s+(.+)/);
  recipe.dripper = m(/드리퍼\s+(.+)/);
- const bottomFromDripper = recipe.dripper.match(/(Fast|Open|Classic|Apex|Closed)/i);
- if (bottomFromDripper) recipe.bottom = bottomFromDripper[1];
+ const bottomFromDripper = recipe.dripper.match(/\b(Fast|Open|Classic|Apex|Closed)\b/i);
+ if (bottomFromDripper) {
+   recipe.bottom = bottomFromDripper[1].charAt(0).toUpperCase() + bottomFromDripper[1].slice(1).toLowerCase();
+   // V4일 때 드리퍼명에서 바텀·불필요 키워드 제거
+   if (/v4/i.test(recipe.dripper)) {
+     recipe.dripper = recipe.dripper.replace(/\b(fast|open|classic|apex|closed)\b/gi, '').replace(/바텀/g, '').replace(/[-—·,]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+   }
+ }
  if (!recipe.bottom) recipe.bottom = m(/바텀\s*(?:추천)?[:\s]+(Fast|Open|Classic|Apex|Closed)/i);
+ if (recipe.bottom) recipe.bottom = recipe.bottom.charAt(0).toUpperCase() + recipe.bottom.slice(1).toLowerCase();
  recipe.dose = m(/도즈\s+(\d+)\s*g/);
  recipe.water = m(/물량\s+(\d+)\s*g/);
  const ratioM = cleaned.match(/1:(\d+(?:\.\d+)?)/); if (ratioM) recipe.ratio = '1:' + ratioM[1];
@@ -1398,7 +1406,7 @@ function parseRecipeText(text) {
  if (grindFinal) recipe.grind = grindFinal[1];
  else { recipe.grind = m(/(?:그라인드|클릭수?)\s+(\d{2,3})\s*(?:클릭)?/); if (!recipe.grind) { const gm = cleaned.match(/클릭수\s*계산[:\s]*(\d{2,3})/); if (gm) recipe.grind = gm[1]; } if (!recipe.grind) { const gm = cleaned.match(/(\d{2,3})\s*클릭/); if (gm) recipe.grind = gm[1]; } }
  const meloMatch = cleaned.match(/멜로드립\s+(.+)/);
- if (meloMatch) { const val = meloMatch[1].trim(); if (/오레아/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/장착/.test(val) || /그립/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; else recipe.meloDrip = '멜로드립'; }
+ if (meloMatch) { const val = meloMatch[1].trim(); if (/오레아/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/핸들/.test(val) || /그립/.test(val)) recipe.meloDrip = '핸들 멜로드립'; else if (/장착/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/사용/.test(val) && !/미사용/.test(val)) recipe.meloDrip = '오레아 멜로드립'; else if (/미사용/.test(val)) recipe.meloDrip = '미사용'; else recipe.meloDrip = '멜로드립'; }
  const timeMatch = cleaned.match(/(?:목표\s*)?(?:총\s*)?추출\s*(?:목표\s*)?시간\s+~?(\d+:\d+)/);
  if (timeMatch) recipe.targetTime = timeMatch[1];
  const lines = cleaned.split('\n');
@@ -1465,6 +1473,7 @@ function openEditRecipeModal(id, fromParse) {
  document.getElementById('editDose').value = r.dose || '';
  document.getElementById('editWater').value = r.water || '';
  document.getElementById('editBottom').value = r.bottom || '';
+ editBottomValue = r.bottom || ''; updateBottomToggle(); toggleBottomField();
  document.getElementById('editTargetTime').value = r.targetTime || '';
  editMeloDripValue = r.meloDrip || ''; updateMeloDripToggle();
  editBrewTypeValue = r.brewType || '핫'; setEditBrewType(editBrewTypeValue);
@@ -1477,7 +1486,17 @@ function openEditRecipeModal(id, fromParse) {
 }
 
 function setMeloDrip(val) { editMeloDripValue = val; updateMeloDripToggle(); }
-function updateMeloDripToggle() { document.querySelectorAll('#editMeloDripToggle .toggle-opt').forEach(btn => { const map = {'미사용':'미사용','오레아':'오레아 멜로드립','멜로드립':'멜로드립'}; btn.classList.toggle('active', map[btn.textContent] === editMeloDripValue); }); }
+function updateMeloDripToggle() { document.querySelectorAll('#editMeloDripToggle .toggle-opt').forEach(btn => { const map = {'미사용':'미사용','오레아':'오레아 멜로드립','핸들':'핸들 멜로드립','멜로드립':'멜로드립'}; btn.classList.toggle('active', map[btn.textContent] === editMeloDripValue); }); }
+
+let editBottomValue = '';
+function setEditBottom(val) { editBottomValue = editBottomValue === val ? '' : val; document.getElementById('editBottom').value = editBottomValue; updateBottomToggle(); }
+function updateBottomToggle() { document.querySelectorAll('#editBottomToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === editBottomValue)); }
+function toggleBottomField() {
+ const drip = (document.getElementById('editDripper').value || '').toLowerCase();
+ const show = /v4/i.test(drip);
+ document.getElementById('eg-bottom').style.display = show ? '' : 'none';
+ if (!show) { editBottomValue = ''; document.getElementById('editBottom').value = ''; }
+}
 
 function saveEditedRecipe() {
  const r = data.recipes.find(x => x.id === editingRecipeId); if (!r) return;
@@ -1500,7 +1519,7 @@ function saveEditedRecipe() {
  r.ratio = document.getElementById('editRatio').value.trim();
  r.dose = document.getElementById('editDose').value.trim();
  r.water = document.getElementById('editWater').value.trim();
- r.bottom = document.getElementById('editBottom').value.trim();
+ r.bottom = editBottomValue;
  r.targetTime = document.getElementById('editTargetTime').value.trim();
  r.meloDrip = editMeloDripValue;
  r.brewType = editBrewTypeValue;
@@ -2541,10 +2560,14 @@ function generateShareCard() {
  if (targetTime || b.time) rows++;
  if (b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) rows++;
  h += rows * 36 + 8;
- // Radar chart height
+ // Radar chart: side-by-side with recipe rows, take the taller of the two
  const radar = b.radar || {};
  const hasRadar = radar && Object.values(radar).some(v => v > 0);
- if (hasRadar) h += 300; // radar chart block
+ if (hasRadar) {
+   const radarBlockH = (90 + 24) * 2 + 20; // rR=90, label offset=24
+   const rowsBlockH = rows * 36 + 8;
+   if (radarBlockH > rowsBlockH) h += (radarBlockH - rowsBlockH);
+ }
  if (b.note) {
    h += 44; // divider
    ctx.font = "italic 22px -apple-system, 'Helvetica Neue', sans-serif";
@@ -2609,9 +2632,19 @@ function generateShareCard() {
  ctx.save(); ctx.letterSpacing = '3px'; ctx.fillText('RECIPE', 80, y); ctx.restore();
  y += 32;
 
+ const recipeStartY = y;
+ // If radar exists, constrain row text to left side and draw radar on right
+ const rowMaxX = hasRadar ? 580 : W - 80;
+
  function row(label, value) {
    ctx.font = "400 20px -apple-system, sans-serif"; ctx.fillStyle = theme.sub; ctx.fillText(label, 80, y);
-   ctx.font = "600 20px -apple-system, sans-serif"; ctx.fillStyle = theme.text; ctx.fillText(value, 300, y);
+   ctx.font = "600 20px -apple-system, sans-serif"; ctx.fillStyle = theme.text;
+   // Truncate value if it would overflow into radar area
+   let displayVal = value;
+   if (hasRadar) {
+     while (ctx.measureText(displayVal).width > rowMaxX - 300 && displayVal.length > 5) displayVal = displayVal.slice(0, -1) + '…';
+   }
+   ctx.fillText(displayVal, 300, y);
    y += 36;
  }
 
@@ -2632,16 +2665,14 @@ function generateShareCard() {
    row('조정', parts.join(' · '));
  }
 
- // ── Tasting note ──
- // ── Radar Chart (pentagon) on share card ──
+ // ── Radar Chart (pentagon) on share card — drawn to the right of recipe rows ──
  if (hasRadar) {
-   y += 16; ctx.fillStyle = theme.line; ctx.fillRect(80, y, W - 160, 1); y += 28;
-   ctx.font = "600 13px -apple-system, sans-serif"; ctx.fillStyle = theme.sub;
-   ctx.save(); ctx.letterSpacing = '3px'; ctx.fillText('TASTING', 80, y); ctx.restore();
-   y += 20;
-   const rcx = W / 2, rcy = y + 110, rR = 90, rn = 5;
-   const rLabels = ['산미', '단맛', '바디', '향', '클린컵'];
+   const rR = 90, rn = 5;
    const rKeys = ['acidity', 'sweetness', 'body', 'aroma', 'cleanCup'];
+   const rcx = W - 80 - rR - 30; // right-aligned
+   const rowsH = y - recipeStartY;
+   const radarBlockH = (rR + 24) * 2 + 20;
+   const rcy = recipeStartY + Math.max(rowsH, radarBlockH) / 2;
    function rPt(i, r) {
      const a = (Math.PI * 2 * i / rn) - Math.PI / 2;
      return [rcx + r * Math.cos(a), rcy + r * Math.sin(a)];
@@ -2669,9 +2700,11 @@ function generateShareCard() {
    // Labels
    ctx.font = "600 16px -apple-system, sans-serif"; ctx.fillStyle = theme.text;
    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+   const rLabels = ['산미', '단맛', '바디', '향', '클린컵'];
    rLabels.forEach((lbl, i) => { const [px, py] = rPt(i, rR + 24); ctx.fillText(lbl, px, py); });
    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-   y = rcy + rR + 50;
+   // Advance y past the taller of rows vs radar
+   y = Math.max(y, rcy + rR + 50);
  }
  if (b.note) {
    y += 12; ctx.fillStyle = theme.line; ctx.fillRect(80, y, W - 160, 1); y += 30;
@@ -2867,7 +2900,7 @@ function loadMeloDripWeight() {
 // ─── MeloDrip type migration ───
 function migrateMeloDripValues() {
  // Convert old values to new naming
- const migrateMap = { '사용': '오레아 멜로드립', '그립형': '오레아 멜로드립', '장착형': '오레아 멜로드립' };
+ const migrateMap = { '사용': '오레아 멜로드립', '장착형': '오레아 멜로드립', '그립형': '핸들 멜로드립' };
  data.recipes.forEach(r => {
    if (r.meloDrip && migrateMap[r.meloDrip]) r.meloDrip = migrateMap[r.meloDrip];
  });
@@ -2877,8 +2910,18 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.1';
+const APP_VERSION = 'v2.5.2';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.2',
+   date: '2025.04.16',
+   items: [
+     { type: 'new', text: '멜로드립 3종 지원 — 오레아(장착형) / 핸들(그립형) / 일반 멜로드립' },
+     { type: 'improve', text: '레시피 파싱 시 드리퍼명에서 바텀(Open/Classic/Apex/Fast) 자동 분리' },
+     { type: 'improve', text: 'V4 드리퍼일 때 바텀 선택 토글 UI 표시' },
+     { type: 'improve', text: '공유 카드 레이더 차트를 레시피 정보 오른쪽에 배치' },
+   ]
+ },
  {
    version: 'v2.5.1',
    date: '2025.04.15',
@@ -2976,6 +3019,23 @@ function closePatchNotes() {
  closeModal('patchNotesModal');
 }
 
+// ─── Dripper-Bottom migration ───
+function migrateDripperBottom() {
+ let changed = false;
+ data.recipes.forEach(r => {
+   if (!r.dripper) return;
+   const bm = r.dripper.match(/\b(Fast|Open|Classic|Apex)\b/i);
+   if (bm) {
+     if (!r.bottom) { r.bottom = bm[1].charAt(0).toUpperCase() + bm[1].slice(1).toLowerCase(); changed = true; }
+     if (/v4/i.test(r.dripper)) {
+       r.dripper = r.dripper.replace(/\b(fast|open|classic|apex|closed)\b/gi, '').replace(/바텀/g, '').replace(/[-—·,]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+       changed = true;
+     }
+   }
+ });
+ if (changed) saveData();
+}
+
 // ─── Init ───
 function init() {
  document.getElementById('clickMin').value = data.clickRange.min;
@@ -2983,6 +3043,7 @@ function init() {
  if (!data.beans) { data.beans = []; saveData(); }
  if (!data.wishlist) { data.wishlist = []; saveData(); }
  migrateMeloDripValues();
+ migrateDripperBottom();
  loadMeloDripWeight();
  updateClickBar(); renderClickGrid(); renderClickHistory();
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
