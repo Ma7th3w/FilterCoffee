@@ -3241,8 +3241,8 @@ function checkAlerts() {
    }
  }
 
- // Render (exclude dismissed)
- const visible = alerts.filter(a => !dismissed.includes(a.id));
+ // Render (exclude dismissed, max 3 visible)
+ const visible = alerts.filter(a => !dismissed.includes(a.id)).slice(0, 3);
  if (!visible.length) return;
  const svgMap = {
    degassing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>',
@@ -3261,6 +3261,7 @@ function dismissAlert(id) {
  const dismissed = JSON.parse(sessionStorage.getItem('fc_dismissedAlerts') || '[]');
  dismissed.push(id);
  sessionStorage.setItem('fc_dismissedAlerts', JSON.stringify(dismissed));
+ checkAlerts();
 }
 
 // ─── Init ───
