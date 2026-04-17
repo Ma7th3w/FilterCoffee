@@ -2141,7 +2141,7 @@ function toggleWish(beanId) {
 }
 
 // ─── Backup / Restore ───
-const FC_EXTRA_KEYS = ['fc_meloDripWeight', 'fc_meloDripWeightOrea', 'fc_meloDripWeightOriginal', 'fc_lastSeenVersion', 'fc_lastExportDate', 'fc_lastGrinderClean', 'fc_alertSettings'];
+const FC_EXTRA_KEYS = ['fc_meloDripWeight', 'fc_meloDripWeightOrea', 'fc_meloDripWeightOriginal', 'fc_lastSeenVersion', 'fc_lastExportDate', 'fc_lastGrinderClean', 'fc_alertSettings', 'fc_dismissedAlerts'];
 
 function exportData() {
  const exportObj = { _mainData: data, _fcKeys: {} };
@@ -3175,7 +3175,6 @@ function checkAlerts() {
  const isOn = (key) => s[key] !== undefined ? s[key] : defaults[key];
  const alerts = [];
  const now = new Date();
- const dismissed = JSON.parse(sessionStorage.getItem('fc_dismissedAlerts') || '[]');
 
  // 1. Degassing complete
  if (isOn('degassing')) {
@@ -3242,7 +3241,7 @@ function checkAlerts() {
  }
 
  // Render (exclude dismissed, max 3 visible)
- const visible = alerts.filter(a => !dismissed.includes(a.id)).slice(0, 3);
+ const visible = alerts.filter(a => !isAlertDismissed(a.id, a.type)).slice(0, 3);
  if (!visible.length) return;
  const svgMap = {
    degassing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>',
@@ -3258,10 +3257,37 @@ function checkAlerts() {
 function dismissAlert(id) {
  const el = document.getElementById('alert-' + id);
  if (el) el.remove();
- const dismissed = JSON.parse(sessionStorage.getItem('fc_dismissedAlerts') || '[]');
- dismissed.push(id);
- sessionStorage.setItem('fc_dismissedAlerts', JSON.stringify(dismissed));
+ const dismissed = JSON.parse(localStorage.getItem('fc_dismissedAlerts') || '{}');
+ // backup: mark dismissed time (will reappear after 14 days)
+ // grinder: mark dismissed time (will reappear after cycle)
+ // degassing/stock: permanent dismiss by id
+ if (id === 'backup') {
+   dismissed['backup'] = new Date().toISOString();
+ } else if (id === 'grinder') {
+   dismissed['grinder'] = new Date().toISOString();
+ } else {
+   dismissed[id] = 'permanent';
+ }
+ localStorage.setItem('fc_dismissedAlerts', JSON.stringify(dismissed));
  checkAlerts();
+}
+
+function isAlertDismissed(id, type) {
+ const dismissed = JSON.parse(localStorage.getItem('fc_dismissedAlerts') || '{}');
+ const val = dismissed[id];
+ if (!val) return false;
+ if (val === 'permanent') return true;
+ // Time-based: check if enough time has passed
+ const dismissedDate = new Date(val);
+ const now = new Date();
+ const daysSince = Math.floor((now - dismissedDate) / 86400000);
+ if (type === 'backup') return daysSince < 14;
+ if (type === 'grinder') {
+   const s = getAlertSettings();
+   const cycle = s.grinderCleanCycle || 14;
+   return daysSince < cycle;
+ }
+ return true;
 }
 
 // ─── Init ───
