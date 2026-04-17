@@ -589,6 +589,48 @@ body {
 .adjust-result-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .adjust-result-btn { padding: 8px 16px; border-radius: 20px; border: 2px solid var(--border); background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
 .adjust-result-btn.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+
+/* ─── Alert Banners ─── */
+.alert-banner-container { padding: 0 16px; }
+.alert-banner {
+ display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
+ border-radius: 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.5;
+ background: var(--bg-card); border: 1px solid var(--border);
+ animation: alertSlideIn 0.3s ease;
+}
+.alert-banner svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-banner-body { flex: 1; }
+.alert-banner-title { font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.alert-banner-desc { color: var(--text-secondary); font-size: 12px; }
+.alert-banner-close {
+ background: none; border: none; color: var(--text-tertiary); cursor: pointer;
+ padding: 2px; font-size: 18px; line-height: 1; flex-shrink: 0;
+}
+.alert-banner.alert-degassing svg { color: var(--success); }
+.alert-banner.alert-stock svg { color: var(--warning); }
+.alert-banner.alert-grinder svg { color: var(--accent); }
+.alert-banner.alert-backup svg { color: var(--text-tertiary); }
+@keyframes alertSlideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── Settings toggle rows ─── */
+.setting-toggle-row {
+ display: flex; justify-content: space-between; align-items: center;
+ padding: 10px 0; border-bottom: 1px solid var(--border-light);
+}
+.setting-toggle-row:last-child { border-bottom: none; }
+.setting-toggle-label { font-size: 14px; color: var(--text); }
+.setting-toggle-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+.toggle-switch {
+ position: relative; width: 44px; height: 24px; background: var(--bg-input);
+ border-radius: 12px; cursor: pointer; transition: background 0.2s;
+}
+.toggle-switch.on { background: var(--accent); }
+.toggle-switch::after {
+ content: ''; position: absolute; top: 2px; left: 2px;
+ width: 20px; height: 20px; border-radius: 50%; background: #fff;
+ transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch.on::after { transform: translateX(20px); }
 </style>
 </head>
 <body>
@@ -607,6 +649,7 @@ body {
 </div>
 
 <!-- ─── App Content ─── -->
+<div class="alert-banner-container" id="alertBannerContainer"></div>
 <div class="app-content">
 
  <!-- Tab: Beans (My Beans) -->
@@ -818,12 +861,23 @@ body {
      </div>
      <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;">장착형 사용 시 블루밍 이후 누적 그람수에 자동 반영됩니다</div>
    </div>
+   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
+     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">알림 설정</h3>
+     <div id="alertSettingsArea"></div>
+     <div style="margin-top:12px;">
+       <div class="input-group" style="margin-bottom:8px;">
+         <label>그라인더 청소 주기 (일)</label>
+         <input type="number" id="grinderCleanCycle" value="14" min="1" max="90" onchange="saveAlertSettings()">
+       </div>
+       <button class="btn btn-secondary btn-sm" onclick="resetGrinderClean()" style="width:auto;font-size:12px;">청소 완료로 리셋</button>
+     </div>
+   </div>
    <div style="border-top:1px solid var(--border);padding-top:16px;">
      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 초기화</h3>
      <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
    </div>
    <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-     FilterCoffee v2.5.2<br>Made with Matthew
+     FilterCoffee v2.5.3<br>Made with Matthew
      <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
    </div>
  </div>
@@ -2087,8 +2141,13 @@ function toggleWish(beanId) {
 }
 
 // ─── Backup / Restore ───
+const FC_EXTRA_KEYS = ['fc_meloDripWeight', 'fc_meloDripWeightOrea', 'fc_meloDripWeightOriginal', 'fc_lastSeenVersion', 'fc_lastExportDate', 'fc_lastGrinderClean', 'fc_alertSettings'];
+
 function exportData() {
- const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+ const exportObj = { _mainData: data, _fcKeys: {} };
+ FC_EXTRA_KEYS.forEach(k => { const v = localStorage.getItem(k); if (v !== null) exportObj._fcKeys[k] = v; });
+ localStorage.setItem('fc_lastExportDate', new Date().toISOString());
+ const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
  const url = URL.createObjectURL(blob); const a = document.createElement('a');
  a.href = url; a.download = `filtercoffee-backup-${new Date().toISOString().split('T')[0]}.json`;
  a.click(); URL.revokeObjectURL(url);
@@ -2097,7 +2156,23 @@ function exportData() {
 function importData(event) {
  const file = event.target.files[0]; if (!file) return;
  const reader = new FileReader();
- reader.onload = (e) => { try { const imp = JSON.parse(e.target.result); if (confirm(`레시피 ${imp.recipes?.length || 0}개, 추출 기록 ${imp.brews?.length || 0}개를 가져올까요? 기존 데이터는 덮어씌워집니다.`)) { data = imp; if (!data.beans) data.beans = []; if (!data.wishlist) data.wishlist = []; saveData(); location.reload(); } } catch (err) { alert('유효하지 않은 파일입니다.'); } };
+ reader.onload = (e) => { try {
+   const imp = JSON.parse(e.target.result);
+   // Support both new format (_mainData) and legacy format (direct data)
+   const mainData = imp._mainData || imp;
+   const fcKeys = imp._fcKeys || {};
+   const rCount = mainData.recipes?.length || 0;
+   const bCount = mainData.brews?.length || 0;
+   const extraCount = Object.keys(fcKeys).length;
+   if (confirm(`레시피 ${rCount}개, 추출 기록 ${bCount}개${extraCount ? ', 설정 ' + extraCount + '개' : ''}를 가져올까요? 기존 데이터는 덮어씌워집니다.`)) {
+     data = mainData;
+     if (!data.beans) data.beans = [];
+     if (!data.wishlist) data.wishlist = [];
+     saveData();
+     Object.entries(fcKeys).forEach(([k, v]) => localStorage.setItem(k, v));
+     location.reload();
+   }
+ } catch (err) { alert('유효하지 않은 파일입니다.'); } };
  reader.readAsText(file);
 }
 
@@ -2107,7 +2182,7 @@ function saveClickRange() {
  saveData(); renderClickGrid();
 }
 
-function confirmClearData() { if (confirm('모든 데이터를 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) { localStorage.removeItem(DB_KEY); location.reload(); } }
+function confirmClearData() { if (confirm('모든 데이터를 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) { localStorage.removeItem(DB_KEY); FC_EXTRA_KEYS.forEach(k => localStorage.removeItem(k)); location.reload(); } }
 
 // ─── Modal Helpers ───
 function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
@@ -2910,8 +2985,19 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.2';
+const APP_VERSION = 'v2.5.3';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.3',
+   date: '2025.04.17',
+   items: [
+     { type: 'new', text: '인앱 알림 배너 — 디게싱 완료, 원두 소진 예측, 그라인더 청소, 백업 권유' },
+     { type: 'new', text: '설정에서 알림 항목별 on/off 및 그라인더 청소 주기 설정' },
+     { type: 'improve', text: '백업 내보내기/가져오기에 멜로드립·알림 등 전체 설정 포함' },
+     { type: 'improve', text: '데이터 초기화 시 모든 설정 키도 함께 삭제' },
+     { type: 'fix', text: '타이머 링 라벨 잘림 수정 (viewBox 확장 + overflow visible)' },
+   ]
+ },
  {
    version: 'v2.5.2',
    date: '2025.04.16',
@@ -3036,6 +3122,147 @@ function migrateDripperBottom() {
  if (changed) saveData();
 }
 
+// ─── Alert / Notification System ───
+function getAlertSettings() {
+ try { return JSON.parse(localStorage.getItem('fc_alertSettings') || '{}'); } catch { return {}; }
+}
+function saveAlertSettings() {
+ const s = getAlertSettings();
+ // Read toggles
+ document.querySelectorAll('[data-alert-key]').forEach(el => {
+   s[el.dataset.alertKey] = el.classList.contains('on');
+ });
+ // Read grinder clean cycle
+ const cycleEl = document.getElementById('grinderCleanCycle');
+ if (cycleEl) s.grinderCleanCycle = parseInt(cycleEl.value) || 14;
+ localStorage.setItem('fc_alertSettings', JSON.stringify(s));
+ checkAlerts();
+}
+function toggleAlertSetting(el) {
+ el.classList.toggle('on');
+ saveAlertSettings();
+}
+function renderAlertSettings() {
+ const s = getAlertSettings();
+ const defaults = { degassing: true, stock: true, grinder: true, backup: true, grinderCleanCycle: 14 };
+ const items = [
+   { key: 'degassing', label: '디게싱 완료 알림', sub: '디게싱이 완료된 원두가 있으면 알려드려요' },
+   { key: 'stock', label: '원두 소진 예측', sub: '소비 속도 기반으로 소진 예정일을 알려드려요' },
+   { key: 'grinder', label: '그라인더 청소 알림', sub: '설정한 주기마다 청소를 권유해요' },
+   { key: 'backup', label: '백업 권유', sub: '마지막 백업 후 14일 경과 시 알려드려요' },
+ ];
+ const area = document.getElementById('alertSettingsArea');
+ if (!area) return;
+ area.innerHTML = items.map(it => {
+   const on = s[it.key] !== undefined ? s[it.key] : defaults[it.key];
+   return `<div class="setting-toggle-row"><div><div class="setting-toggle-label">${it.label}</div><div class="setting-toggle-sub">${it.sub}</div></div><div class="toggle-switch${on ? ' on' : ''}" data-alert-key="${it.key}" onclick="toggleAlertSetting(this)"></div></div>`;
+ }).join('');
+ const cycleEl = document.getElementById('grinderCleanCycle');
+ if (cycleEl) cycleEl.value = s.grinderCleanCycle || defaults.grinderCleanCycle;
+}
+function resetGrinderClean() {
+ localStorage.setItem('fc_lastGrinderClean', new Date().toISOString());
+ alert('그라인더 청소 일자가 오늘로 리셋되었습니다.');
+ checkAlerts();
+}
+
+function checkAlerts() {
+ const container = document.getElementById('alertBannerContainer');
+ if (!container) return;
+ container.innerHTML = '';
+ const s = getAlertSettings();
+ const defaults = { degassing: true, stock: true, grinder: true, backup: true, grinderCleanCycle: 14 };
+ const isOn = (key) => s[key] !== undefined ? s[key] : defaults[key];
+ const alerts = [];
+ const now = new Date();
+ const dismissed = JSON.parse(sessionStorage.getItem('fc_dismissedAlerts') || '[]');
+
+ // 1. Degassing complete
+ if (isOn('degassing')) {
+   const activeBeans = (data.beans || []).filter(b => !b.finished);
+   activeBeans.forEach(b => {
+     if (!b.roastDate) return;
+     const degassingDays = parseInt(b.degassingDays) || 14;
+     const roast = new Date(b.roastDate);
+     const elapsed = Math.floor((now - roast) / 86400000);
+     if (elapsed >= degassingDays) {
+       const dPlus = elapsed - degassingDays;
+       alerts.push({ id: 'degas-' + b.id, type: 'degassing', title: `${b.name || '원두'} 디게싱 완료`, desc: `D+${dPlus} — 최적의 추출 타이밍이에요!`, icon: '☕' });
+     }
+   });
+ }
+
+ // 2. Stock depletion forecast
+ if (isOn('stock')) {
+   const activeBeans = (data.beans || []).filter(b => !b.finished && b.weight);
+   activeBeans.forEach(b => {
+     const remaining = parseFloat(b.weight) || 0;
+     if (remaining <= 0) return;
+     // Calculate consumption pace from brews linked to this bean
+     const beanBrews = (data.brews || []).filter(br => br.beanId === b.id || br.bean === b.name).filter(br => br.dose && br.date);
+     if (beanBrews.length < 2) {
+       // Not enough data but check if remaining is very low
+       if (remaining <= 20) {
+         alerts.push({ id: 'stock-' + b.id, type: 'stock', title: `${b.name || '원두'} 잔량 부족`, desc: `${remaining}g 남음 — 재구매를 고려해보세요`, icon: '⚠️' });
+       }
+       return;
+     }
+     beanBrews.sort((a, c) => new Date(a.date) - new Date(c.date));
+     const firstDate = new Date(beanBrews[0].date);
+     const daySpan = Math.max(1, Math.floor((now - firstDate) / 86400000));
+     const totalDose = beanBrews.reduce((sum, br) => sum + (parseFloat(br.dose) || 0), 0);
+     const dailyRate = totalDose / daySpan;
+     if (dailyRate <= 0) return;
+     const daysLeft = Math.round(remaining / dailyRate);
+     if (daysLeft <= 7) {
+       alerts.push({ id: 'stock-' + b.id, type: 'stock', title: `${b.name || '원두'} 약 ${daysLeft}일 후 소진`, desc: `${remaining}g 남음 · 일 평균 ${dailyRate.toFixed(1)}g 소비`, icon: '⚠️' });
+     }
+   });
+ }
+
+ // 3. Grinder cleaning
+ if (isOn('grinder')) {
+   const cycle = s.grinderCleanCycle || defaults.grinderCleanCycle;
+   const lastClean = localStorage.getItem('fc_lastGrinderClean');
+   const lastDate = lastClean ? new Date(lastClean) : null;
+   const daysSince = lastDate ? Math.floor((now - lastDate) / 86400000) : null;
+   if (daysSince === null || daysSince >= cycle) {
+     alerts.push({ id: 'grinder', type: 'grinder', title: '그라인더 청소 시기', desc: lastDate ? `마지막 청소 ${daysSince}일 전 — 청소 주기 ${cycle}일` : `청소 기록이 없어요 — 설정에서 리셋해주세요`, icon: '🔧' });
+   }
+ }
+
+ // 4. Backup reminder
+ if (isOn('backup')) {
+   const lastExport = localStorage.getItem('fc_lastExportDate');
+   const lastDate = lastExport ? new Date(lastExport) : null;
+   const daysSince = lastDate ? Math.floor((now - lastDate) / 86400000) : null;
+   if (daysSince === null || daysSince >= 14) {
+     alerts.push({ id: 'backup', type: 'backup', title: '데이터 백업 권유', desc: lastDate ? `마지막 백업 ${daysSince}일 전` : '아직 백업을 한 적이 없어요', icon: '💾' });
+   }
+ }
+
+ // Render (exclude dismissed)
+ const visible = alerts.filter(a => !dismissed.includes(a.id));
+ if (!visible.length) return;
+ const svgMap = {
+   degassing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>',
+   stock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>',
+   grinder: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+   backup: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+ };
+ container.innerHTML = visible.map(a =>
+   `<div class="alert-banner alert-${a.type}" id="alert-${a.id}">${svgMap[a.type] || ''}<div class="alert-banner-body"><div class="alert-banner-title">${a.title}</div><div class="alert-banner-desc">${a.desc}</div></div><button class="alert-banner-close" onclick="dismissAlert('${a.id}')">&times;</button></div>`
+ ).join('');
+}
+
+function dismissAlert(id) {
+ const el = document.getElementById('alert-' + id);
+ if (el) el.remove();
+ const dismissed = JSON.parse(sessionStorage.getItem('fc_dismissedAlerts') || '[]');
+ dismissed.push(id);
+ sessionStorage.setItem('fc_dismissedAlerts', JSON.stringify(dismissed));
+}
+
 // ─── Init ───
 function init() {
  document.getElementById('clickMin').value = data.clickRange.min;
@@ -3047,6 +3274,8 @@ function init() {
  loadMeloDripWeight();
  updateClickBar(); renderClickGrid(); renderClickHistory();
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
+ renderAlertSettings();
+ checkAlerts();
  // iOS PWA viewport fix — force layout recalculation on load
  requestAnimationFrame(() => { window.scrollTo(0, 0); });
  // Show patch notes if version updated
