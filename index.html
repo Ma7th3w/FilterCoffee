@@ -3257,10 +3257,8 @@ function checkAlerts() {
 function dismissAlert(id) {
  const el = document.getElementById('alert-' + id);
  if (el) el.remove();
- const dismissed = JSON.parse(localStorage.getItem('fc_dismissedAlerts') || '{}');
- // backup: mark dismissed time (will reappear after 14 days)
- // grinder: mark dismissed time (will reappear after cycle)
- // degassing/stock: permanent dismiss by id
+ let dismissed = {};
+ try { dismissed = JSON.parse(localStorage.getItem('fc_dismissedAlerts') || '{}'); } catch(e) { dismissed = {}; }
  if (id === 'backup') {
    dismissed['backup'] = new Date().toISOString();
  } else if (id === 'grinder') {
@@ -3309,6 +3307,10 @@ function init() {
  checkPatchNotes();
 }
 init();
+
+// Re-check alerts when PWA resumes from background (iOS bfcache)
+window.addEventListener('pageshow', (e) => { if (e.persisted) checkAlerts(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkAlerts(); });
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 
