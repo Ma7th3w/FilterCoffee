@@ -631,6 +631,35 @@ body {
  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 .toggle-switch.on::after { transform: translateX(20px); }
+
+/* ─── Toast ─── */
+.fc-toast {
+ position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(10px);
+ background: var(--bg-card); color: var(--text); border: 1px solid var(--border);
+ padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: 500;
+ opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 9999;
+ box-shadow: 0 4px 12px var(--shadow-md);
+}
+.fc-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─── Settings Sub-modal ─── */
+.settings-menu-item {
+ display: flex; justify-content: space-between; align-items: center;
+ padding: 14px 16px; background: var(--bg-card-alt); border-radius: 12px;
+ cursor: pointer; margin-bottom: 6px; transition: background 0.15s;
+}
+.settings-menu-item:active { background: var(--border); }
+.settings-menu-icon { font-size: 16px; width: 24px; text-align: center; margin-right: 12px; flex-shrink: 0; }
+.settings-menu-body { flex: 1; }
+.settings-menu-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.settings-menu-desc { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+.settings-menu-arrow { color: var(--text-tertiary); font-size: 14px; }
+.settings-sub-back {
+ background: none; border: none; color: var(--accent); font-size: 14px;
+ cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;
+}
+.settings-sub-view { display: none; }
+.settings-sub-view.active { display: block; }
 </style>
 </head>
 <body>
@@ -792,10 +821,11 @@ body {
      <div class="input-group" style="flex:1;"><label>중량 (g)</label><input type="number" id="beanWeight" placeholder="200"></div>
    </div>
    <div style="display:flex;gap:8px;">
-     <div class="input-group" style="flex:1;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:13px;"></div>
-     <div class="input-group" style="flex:1;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:13px;"></div>
+     <div class="input-group" style="flex:1;min-width:0;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:12px;min-width:0;width:100%;"></div>
+     <div class="input-group" style="flex:1;min-width:0;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:12px;min-width:0;width:100%;"></div>
    </div>
    <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
+   <div class="input-group"><label>컵노트</label><input type="text" id="beanCupNotes" placeholder="예: 자스민, 복숭아, 캐러멜"></div>
    <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
    <button class="btn btn-primary" onclick="saveBean()">저장</button>
  </div>
@@ -821,34 +851,64 @@ body {
 <!-- Settings Modal (moved from tab) -->
 <div class="modal-overlay" id="settingsModal">
  <div class="modal">
-   <div class="modal-header">
-     <span class="modal-title">설정</span>
-     <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
-   </div>
-   <div class="card" style="border:none;padding:0;margin-bottom:16px;">
-     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 백업</h3>
-     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">JSON 파일로 데이터를 내보내거나 가져올 수 있습니다.</p>
-     <div style="display:flex;gap:8px;">
-       <button class="btn btn-secondary" onclick="exportData()" style="flex:1;">내보내기</button>
-       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="flex:1;">가져오기</button>
-       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+   <!-- Main menu view -->
+   <div class="settings-sub-view active" id="settingsMainView">
+     <div class="modal-header">
+       <span class="modal-title">설정</span>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('grinder')">
+       <span class="settings-menu-icon">⚙️</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">그라인더 설정</div><div class="settings-menu-desc">클릭수 범위</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('melodrip')">
+       <span class="settings-menu-icon">💧</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">멜로드립 설정</div><div class="settings-menu-desc">장착형 무게 설정</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('alerts')">
+       <span class="settings-menu-icon">🔔</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">알림 설정</div><div class="settings-menu-desc">디게싱 · 소진 · 청소 · 백업</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('data')">
+       <span class="settings-menu-icon">💾</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">데이터 관리</div><div class="settings-menu-desc">백업 · 복원 · 초기화</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
+       FilterCoffee v2.5.4<br>Made with Matthew
+       <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
      </div>
    </div>
-   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
-     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">클릭수 범위 설정</h3>
+
+   <!-- Sub: Grinder -->
+   <div class="settings-sub-view" id="settingsSubGrinder">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">그라인더 설정</h3>
      <div style="display:flex;gap:8px;">
        <div class="input-group" style="flex:1;margin-bottom:0;">
-         <label>최소</label>
+         <label>최소 클릭수</label>
          <input type="number" id="clickMin" value="28" onchange="saveClickRange()">
        </div>
        <div class="input-group" style="flex:1;margin-bottom:0;">
-         <label>최대</label>
+         <label>최대 클릭수</label>
          <input type="number" id="clickMax" value="34" onchange="saveClickRange()">
        </div>
      </div>
    </div>
-   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
-     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">멜로드립 설정</h3>
+
+   <!-- Sub: MeloDrip -->
+   <div class="settings-sub-view" id="settingsSubMelodrip">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">멜로드립 설정</h3>
      <div class="input-group" style="margin-bottom:12px;">
        <label>오레아 멜로드립 무게 (g)</label>
        <input type="number" id="meloDripWeightOrea" placeholder="예: 30" onchange="saveMeloDripWeights()">
@@ -861,8 +921,14 @@ body {
      </div>
      <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;">장착형 사용 시 블루밍 이후 누적 그람수에 자동 반영됩니다</div>
    </div>
-   <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
-     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">알림 설정</h3>
+
+   <!-- Sub: Alerts -->
+   <div class="settings-sub-view" id="settingsSubAlerts">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">알림 설정</h3>
      <div id="alertSettingsArea"></div>
      <div style="margin-top:12px;">
        <div class="input-group" style="margin-bottom:8px;">
@@ -872,13 +938,24 @@ body {
        <button class="btn btn-secondary btn-sm" onclick="resetGrinderClean()" style="width:auto;font-size:12px;">청소 완료로 리셋</button>
      </div>
    </div>
-   <div style="border-top:1px solid var(--border);padding-top:16px;">
-     <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">데이터 초기화</h3>
-     <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
-   </div>
-   <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-     FilterCoffee v2.5.3<br>Made with Matthew
-     <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
+
+   <!-- Sub: Data -->
+   <div class="settings-sub-view" id="settingsSubData">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">데이터 관리</h3>
+     <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">JSON 파일로 데이터를 내보내거나 가져올 수 있습니다.</p>
+     <div style="display:flex;gap:8px;margin-bottom:24px;">
+       <button class="btn btn-secondary" onclick="exportData()" style="flex:1;">내보내기</button>
+       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" style="flex:1;">가져오기</button>
+       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+     </div>
+     <div style="border-top:1px solid var(--border);padding-top:16px;">
+       <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;color:var(--danger);">데이터 초기화</h3>
+       <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
+     </div>
    </div>
  </div>
 </div>
@@ -1236,6 +1313,7 @@ function openAddBeanModal(editId) {
  document.getElementById('beanPurchaseDate').value = b?.purchaseDate || new Date().toISOString().split('T')[0];
  document.getElementById('beanRoastDate').value = b?.roastDate || '';
  document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
+ document.getElementById('beanCupNotes').value = b?.cupNotes || '';
  document.getElementById('beanMemo').value = b?.memo || '';
  updateRoasteryList();
  openModal('addBeanModal');
@@ -1253,6 +1331,7 @@ function saveBean() {
    purchaseDate: document.getElementById('beanPurchaseDate').value,
    roastDate: document.getElementById('beanRoastDate').value,
    roastLevel: document.getElementById('beanRoastLevel').value,
+   cupNotes: document.getElementById('beanCupNotes').value.trim(),
    memo: document.getElementById('beanMemo').value.trim()
  };
  if (editingBeanId) {
@@ -1313,6 +1392,7 @@ function renderBeans() {
        ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
+       ${b.cupNotes ? `<span class="tag" style="color:var(--accent);">${b.cupNotes}</span>` : ''}
        ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
        ${remainShots !== null ? `<span class="tag" style="${remainShots <= 1 ? 'color:var(--warning);' : ''}">약 ${remainShots}잔 남음</span>` : ''}
      </div>
@@ -1336,7 +1416,9 @@ function openBeanDetail(id) {
  document.getElementById('beanDetailTitle').textContent = b.name;
  const degassing = getDegassingInfo(b.roastDate);
  let html = '<div class="recipe-detail-section"><h3>원두 정보</h3>';
- [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
+ // 원두명 + 복사 버튼
+ html += `<div class="recipe-detail-row"><span class="recipe-detail-label">원두명</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:6px;">${b.name}<button onclick="copyBeanName()" style="background:none;border:none;color:var(--text-tertiary);cursor:pointer;padding:2px;display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button></span></div>`;
+ [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['컵노트', b.cupNotes], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
    if (v) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span></div>`;
  });
  // 잔량 행 (수기 수정 가능)
@@ -1370,6 +1452,18 @@ function toggleBeanFinished() {
  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
  b.finished = !b.finished;
  saveData(); closeModal('beanDetailModal'); renderBeans();
+}
+
+function copyBeanName() {
+ const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
+ navigator.clipboard.writeText(b.name).then(() => { showToast('복사됨'); }).catch(() => { showToast('복사 실패'); });
+}
+
+function showToast(msg) {
+ let t = document.getElementById('fcToast');
+ if (!t) { t = document.createElement('div'); t.id = 'fcToast'; t.className = 'fc-toast'; document.body.appendChild(t); }
+ t.textContent = msg; t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 1800);
 }
 
 function editBeanFromDetail() { closeModal('beanDetailModal'); openAddBeanModal(selectedBeanId); }
@@ -2186,7 +2280,10 @@ function confirmClearData() { if (confirm('모든 데이터를 삭제할까요? 
 
 // ─── Modal Helpers ───
 function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+function closeModal(id) {
+ document.getElementById(id).classList.remove('active'); document.body.style.overflow = '';
+ if (id === 'settingsModal') closeSettingsSub();
+}
 document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) { o.classList.remove('active'); document.body.style.overflow = ''; } }));
 
 // ─── Utilities ───
@@ -2604,7 +2701,7 @@ function generateShareCard() {
  const notes = recipe?.notes || '';
  const bottom = recipe?.bottom || '';
  const targetTime = recipe?.targetTime || '';
- const theme = getCardTheme(notes || b.note || '');
+ const theme = getCardTheme(bean?.cupNotes || notes || b.note || '');
 
  const canvas = document.getElementById('shareCanvas');
  const ctx = canvas.getContext('2d');
@@ -2985,8 +3082,20 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.3';
+const APP_VERSION = 'v2.5.4';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.4',
+   date: '2025.04.18',
+   items: [
+     { type: 'new', text: '원두에 컵노트(cupNotes) 필드 추가 — 등록/편집/상세에서 관리' },
+     { type: 'new', text: '원두 상세에서 원두명 복사 기능 (아이콘 탭)' },
+     { type: 'improve', text: '설정 서브모달 리디자인 — 그라인더/멜로드립/알림/데이터 카테고리별 정리' },
+     { type: 'improve', text: '레시피 컵노트 → 연결된 원두로 자동 마이그레이션' },
+     { type: 'improve', text: '공유 카드 테마가 원두 cupNotes 기준으로도 매칭' },
+     { type: 'fix', text: '원두 등록 날짜 필드 iOS 겹침 수정' },
+   ]
+ },
  {
    version: 'v2.5.3',
    date: '2025.04.17',
@@ -3105,6 +3214,20 @@ function closePatchNotes() {
  closeModal('patchNotesModal');
 }
 
+// ─── CupNotes migration: recipe.notes → bean.cupNotes ───
+function migrateCupNotes() {
+ let changed = false;
+ (data.recipes || []).forEach(r => {
+   if (!r.notes || !r.beanId) return;
+   const bean = data.beans.find(b => b.id === r.beanId);
+   if (bean && !bean.cupNotes) {
+     bean.cupNotes = r.notes;
+     changed = true;
+   }
+ });
+ if (changed) saveData();
+}
+
 // ─── Dripper-Bottom migration ───
 function migrateDripperBottom() {
  let changed = false;
@@ -3142,6 +3265,18 @@ function toggleAlertSetting(el) {
  el.classList.toggle('on');
  saveAlertSettings();
 }
+// ─── Settings Sub-modal Navigation ───
+function openSettingsSub(name) {
+ const map = { grinder: 'settingsSubGrinder', melodrip: 'settingsSubMelodrip', alerts: 'settingsSubAlerts', data: 'settingsSubData' };
+ document.querySelectorAll('#settingsModal .settings-sub-view').forEach(v => v.classList.remove('active'));
+ const sub = document.getElementById(map[name]);
+ if (sub) sub.classList.add('active');
+}
+function closeSettingsSub() {
+ document.querySelectorAll('#settingsModal .settings-sub-view').forEach(v => v.classList.remove('active'));
+ document.getElementById('settingsMainView').classList.add('active');
+}
+
 function renderAlertSettings() {
  const s = getAlertSettings();
  const defaults = { degassing: true, stock: true, grinder: true, backup: true, grinderCleanCycle: 14 };
@@ -3296,6 +3431,7 @@ function init() {
  if (!data.wishlist) { data.wishlist = []; saveData(); }
  migrateMeloDripValues();
  migrateDripperBottom();
+ migrateCupNotes();
  loadMeloDripWeight();
  updateClickBar(); renderClickGrid(); renderClickHistory();
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
