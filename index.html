@@ -379,6 +379,7 @@ body {
 .recipe-detail-label { color: var(--text-secondary); }
 .recipe-detail-value { font-weight: 600; text-align: right; max-width: 60%; }
 .recipe-detail-value.empty { color: var(--warning); font-style: italic; font-weight: 400; }
+.recipe-detail-sub-hint { font-size: 12px; color: var(--text-tertiary); padding: 2px 0 6px 10px; border-left: 2px solid var(--border); margin: -2px 0 4px 4px; line-height: 1.5; }
 
 .pour-step { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; }
 .pour-step:last-child { border-bottom: none; }
@@ -825,6 +826,8 @@ body {
      <div class="input-group" style="flex:1;min-width:0;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:12px;min-width:0;width:100%;"></div>
    </div>
    <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
+   <div class="setting-toggle-row" style="padding:8px 0 4px;"><div><div class="setting-toggle-label">❄️ 냉동 보관</div><div class="setting-toggle-sub">냉동 보관 중인 원두</div></div><div class="toggle-switch" id="beanFrozenToggle" onclick="toggleBeanFrozen()"></div></div>
+   <div class="input-group" id="beanFrozenDateGroup" style="display:none;margin-top:4px;margin-bottom:12px;"><label>냉동 시작일</label><input type="date" id="beanFrozenDate"></div>
    <div class="input-group"><label>컵노트</label><input type="text" id="beanCupNotes" placeholder="예: 자스민, 복숭아, 캐러멜"></div>
    <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
    <button class="btn btn-primary" onclick="saveBean()">저장</button>
@@ -878,7 +881,7 @@ body {
        <span class="settings-menu-arrow">›</span>
      </div>
      <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-       FilterCoffee v2.5.4<br>Made with Matthew
+       FilterCoffee v2.5.5<br>Made with Matthew
        <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
      </div>
    </div>
@@ -957,6 +960,25 @@ body {
        <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
      </div>
    </div>
+ </div>
+</div>
+
+<!-- Recipe Generator Modal -->
+<div class="modal-overlay" id="recipeGenModal">
+ <div class="modal">
+   <div class="modal-header">
+     <span class="modal-title" id="recipeGenTitle">레시피 생성</span>
+     <button class="modal-close" onclick="closeModal('recipeGenModal')">&times;</button>
+   </div>
+   <div id="recipeGenBeanInfo" style="background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;"></div>
+   <div class="input-group"><label>핫 / 아이스</label><div class="toggle-group" id="genBrewTypeToggle"><button class="toggle-opt active" onclick="setGenBrewType('핫')">핫</button><button class="toggle-opt" onclick="setGenBrewType('아이스')">아이스</button></div></div>
+   <div class="input-group"><label>드리퍼</label><div class="toggle-group" id="genDripperToggle"><button class="toggle-opt active" onclick="setGenDripper('V4')">Orea V4</button><button class="toggle-opt" onclick="setGenDripper('Baby O')">Baby O</button></div></div>
+   <div class="input-group" id="genDoseGroup" style="display:none;"><label>도즈 (Baby O)</label><div class="toggle-group" id="genDoseToggle"><button class="toggle-opt" onclick="setGenDose(10)">10g</button><button class="toggle-opt" onclick="setGenDose(12)">12g</button><button class="toggle-opt" onclick="setGenDose(14)">14g</button><button class="toggle-opt active" onclick="setGenDose(16)">16g</button></div></div>
+   <div class="input-group"><label>맛 방향</label><div class="toggle-group" id="genFlavorToggle"><button class="toggle-opt active" onclick="setGenFlavor('밸런스')">밸런스</button><button class="toggle-opt" onclick="setGenFlavor('산미')">산미</button></div></div>
+   <div class="input-group"><label>멜로드립</label><div class="toggle-group" id="genMeloToggle"><button class="toggle-opt active" onclick="setGenMelo('미사용')">미사용</button><button class="toggle-opt" onclick="setGenMelo('오레아')">오레아(거치형)</button><button class="toggle-opt" onclick="setGenMelo('핸들')">핸들(그립형)</button></div></div>
+   <div id="genBottomInfo" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);"></div>
+   <div id="genPreview" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;"></div>
+   <button class="btn btn-primary" onclick="generateAndSaveRecipe()">레시피 생성</button>
  </div>
 </div>
 
@@ -1313,6 +1335,11 @@ function openAddBeanModal(editId) {
  document.getElementById('beanPurchaseDate').value = b?.purchaseDate || new Date().toISOString().split('T')[0];
  document.getElementById('beanRoastDate').value = b?.roastDate || '';
  document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
+ const frozenToggle = document.getElementById('beanFrozenToggle');
+ const frozenDateGroup = document.getElementById('beanFrozenDateGroup');
+ if (frozenToggle) { if (b?.frozen) frozenToggle.classList.add('on'); else frozenToggle.classList.remove('on'); }
+ document.getElementById('beanFrozenDate').value = b?.frozenDate || '';
+ if (frozenDateGroup) frozenDateGroup.style.display = b?.frozen ? '' : 'none';
  document.getElementById('beanCupNotes').value = b?.cupNotes || '';
  document.getElementById('beanMemo').value = b?.memo || '';
  updateRoasteryList();
@@ -1331,6 +1358,8 @@ function saveBean() {
    purchaseDate: document.getElementById('beanPurchaseDate').value,
    roastDate: document.getElementById('beanRoastDate').value,
    roastLevel: document.getElementById('beanRoastLevel').value,
+   frozen: document.getElementById('beanFrozenToggle')?.classList.contains('on') || false,
+   frozenDate: document.getElementById('beanFrozenDate')?.value || '',
    cupNotes: document.getElementById('beanCupNotes').value.trim(),
    memo: document.getElementById('beanMemo').value.trim()
  };
@@ -1343,6 +1372,17 @@ function saveBean() {
    data.beans.unshift(beanData);
  }
  saveData(); closeModal('addBeanModal'); renderBeans();
+}
+
+function toggleBeanFrozen() {
+ const toggle = document.getElementById('beanFrozenToggle');
+ const dateGroup = document.getElementById('beanFrozenDateGroup');
+ toggle.classList.toggle('on');
+ const isOn = toggle.classList.contains('on');
+ dateGroup.style.display = isOn ? '' : 'none';
+ if (isOn && !document.getElementById('beanFrozenDate').value) {
+   document.getElementById('beanFrozenDate').value = new Date().toISOString().split('T')[0];
+ }
 }
 
 function renderBeans() {
@@ -1392,6 +1432,7 @@ function renderBeans() {
        ${b.processing ? `<span class="tag">${b.processing}</span>` : ''}
        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
+       ${b.frozen ? (() => { const fd = b.frozenDate ? Math.floor((new Date() - new Date(b.frozenDate)) / 86400000) : null; return `<span class="tag" style="color:#4a90d9;">❄️ 냉동${fd !== null ? ' D+' + fd : ''}</span>`; })() : ''}
        ${b.cupNotes ? `<span class="tag" style="color:var(--accent);">${b.cupNotes}</span>` : ''}
        ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
        ${remainShots !== null ? `<span class="tag" style="${remainShots <= 1 ? 'color:var(--warning);' : ''}">약 ${remainShots}잔 남음</span>` : ''}
@@ -1421,6 +1462,11 @@ function openBeanDetail(id) {
  [['로스터리', b.roastery], ['산지', b.origin], ['품종', b.variety], ['프로세싱', b.processing], ['로스팅 레벨', b.roastLevel], ['컵노트', b.cupNotes], ['구매일', b.purchaseDate], ['로스팅일', b.roastDate]].forEach(([l, v]) => {
    if (v) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span></div>`;
  });
+ if (b.frozen) {
+   const frozenDays = b.frozenDate ? Math.floor((new Date() - new Date(b.frozenDate)) / 86400000) : null;
+   html += `<div class="recipe-detail-row"><span class="recipe-detail-label">보관</span><span class="recipe-detail-value" style="color:#4a90d9;">❄️ 냉동${frozenDays !== null ? ' D+' + frozenDays : ''}</span></div>`;
+   if (b.frozenDate) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">냉동 시작일</span><span class="recipe-detail-value">${b.frozenDate}</span></div>`;
+ }
  // 잔량 행 (수기 수정 가능)
  html += `<div class="recipe-detail-row"><span class="recipe-detail-label">잔량</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:8px;"><span id="beanWeightDisplay">${b.weight ? b.weight + 'g' : '미입력'}</span><button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;width:auto;" onclick="editBeanWeight()">수정</button></span></div>`;
  if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? ' (D+' + degassing.days + ')' : ' (' + degassing.days + '일차)'}</span></div>`;
@@ -1489,12 +1535,381 @@ function deleteBean() {
 function createRecipeFromBean() {
  const b = data.beans.find(x => x.id === selectedBeanId); if (!b) return;
  closeModal('beanDetailModal');
- openAddRecipeModal();
- // 원두 셀렉트 자동 선택
- const beanSelect = document.getElementById('addRecipeBeanSelect');
- if (beanSelect) {
-   beanSelect.value = selectedBeanId;
+ openRecipeGenModal(b);
+}
+
+// ─── Recipe Generator Engine ───
+let genState = { beanId: '', brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용' };
+
+function openRecipeGenModal(bean) {
+ genState = { beanId: bean.id, brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용' };
+ document.getElementById('recipeGenTitle').textContent = `${bean.name} 레시피 생성`;
+ // Bean info display
+ const info = [];
+ if (bean.roastLevel) info.push(bean.roastLevel);
+ if (bean.processing) info.push(bean.processing);
+ if (bean.cupNotes) info.push(bean.cupNotes);
+ if (bean.origin) info.push(bean.origin);
+ document.getElementById('recipeGenBeanInfo').innerHTML = info.length
+   ? `<div style="font-weight:600;margin-bottom:4px;">${bean.name}</div><div style="color:var(--text-secondary);">${info.join(' · ')}</div>`
+   : `<div style="font-weight:600;">${bean.name}</div>`;
+ // Reset toggles
+ setGenBrewType('핫'); setGenDripper('V4'); setGenFlavor('밸런스'); setGenMelo('미사용'); setGenDose(16);
+ // Validation warnings
+ if (!bean.roastLevel || !bean.processing) {
+   document.getElementById('recipeGenBeanInfo').innerHTML += `<div style="color:var(--warning);margin-top:8px;font-size:12px;">⚠ ${!bean.roastLevel ? '로스팅 레벨' : ''}${!bean.roastLevel && !bean.processing ? ', ' : ''}${!bean.processing ? '프로세싱' : ''} 미입력 — 원두 편집에서 추가해주세요</div>`;
  }
+ updateGenPreview();
+ openModal('recipeGenModal');
+}
+
+function setGenBrewType(v) {
+ genState.brewType = v;
+ document.querySelectorAll('#genBrewTypeToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === v));
+ updateGenPreview();
+}
+function setGenDripper(v) {
+ genState.dripper = v;
+ document.querySelectorAll('#genDripperToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent.includes(v)));
+ document.getElementById('genDoseGroup').style.display = v === 'Baby O' ? '' : 'none';
+ updateGenPreview();
+}
+function setGenDose(v) {
+ genState.dose = v;
+ document.querySelectorAll('#genDoseToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === v + 'g'));
+ updateGenPreview();
+}
+function setGenFlavor(v) {
+ genState.flavor = v;
+ document.querySelectorAll('#genFlavorToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === v));
+ updateGenPreview();
+}
+function setGenMelo(v) {
+ genState.melo = v;
+ const map = {'미사용':'미사용','오레아':'오레아(거치형)','핸들':'핸들(그립형)'};
+ document.querySelectorAll('#genMeloToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === map[v]));
+ updateGenPreview();
+}
+
+function updateGenPreview() {
+ const bean = data.beans.find(x => x.id === genState.beanId); if (!bean) return;
+ if (!bean.roastLevel || !bean.processing) {
+   document.getElementById('genPreview').style.display = 'none';
+   document.getElementById('genBottomInfo').style.display = 'none';
+   return;
+ }
+ const result = generateRecipeData(bean, genState);
+ // Bottom info (V4 only)
+ const bottomEl = document.getElementById('genBottomInfo');
+ if (genState.dripper === 'V4' && result.bottomReason) {
+   bottomEl.style.display = '';
+   bottomEl.innerHTML = `<div style="font-weight:600;margin-bottom:4px;">바텀 추천: ${result.bottom}</div><div>${result.bottomReason}</div>`;
+ } else {
+   bottomEl.style.display = 'none';
+ }
+ // Preview
+ const prev = document.getElementById('genPreview');
+ prev.style.display = '';
+ prev.innerHTML = `
+   <div style="font-weight:600;margin-bottom:8px;">미리보기</div>
+   <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
+     <span style="color:var(--text-tertiary);">드리퍼</span><span>${result.dripper}${result.bottom ? ' · ' + result.bottom : ''}</span>
+     <span style="color:var(--text-tertiary);">도즈/물량</span><span>${result.dose}g → ${result.water}g (${result.ratio})</span>
+     <span style="color:var(--text-tertiary);">수온</span><span>${result.temp}°C</span>
+     <span style="color:var(--text-tertiary);">클릭수</span><span>C60 ${result.grind}클릭</span>
+     <span></span><span style="font-size:11px;color:var(--text-tertiary);border-left:2px solid var(--border);padding-left:8px;">${result.grindBreakdown}</span>
+     <span style="color:var(--text-tertiary);">멜로드립</span><span>${result.meloDrip}</span>
+     <span style="color:var(--text-tertiary);">목표 시간</span><span>${result.targetTime}</span>
+     <span style="color:var(--text-tertiary);">푸어링</span><span>${result.pourGuide.length}단계</span>
+     ${result.brewType === '아이스' ? (() => { const ice = calcRecommendedIce(result); return ice ? `<span style="color:var(--text-tertiary);">추천 얼음량</span><span>${ice.ice}g</span>` : ''; })() : ''}
+   </div>`;
+}
+
+// ─── Core Engine ───
+function generateRecipeData(bean, opts) {
+ const isIce = opts.brewType === '아이스';
+ const isV4 = opts.dripper === 'V4';
+ const isBabyO = !isV4;
+ const useMelo = opts.melo !== '미사용';
+ const meloType = opts.melo; // '미사용' | '오레아' | '핸들'
+ const roast = bean.roastLevel || '라이트플러스';
+ const proc = bean.processing || '워시드';
+ const flavor = opts.flavor || '밸런스';
+ const dose = isV4 ? 18 : opts.dose;
+ const cupNotes = (bean.cupNotes || '').toLowerCase();
+
+ // ── Bottom recommendation (V4 only) ──
+ let bottom = 'Fast', bottomReason = '';
+ if (isV4) {
+   if (proc === '내츄럴' || proc === '내추럴') {
+     bottom = 'Fast'; bottomReason = '내츄럴 → Fast (발효감 컨트롤, 클린컵)';
+   } else {
+     const floralCitrus = ['플로럴','시트러스','자스민','라벤더','장미','꽃','레몬','라임','자몽','오렌지','금귤','유자','티','얼그레이','녹차','홍차','캐모마일','허브','히비스커스'].some(k => cupNotes.includes(k));
+     const nuttyChoco = ['초콜릿','캐러멜','카카오','아몬드','헤이즐넛','견과','고소','땅콩','호두','바닐라','넛','다크초콜릿'].some(k => cupNotes.includes(k));
+     if (floralCitrus) {
+       bottom = 'Open'; bottomReason = '워시드 + 플로럴/시트러스/티 노트 → Open (섬세한 플레이버 발달)';
+     } else if (nuttyChoco) {
+       bottom = 'Classic'; bottomReason = '워시드 + 초콜릿/견과류/캐러멜 노트 → Classic (균형 잡힌 추출)';
+     } else {
+       bottom = 'Fast'; bottomReason = '판단 어려움 → Fast (가장 범용적)';
+     }
+   }
+ }
+
+ // ── Grind calculation ──
+ let grind = 33;
+ const roastAdj = { '엑스트라 라이트': -3, '라이트': -1, '라이트플러스': 0, '라이트미디엄': 1 };
+ const procAdj = (proc === '내츄럴' || proc === '내추럴') ? 1 : 0;
+ const flavorAdj = flavor === '산미' ? 2 : 0;
+ let bottomAdj = 0;
+ if (isV4) { bottomAdj = { Fast: 0, Open: 1, Apex: 1, Classic: 2 }[bottom] || 0; }
+ const dripperAdj = isBabyO ? -2 : 0;
+ const meloAdj = useMelo ? -2 : 0;
+ const rAdj = roastAdj[roast] || 0;
+ grind = 33 + rAdj + procAdj + flavorAdj + bottomAdj + dripperAdj + meloAdj;
+ const grindCalc = `33${rAdj >= 0 ? '+' + rAdj : rAdj}${procAdj >= 0 ? '+' + procAdj : procAdj}${flavorAdj >= 0 ? '+' + flavorAdj : flavorAdj}${isV4 ? (bottomAdj >= 0 ? '+' + bottomAdj : bottomAdj) : ''}${dripperAdj >= 0 ? '+' + dripperAdj : dripperAdj}${meloAdj >= 0 ? '+' + meloAdj : meloAdj}=${grind}`;
+ // 레이블 붙인 계산 근거
+ const grindParts = [{label:'기준',val:33}];
+ if (rAdj !== 0) grindParts.push({label:roast,val:rAdj});
+ if (procAdj !== 0) grindParts.push({label:proc,val:procAdj});
+ if (flavorAdj !== 0) grindParts.push({label:flavor,val:flavorAdj});
+ if (isV4 && bottomAdj !== 0) grindParts.push({label:bottom,val:bottomAdj});
+ if (dripperAdj !== 0) grindParts.push({label:'Baby O',val:dripperAdj});
+ if (meloAdj !== 0) grindParts.push({label:'멜로드립',val:meloAdj});
+ const grindBreakdown = grindParts.map(p => p.label === '기준' ? `기준 ${p.val}` : `${p.label} ${p.val > 0 ? '+' : ''}${p.val}`).join(' / ');
+
+ // ── Temperature ──
+ let temp;
+ if (isV4) {
+   if (isIce) { temp = { '엑스트라 라이트': 96, '라이트': 95, '라이트플러스': 94, '라이트미디엄': 92 }[roast] || 94; }
+   else { temp = { '엑스트라 라이트': 94, '라이트': 93, '라이트플러스': 92, '라이트미디엄': 90 }[roast] || 92; }
+ } else {
+   if (isIce) { temp = 96; /* Baby O 아이스 고정 */ }
+   else { temp = dose >= 16 ? 96 : 94; /* Baby O 핫: 16g=96, 10~14g=94 */ }
+   // Baby O 아이스 멜로드립 16g → 98°C
+   if (isIce && useMelo && dose >= 16) temp = 98;
+ }
+
+ // ── Dose & Water ──
+ let water, ratio;
+ if (isV4) {
+   if (isIce) { water = 200; ratio = '1:11'; }
+   else { water = 270; ratio = '1:15'; }
+ } else {
+   if (isIce) {
+     if (dose >= 16) { water = 175; ratio = '1:11'; }
+     else { water = Math.round(dose * 12 / 5) * 5; ratio = '1:12'; }
+   } else {
+     if (dose >= 16) { water = 240; ratio = '1:15'; }
+     else { water = Math.round(dose * 16.7 / 5) * 5; ratio = '1:16.7'; }
+   }
+ }
+
+ // ── Target time ──
+ let targetTime;
+ if (isV4) {
+   if (isIce) targetTime = useMelo ? '2:30~2:50' : '2:20~2:40';
+   else targetTime = useMelo ? '3:10~3:20' : '3:00';
+ } else {
+   if (isIce) targetTime = useMelo ? '2:30~2:50' : '2:20~2:40';
+   else targetTime = useMelo ? '2:40~3:10' : '2:30~3:00';
+ }
+
+ // ── Pour guide ──
+ const pourGuide = buildPourGuide(isV4, isBabyO, dose, water, isIce, useMelo, targetTime);
+
+ // ── MeloDrip display ──
+ const meloDrip = meloType === '오레아' ? '오레아 멜로드립' : meloType === '핸들' ? '핸들 멜로드립' : '미사용';
+
+ // ── Adjustments ──
+ let adjustments;
+ if (isIce) {
+   adjustments = [
+     { symptom: '밍밍하다', fix: '1~2클릭 가늘게 또는 수온 +1°C' },
+     { symptom: '쓰다/텁텁하다', fix: '1~2클릭 굵게 또는 수온 -1°C' },
+     { symptom: '너무 시다', fix: '1~2클릭 가늘게 (아이스에서 산미가 두드러지는 것은 정상)' },
+     { symptom: '너무 진하다', fix: '얼음을 더 추가하여 희석' },
+     { symptom: '너무 연하다', fix: '얼음량 줄이기 또는 1~2클릭 가늘게' },
+   ];
+ } else {
+   adjustments = [
+     { symptom: '시다', fix: '1~2클릭 가늘게 또는 수온 +1°C' },
+     { symptom: '쓰다/텁텁하다', fix: '1~2클릭 굵게 또는 수온 -1°C' },
+     { symptom: '밍밍하다', fix: '1~2클릭 가늘게 또는 수온 +1°C' },
+     { symptom: '너무 진하다', fix: '1~2클릭 굵게 또는 수온 -1°C' },
+   ];
+ }
+
+ return {
+   dripper: isV4 ? 'Orea V4' : 'Orea Baby O', bottom, bottomReason,
+   dose: dose.toString(), water: water.toString(), ratio, temp: temp.toString(),
+   grind: grind.toString(), grindCalc, grindBreakdown, meloDrip, targetTime, pourGuide, adjustments,
+   brewType: opts.brewType, flavor,
+   // Bean info passthrough
+   name: bean.name, roastery: bean.roastery || '', origin: bean.origin || '',
+   variety: bean.variety || '', processing: proc, roasting: roast,
+   notes: bean.cupNotes || '', beanId: bean.id
+ };
+}
+
+function buildPourGuide(isV4, isBabyO, dose, water, isIce, useMelo, targetTime) {
+ const guide = [];
+ const speed = useMelo ? '~3-4g/s' : '~5g/s';
+ const meloNote = useMelo ? '멜로드립 경유. ' : '';
+ let cumulative = 0;
+
+ function addStep(label, time, amt, spd, action) {
+   cumulative += amt;
+   guide.push({ time, amount: amt + 'g', cumulative: cumulative + 'g', label, speed: spd, action: label + ' ' + action });
+ }
+
+ if (isV4 && !isIce) {
+   // V4 핫: 4 pour
+   const bloom = Math.round(water * 0.2 / 5) * 5;
+   const fixed3rd = 40;
+   const remaining = water - bloom - fixed3rd;
+   const pour1 = Math.round(remaining * 0.43 / 5) * 5;
+   const pour2 = water - bloom - pour1 - fixed3rd;
+   addStep('블루밍', '0:00', bloom, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', pour1, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('2차 푸어', '1:20', pour2, speed, `${meloNote}센터→바깥 원형. 메인 추출. 천천히(4~5g/s).`);
+   addStep('3차 푸어', '2:00', fixed3rd, speed, `${meloNote}센터에만.${useMelo ? '' : ' 스월 1회.'}`);
+ } else if (isV4 && isIce) {
+   // V4 아이스: 3 pour
+   const bloom = Math.round(water * 0.25 / 5) * 5;
+   const pour1 = Math.round(water * 0.4 / 5) * 5;
+   const pour2 = water - bloom - pour1;
+   addStep('블루밍', '0:00', bloom, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', pour1, speed, `${meloNote}센터→바깥 원형. 메인 추출.`);
+   addStep('2차 푸어', '1:20', pour2, speed, `${meloNote}센터→바깥 원형.${useMelo ? '' : ' 스월 1회.'}`);
+ } else if (isBabyO && !isIce && dose < 16) {
+   // Baby O 핫 10~14g: 3 pour (The Mid 변형)
+   const bloom = Math.round(water * 0.25 / 5) * 5;
+   const pour1 = Math.round(water * 0.375 / 5) * 5;
+   const pour2 = water - bloom - pour1;
+   addStep('블루밍', '0:00', bloom, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', pour1, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('2차 푸어', '1:45', pour2, speed, `${meloNote}반원형→센터 전환.${useMelo ? '' : ' 스월 1회.'}`);
+ } else if (isBabyO && !isIce && dose >= 16) {
+   // Baby O 핫 16g: 5 pour
+   addStep('블루밍', '0:00', 55, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', 45, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('2차 푸어', '1:10', 45, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('3차 푸어', '1:40', 45, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('4차 푸어', '2:10', 50, speed, `${meloNote}반원형→센터 전환.${useMelo ? '' : ' 스월 1회.'}`);
+ } else if (isBabyO && isIce && dose < 16) {
+   // Baby O 아이스 10~14g: 3 pour
+   const bloom = Math.round(water * 0.25 / 5) * 5;
+   const pour1 = Math.round(water * 0.375 / 5) * 5;
+   const pour2 = water - bloom - pour1;
+   addStep('블루밍', '0:00', bloom, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', pour1, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('2차 푸어', '1:45', pour2, speed, `${meloNote}반원형→센터 전환.${useMelo ? '' : ' 스월 1회.'}`);
+ } else if (isBabyO && isIce && dose >= 16) {
+   // Baby O 아이스 16g: 4 pour
+   addStep('블루밍', '0:00', 45, '~5g/s', `센터에서 원형. ${useMelo ? '직접 푸어 (멜로드립 X). ' : ''}스월 1회.`);
+   addStep('1차 푸어', '0:40', 40, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('2차 푸어', '1:10', 45, speed, `${meloNote}센터→바깥 원형.`);
+   addStep('3차 푸어', '1:40', 45, speed, `${meloNote}반원형→센터 전환.${useMelo ? '' : ' 스월 1회.'}`);
+ }
+
+ // Add drawdown — time from guidelines
+ let ddTime;
+ if (isV4 && !isIce) ddTime = '~2:10~';
+ else if (isV4 && isIce) ddTime = '~1:40~';
+ else if (isBabyO && !isIce && dose < 16) ddTime = '~2:10~';
+ else if (isBabyO && !isIce && dose >= 16) ddTime = '~2:30~';
+ else if (isBabyO && isIce && dose < 16) ddTime = '~2:10~';
+ else if (isBabyO && isIce && dose >= 16) ddTime = '~2:00~';
+ else ddTime = '~2:10~';
+ guide.push({ time: ddTime, amount: '', cumulative: '', label: '드로우다운', speed: '', action: `드로우다운 자연 낙수. 완료 목표 ${targetTime}.` });
+
+ return guide;
+}
+
+// ─── Grind Breakdown Calculator (for all recipes) ───
+function calcGrindBreakdown(r) {
+ if (!r.grind || !r.roasting) return '';
+ const roastAdj = { '엑스트라 라이트': -3, '라이트': -1, '라이트플러스': 0, '라이트미디엄': 1 };
+ const rAdj = roastAdj[r.roasting];
+ if (rAdj === undefined) return '';
+ const proc = r.processing || '워시드';
+ const procAdj = (proc === '내츄럴' || proc === '내추럴') ? 1 : 0;
+ const isV4 = /v4/i.test(r.dripper || '');
+ const isBabyO = /baby/i.test(r.dripper || '');
+ const bottom = r.bottom || '';
+ let bottomAdj = 0;
+ if (isV4) { bottomAdj = { Fast: 0, Open: 1, Apex: 1, Classic: 2 }[bottom] || 0; }
+ const dripperAdj = isBabyO ? -2 : 0;
+ const meloDrip = r.meloDrip || '미사용';
+ const meloAdj = (meloDrip !== '미사용' && meloDrip) ? -2 : 0;
+ // flavor: 저장된 값 사용, 없으면 역산
+ let flavorAdj = 0;
+ if (r.flavor === '산미') { flavorAdj = 2; }
+ else if (!r.flavor && r.grind) {
+   const expected = 33 + rAdj + procAdj + bottomAdj + dripperAdj + meloAdj;
+   const actual = parseInt(r.grind);
+   const diff = actual - expected;
+   if (diff === 2) flavorAdj = 2; // 산미
+ }
+ const parts = [{label:'기준',val:33}];
+ if (rAdj !== 0) parts.push({label:r.roasting,val:rAdj});
+ if (procAdj !== 0) parts.push({label:proc,val:procAdj});
+ if (flavorAdj !== 0) parts.push({label:'산미',val:flavorAdj});
+ if (isV4 && bottomAdj !== 0) parts.push({label:bottom,val:bottomAdj});
+ if (dripperAdj !== 0) parts.push({label:'Baby O',val:dripperAdj});
+ if (meloAdj !== 0) parts.push({label:'멜로드립',val:meloAdj});
+ return parts.map(p => p.label === '기준' ? `기준 ${p.val}` : `${p.label} ${p.val > 0 ? '+' : ''}${p.val}`).join(' / ');
+}
+
+// ─── Recommended Ice Calculator ───
+function calcRecommendedIce(r) {
+ const dose = parseInt(r.dose);
+ const iceWater = parseInt(r.water);
+ if (!dose || !iceWater) return null;
+ const isV4 = /v4/i.test(r.dripper || '');
+ const isBabyO = /baby/i.test(r.dripper || '');
+ let hotWater;
+ if (isV4) {
+   hotWater = 270; // 18g * 1:15
+ } else if (isBabyO) {
+   if (dose >= 16) hotWater = 240; // 16g * 1:15
+   else hotWater = Math.round(dose * 16.7 / 5) * 5; // 1:16.7
+ } else {
+   return null;
+ }
+ const ice = hotWater - iceWater;
+ if (ice <= 0) return null;
+ const hotRatio = isV4 ? '1:15' : (dose >= 16 ? '1:15' : '1:16.7');
+ return { ice, desc: `핫 ${hotRatio} ${hotWater}g − 아이스 ${iceWater}g = ${ice}g · 취향에 따라 ±20g 조절` };
+}
+
+function generateAndSaveRecipe() {
+ const bean = data.beans.find(x => x.id === genState.beanId);
+ if (!bean) return;
+ if (!bean.roastLevel || !bean.processing) {
+   alert('로스팅 레벨과 프로세싱을 원두 편집에서 먼저 입력해주세요.');
+   return;
+ }
+ const result = generateRecipeData(bean, genState);
+ const recipe = {
+   id: Date.now().toString(),
+   name: result.name, roastery: result.roastery, origin: result.origin,
+   variety: result.variety, processing: result.processing, roasting: result.roasting,
+   notes: result.notes, dripper: result.dripper, bottom: result.bottom,
+   dose: result.dose, water: result.water, ratio: result.ratio,
+   temp: result.temp, grind: result.grind, grindBreakdown: result.grindBreakdown,
+   meloDrip: result.meloDrip, flavor: result.flavor,
+   targetTime: result.targetTime, brewType: result.brewType,
+   pourGuide: result.pourGuide, adjustments: result.adjustments,
+   beanId: result.beanId, raw: '', createdAt: new Date().toISOString(),
+   generatedBy: 'engine'
+ };
+ data.recipes.unshift(recipe);
+ saveData();
+ closeModal('recipeGenModal');
+ renderRecipes();
+ showToast('레시피가 생성되었습니다');
 }
 
 // ─── Helper: Roastery autocomplete ───
@@ -1721,9 +2136,25 @@ function openRecipeDetail(id) {
  html += '<div class="recipe-detail-section"><h3>원두 정보</h3>';
  [['로스터리', r.roastery], ['산지', r.origin], ['품종', r.variety], ['프로세싱', r.processing], ['로스팅', r.roasting], ['예상 노트', r.notes]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
  html += '</div><div class="recipe-detail-section"><h3>레시피</h3>';
- [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
+ const breakdown = r.grindBreakdown || calcGrindBreakdown(r);
+ const recipeFields = [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]];
+ recipeFields.forEach(([l, v]) => {
+   html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`;
+   if (l === '그라인드' && breakdown && r.grind) {
+     html += `<div class="recipe-detail-sub-hint">${breakdown}</div>`;
+   }
+ });
+ // 추천 얼음량 (아이스만)
+ if (r.brewType === '아이스' && r.dose && r.water) {
+   const iceInfo = calcRecommendedIce(r);
+   if (iceInfo) {
+     html += `<div class="recipe-detail-row"><span class="recipe-detail-label">추천 얼음량</span><span class="recipe-detail-value">${iceInfo.ice}g</span></div>`;
+     html += `<div class="recipe-detail-sub-hint">${iceInfo.desc}</div>`;
+   }
+ }
  html += '</div>';
  if (r.pourGuide?.length) { html += '<div class="recipe-detail-section"><h3>푸어링 가이드</h3>'; r.pourGuide.forEach(p => html += `<div class="pour-step"><div class="pour-step-time">${p.time}</div><div class="pour-step-amount">${p.amount}</div><div class="pour-step-action">${p.action}</div></div>`); html += '</div>'; }
+ if (r.brewType === '아이스') { html += '<div class="recipe-detail-section"><h3>냉각 가이드</h3><div style="font-size:13px;color:var(--text-secondary);line-height:1.6;">1. 추출 완료 후, 얼음을 담은 별도 서버(또는 컵)에 추출된 커피를 부음<br>2. 스월 또는 스푼으로 저어 얼음을 빠르게 녹임<br>3. 얼음이 다 녹으면 얼음잔에 부어 서빙<br>4. 추가 얼음량은 취향에 따라 자유롭게 조절</div></div>'; }
  if (r.adjustments?.length) { html += '<div class="recipe-detail-section"><h3>미세 조정</h3>'; r.adjustments.forEach(a => html += `<div class="adjust-row"><span class="adjust-symptom">${a.symptom}</span><span class="adjust-fix">${a.fix}</span></div>`); html += '</div>'; }
  document.getElementById('recipeDetailContent').innerHTML = html;
  openModal('recipeDetailModal');
@@ -2303,8 +2734,10 @@ let wakeLock = null;
 
 function parseTimeToSeconds(timeStr) {
  if (!timeStr) return 0;
- const parts = timeStr.split(':');
- return parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+ const cleaned = timeStr.replace(/[~～]/g, '').trim();
+ if (!cleaned) return 0;
+ const parts = cleaned.split(':');
+ return (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
 }
 
 function formatTimerTime(sec) {
@@ -3082,8 +3515,21 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.4';
+const APP_VERSION = 'v2.5.5';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.5',
+   date: '2025.04.20',
+   items: [
+     { type: 'new', text: '레시피 자동 생성 엔진 — 원두 선택 후 핫/아이스 · 드리퍼 · 맛방향 · 멜로드립만 고르면 완성' },
+     { type: 'new', text: 'V4 바텀 자동 추천 — 원두 컵노트 기반 Fast/Open/Classic 자동 결정' },
+     { type: 'new', text: '클릭수 계산 근거 표시 — 레시피 상세에서 각 조건별 가감 이유 확인' },
+     { type: 'new', text: '아이스 레시피 추천 얼음량 — 핫 기준 물량 차이로 자동 계산' },
+     { type: 'new', text: '원두 냉동 보관 — 토글 + 냉동 시작일 기록, 카드에 ❄️ D+경과일 표시' },
+     { type: 'improve', text: '멜로드립 3종 선택 — 미사용 / 오레아(거치형) / 핸들(그립형)' },
+     { type: 'improve', text: '클릭수 보정·얼음량 보조설명 — 좌측 구분선으로 명확한 레이아웃 개선' },
+   ]
+ },
  {
    version: 'v2.5.4',
    date: '2025.04.18',
