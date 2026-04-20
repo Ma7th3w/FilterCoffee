@@ -163,16 +163,16 @@ body {
 .btn-danger { background: var(--danger); color: #fff; }
 .btn-sm { padding: 8px 16px; font-size: 13px; width: auto; }
 
-.input-group { margin-bottom: 16px; }
+.input-group { margin-bottom: 16px; overflow: hidden; }
 .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
 .input-group label .required { color: var(--accent); margin-left: 2px; }
 .input-group input, .input-group select, .input-group textarea {
  width: 100%; padding: 12px 14px; border-radius: 12px;
  border: 1px solid var(--border); background: var(--bg-input);
  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text);
- outline: none; transition: border-color 0.2s;
+ outline: none; transition: border-color 0.2s; box-sizing: border-box;
 }
-.input-group input[type="date"] { min-width: 0; max-width: 100%; }
+.input-group input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--accent); }
 .input-group textarea { resize: vertical; min-height: 80px; }
 .input-group.missing input, .input-group.missing select, .input-group.missing textarea {
@@ -325,7 +325,7 @@ body {
  background: var(--bg-card);
  border-radius: 20px 20px 0 0;
  width: 100%; max-width: 500px;
- max-height: 90dvh; overflow-y: auto;
+ max-height: 90dvh; overflow-y: auto; overflow-x: hidden;
  padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
  animation: slideUp 0.3s ease;
 }
