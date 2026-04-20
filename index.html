@@ -811,6 +811,12 @@ body {
      <span class="modal-title">원두 등록</span>
      <button class="modal-close" onclick="closeModal('addBeanModal')">&times;</button>
    </div>
+   <div class="input-group" id="beanParseGroup">
+     <label>텍스트로 자동 입력</label>
+     <textarea id="beanParseArea" rows="3" placeholder="구매 내역이나 원두 설명을 붙여넣으면 자동으로 채워드려요"></textarea>
+     <button class="btn btn-secondary btn-sm" style="margin-top:8px;" onclick="parseBeanText()">자동 채우기</button>
+   </div>
+   <div style="height:1px;background:var(--border);margin-bottom:16px;"></div>
    <div class="input-group"><label>원두명</label><input type="text" id="beanName" placeholder="예: 에티오피아 벤치 마지 게샤"></div>
    <div class="input-group"><label>로스터리</label><input type="text" id="beanRoastery" placeholder="예: 커넥츠커피" list="beanRoasteryList"><datalist id="beanRoasteryList"></datalist></div>
    <div style="display:flex;gap:8px;">
@@ -821,12 +827,15 @@ body {
      <div class="input-group" style="flex:1;"><label>품종</label><input type="text" id="beanVariety"></div>
      <div class="input-group" style="flex:1;"><label>중량 (g)</label><input type="number" id="beanWeight" placeholder="200"></div>
    </div>
-   <div style="display:flex;gap:8px;">
-     <div class="input-group" style="flex:1;min-width:0;"><label>구매일</label><input type="date" id="beanPurchaseDate" style="font-size:12px;min-width:0;width:100%;"></div>
-     <div class="input-group" style="flex:1;min-width:0;"><label>로스팅일</label><input type="date" id="beanRoastDate" style="font-size:12px;min-width:0;width:100%;"></div>
-   </div>
+   <div class="input-group"><label>구매일</label><input type="date" id="beanPurchaseDate"></div>
+   <div class="input-group"><label>로스팅일</label><input type="date" id="beanRoastDate"></div>
    <div class="input-group"><label>로스팅 레벨</label><select id="beanRoastLevel"><option value="">선택</option><option value="엑스트라 라이트">엑스트라 라이트</option><option value="라이트">라이트</option><option value="라이트플러스">라이트플러스</option><option value="라이트미디엄">라이트미디엄</option><option value="미디엄">미디엄</option><option value="다크">다크</option></select></div>
    <div class="input-group"><label>컵노트</label><input type="text" id="beanCupNotes" placeholder="예: 자스민, 복숭아, 캐러멜"></div>
+   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+     <label style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin:0;">냉동 보관</label>
+     <div class="toggle-switch" id="beanFrozenToggle" onclick="toggleBeanFrozen()"></div>
+   </div>
+   <div class="input-group" id="beanFrozenDateGroup" style="display:none;"><label>냉동일</label><input type="date" id="beanFrozenDate"></div>
    <div class="input-group"><label>메모</label><input type="text" id="beanMemo" placeholder="가격, 기타 정보 등"></div>
    <button class="btn btn-primary" onclick="saveBean()">저장</button>
  </div>
@@ -879,7 +888,7 @@ body {
        <span class="settings-menu-arrow">›</span>
      </div>
      <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-       FilterCoffee v2.5.5<br>Made with Matthew
+       FilterCoffee v2.5.5.1<br>Made with Matthew
        <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
      </div>
    </div>
@@ -1324,6 +1333,10 @@ function renderClickHistory() {
 function openAddBeanModal(editId) {
  editingBeanId = editId || null;
  const b = editId ? data.beans.find(x => x.id === editId) : null;
+ // 파싱 영역: 신규 등록만 표시, 편집 시 숨김
+ const parseGroup = document.getElementById('beanParseGroup');
+ if (parseGroup) { parseGroup.style.display = editId ? 'none' : ''; }
+ document.getElementById('beanParseArea').value = '';
  document.getElementById('beanName').value = b?.name || '';
  document.getElementById('beanRoastery').value = b?.roastery || '';
  document.getElementById('beanOrigin').value = b?.origin || '';
@@ -1335,8 +1348,53 @@ function openAddBeanModal(editId) {
  document.getElementById('beanRoastLevel').value = b?.roastLevel || '';
  document.getElementById('beanCupNotes').value = b?.cupNotes || '';
  document.getElementById('beanMemo').value = b?.memo || '';
+ // 냉동 보관
+ const frozen = b?.frozen || false;
+ const frozenToggle = document.getElementById('beanFrozenToggle');
+ if (frozenToggle) { frozenToggle.classList.toggle('on', frozen); }
+ document.getElementById('beanFrozenDateGroup').style.display = frozen ? '' : 'none';
+ document.getElementById('beanFrozenDate').value = b?.frozenDate || '';
  updateRoasteryList();
  openModal('addBeanModal');
+}
+
+// ─── Bean Text Parser ───
+function parseBeanText() {
+ const raw = document.getElementById('beanParseArea').value.trim();
+ if (!raw) return;
+ // 메타 태그 제거
+ let text = raw.replace(/\[.*?\]/g, '').replace(/#\d+/g, '').replace(/\(분쇄\s*안\s*함?\)/gi, '').replace(/\(홀빈\)/gi, '').trim();
+ // 중량 추출: "중량:100g", "100g", "100 g"
+ let weight = null;
+ const wm = text.match(/중량\s*[:\s]*(\d+)\s*g/i) || text.match(/(\d+)\s*g(?!\w)/i);
+ if (wm) { weight = parseInt(wm[1]); text = text.replace(wm[0], ''); }
+ // 수량 추출: "2개", "x2"
+ let qty = 1;
+ const qm = text.match(/(\d+)\s*개/) || text.match(/[x×]\s*(\d+)/i);
+ if (qm) { qty = parseInt(qm[1]); text = text.replace(qm[0], ''); }
+ if (weight) weight = weight * qty;
+ // 산지 인식
+ const origins = ['에티오피아','콜롬비아','케냐','과테말라','파나마','코스타리카','브라질','엘살바도르','온두라스','르완다','부룬디','탄자니아','인도네시아','인도','볼리비아','페루','멕시코','예멘','중국','태국','미얀마','하와이','자메이카','도미니카','니카라과'];
+ let origin = '';
+ origins.forEach(o => { if (text.includes(o)) origin = o; });
+ // 품종 인식
+ const varieties = [['게이샤','게이샤'],['게샤','게이샤'],['버번','버번'],['티피카','티피카'],['카투라','카투라'],['카투아이','카투아이'],['SL28','SL28'],['SL34','SL34'],['파카마라','파카마라'],['핑크버번','핑크버번'],['시드라','시드라'],['우시우시','우시우시'],['자바','자바'],['마라고지페','마라고지페']];
+ let variety = '';
+ varieties.forEach(([k,v]) => { if (text.toLowerCase().includes(k.toLowerCase())) variety = v; });
+ // 프로세싱 인식
+ const processings = [['워시드','워시드'],['워시','워시드'],['washed','워시드'],['내츄럴','내츄럴'],['내추럴','내츄럴'],['natural','내츄럴'],['허니','허니'],['honey','허니'],['무산소','무산소'],['애너러빅','무산소'],['anaerobic','무산소']];
+ let processing = '';
+ processings.forEach(([k,v]) => { if (text.toLowerCase().includes(k.toLowerCase())) processing = v; });
+ // 원두명: 남은 텍스트 정리
+ let name = text.replace(/[/|]/g, ' ').replace(/\s{2,}/g, ' ').replace(/^\s*[,·\-]\s*/, '').replace(/\s*[,·\-]\s*$/, '').trim();
+ // 필드 채우기 (비어있는 것만)
+ const setIfEmpty = (id, val) => { const el = document.getElementById(id); if (el && !el.value && val) el.value = val; };
+ setIfEmpty('beanName', name);
+ setIfEmpty('beanOrigin', origin);
+ setIfEmpty('beanVariety', variety);
+ setIfEmpty('beanProcessing', processing);
+ if (weight && !document.getElementById('beanWeight').value) document.getElementById('beanWeight').value = weight;
+ showToast('자동 채우기 완료 — 확인 후 저장해주세요');
 }
 
 function saveBean() {
@@ -1352,7 +1410,9 @@ function saveBean() {
    roastDate: document.getElementById('beanRoastDate').value,
    roastLevel: document.getElementById('beanRoastLevel').value,
    cupNotes: document.getElementById('beanCupNotes').value.trim(),
-   memo: document.getElementById('beanMemo').value.trim()
+   memo: document.getElementById('beanMemo').value.trim(),
+   frozen: document.getElementById('beanFrozenToggle').classList.contains('on'),
+   frozenDate: document.getElementById('beanFrozenDate').value
  };
  if (editingBeanId) {
    const existing = data.beans.find(x => x.id === editingBeanId);
@@ -1413,6 +1473,7 @@ function renderBeans() {
        ${b.variety ? `<span class="tag">${b.variety}</span>` : ''}
        ${b.roastLevel ? `<span class="tag">${b.roastLevel}</span>` : ''}
        ${b.cupNotes ? `<span class="tag" style="color:var(--accent);">${b.cupNotes}</span>` : ''}
+       ${b.frozen ? '<span class="tag" style="color:#4a90d9;">❄️ 냉동</span>' : ''}
        ${b.weight ? `<span class="tag">${b.weight}g</span>` : ''}
        ${remainShots !== null ? `<span class="tag" style="${remainShots <= 1 ? 'color:var(--warning);' : ''}">약 ${remainShots}잔 남음</span>` : ''}
      </div>
@@ -1444,6 +1505,15 @@ function openBeanDetail(id) {
  // 잔량 행 (수기 수정 가능)
  html += `<div class="recipe-detail-row"><span class="recipe-detail-label">잔량</span><span class="recipe-detail-value" style="display:flex;align-items:center;gap:8px;"><span id="beanWeightDisplay">${b.weight ? b.weight + 'g' : '미입력'}</span><button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;width:auto;" onclick="editBeanWeight()">수정</button></span></div>`;
  if (degassing) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">디게싱</span><span class="recipe-detail-value" style="color:${degassing.done ? 'var(--success)' : 'var(--accent)'};">${degassing.label}${degassing.done ? ' (D+' + degassing.days + ')' : ' (' + degassing.days + '일차)'}</span></div>`;
+ if (b.frozen) {
+   let frozenLabel = '❄️ 냉동 보관 중';
+   if (b.frozenDate) {
+     const fd = new Date(b.frozenDate);
+     const days = Math.floor((new Date() - fd) / 86400000);
+     frozenLabel += ` (${days}일째)`;
+   }
+   html += `<div class="recipe-detail-row"><span class="recipe-detail-label">보관</span><span class="recipe-detail-value" style="color:#4a90d9;">${frozenLabel}</span></div>`;
+ }
  if (b.memo) html += `<div class="recipe-detail-row"><span class="recipe-detail-label">메모</span><span class="recipe-detail-value">${b.memo}</span></div>`;
  html += '</div>';
  // Show related brews
@@ -1466,6 +1536,16 @@ function openBeanDetail(id) {
    finBtn.className = 'btn btn-primary btn-sm';
  }
  openModal('beanDetailModal');
+}
+
+function toggleBeanFrozen() {
+ const toggle = document.getElementById('beanFrozenToggle');
+ toggle.classList.toggle('on');
+ const on = toggle.classList.contains('on');
+ document.getElementById('beanFrozenDateGroup').style.display = on ? '' : 'none';
+ if (on && !document.getElementById('beanFrozenDate').value) {
+   document.getElementById('beanFrozenDate').value = new Date().toISOString().split('T')[0];
+ }
 }
 
 function toggleBeanFinished() {
@@ -2110,12 +2190,11 @@ function openRecipeDetail(id) {
  html += '<div class="recipe-detail-section"><h3>원두 정보</h3>';
  [['로스터리', r.roastery], ['산지', r.origin], ['품종', r.variety], ['프로세싱', normalizeProcessing(r.processing)], ['로스팅', r.roasting], ['예상 노트', r.notes]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
  html += '</div><div class="recipe-detail-section"><h3>레시피</h3>';
- // 클릭수 계산 근거를 그라인드 행 안에 포함
  const breakdown = r.grindBreakdown || calcGrindBreakdown(r);
- const recipeRows = [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]];
- recipeRows.forEach(([l, v]) => {
+ const recipeFields = [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]];
+ recipeFields.forEach(([l, v]) => {
    if (l === '그라인드' && breakdown && r.grind) {
-     html += `<div class="recipe-detail-row" style="flex-wrap:wrap;"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span><span class="recipe-grind-breakdown">${breakdown}</span></div>`;
+     html += `<div class="recipe-detail-row" style="flex-wrap:wrap;"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span><span class="recipe-grind-breakdown">${breakdown}</span></div>`;
    } else {
      html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`;
    }
@@ -3491,8 +3570,18 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.5';
+const APP_VERSION = 'v2.5.5.1';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.5.1',
+   date: '2025.04.20',
+   items: [
+     { type: 'new', text: '원두 냉동 보관 — 냉동 체크 + 냉동일자 기록, 카드/상세에 ❄️ 표시' },
+     { type: 'improve', text: '프로세싱 표기 통일 — 내츄럴/네츄럴/네추럴 등 모두 "내추럴"로 자동 정규화' },
+     { type: 'improve', text: '클릭수 계산 근거가 그라인드 행 안에 표시 (행 높이 자동 확장)' },
+     { type: 'improve', text: '추천 얼음량 설명도 해당 행 안에 통합 표시' },
+   ]
+ },
  {
    version: 'v2.5.5',
    date: '2025.04.19',
@@ -3502,6 +3591,8 @@ const PATCH_NOTES = [
      { type: 'new', text: '클릭수 계산 근거 표시 — 레시피 상세에서 각 조건별 가감 이유 확인' },
      { type: 'new', text: '아이스 레시피 추천 얼음량 — 핫 기준 물량 차이로 자동 계산' },
      { type: 'improve', text: '멜로드립 3종 선택 — 미사용 / 오레아(거치형) / 핸들(그립형)' },
+     { type: 'new', text: '원두 텍스트 파싱 — 구매 내역 붙여넣기로 원두명·산지·품종·프로세싱·중량 자동 입력' },
+     { type: 'fix', text: '원두 등록 날짜 필드 iOS 세로 배치로 변경 (겹침 수정)' },
    ]
  },
  {
