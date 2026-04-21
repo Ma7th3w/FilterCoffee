@@ -203,6 +203,88 @@ body {
 }
 .missing-banner svg { width: 18px; height: 18px; flex-shrink: 0; }
 
+/* ─── Preset Origin Banner (v2.5.6.3) ─── */
+.preset-origin-banner {
+ background: rgba(196,94,58,0.08);
+ border: 1px solid rgba(196,94,58,0.2);
+ border-radius: 12px;
+ padding: 10px 14px;
+ margin-bottom: 16px;
+ font-size: 13px;
+}
+.preset-origin-title { color: var(--text-secondary); font-size: 12px; }
+.preset-origin-title strong { color: var(--accent); font-weight: 600; }
+.preset-origin-diffs {
+ margin-top: 8px;
+ display: flex;
+ flex-direction: column;
+ gap: 4px;
+}
+.preset-origin-diff {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 12px;
+ font-family: 'DM Mono', monospace;
+}
+.preset-origin-diff-label {
+ min-width: 48px;
+ color: var(--text-tertiary);
+}
+.preset-origin-diff-from {
+ color: var(--text-tertiary);
+ text-decoration: line-through;
+ opacity: 0.7;
+}
+.preset-origin-diff-arrow { color: var(--text-tertiary); }
+.preset-origin-diff-to {
+ color: var(--accent);
+ font-weight: 600;
+}
+
+/* ─── Preset Picker (v2.5.6.3) ─── */
+.preset-picker-list {
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+}
+.preset-picker-card {
+ background: var(--bg-card);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ padding: 12px 14px;
+ cursor: pointer;
+ transition: all 0.15s;
+ display: flex;
+ flex-direction: column;
+ gap: 4px;
+}
+.preset-picker-card:active { transform: scale(0.98); border-color: var(--accent); }
+.preset-picker-card.selected { border-color: var(--accent); background: rgba(196,94,58,0.06); }
+.preset-picker-card-title {
+ font-weight: 600;
+ font-size: 14px;
+ display: flex;
+ align-items: center;
+ gap: 6px;
+}
+.preset-picker-card-badge {
+ font-size: 10px;
+ font-weight: 500;
+ color: var(--text-tertiary);
+ background: var(--bg-input);
+ padding: 2px 6px;
+ border-radius: 6px;
+}
+.preset-picker-card-meta {
+ font-size: 12px;
+ color: var(--text-tertiary);
+}
+.preset-picker-card-author {
+ font-size: 11px;
+ color: var(--text-secondary);
+}
+
 /* ─── Click Buttons ─── */
 .click-grid {
  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 20px 0;
@@ -220,6 +302,23 @@ body {
  box-shadow: 0 4px 16px rgba(196,94,58,0.3);
 }
 .click-btn:active { transform: scale(0.95); }
+
+/* v2.5.6.5: Click modal grinder picker */
+.click-grinder-btn {
+ padding: 8px 14px; border-radius: 10px; border: 1.5px solid var(--border);
+ background: var(--bg-card-alt); color: var(--text-secondary);
+ font-size: 13px; font-weight: 500;
+ cursor: pointer; transition: all 0.15s;
+ display: inline-flex; align-items: center; gap: 6px;
+}
+.click-grinder-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.click-grinder-btn.selected {
+ background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.click-grinder-btn .active-dot {
+ display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+ background: currentColor; opacity: 0.9;
+}
 
 .click-history { margin-top: 24px; }
 .click-history-item {
@@ -668,11 +767,11 @@ body {
 
 <!-- ─── Click Bar ─── -->
 <div class="click-bar">
- <div style="cursor:pointer;" onclick="openModal('clickModal')">
-   <div class="click-bar-label">C60 Clicks</div>
-   <div><span class="click-bar-value" id="currentClickDisplay">--</span><span class="click-bar-unit">clicks</span></div>
+ <div style="cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:4px;" onclick="openClickModal()">
+   <div class="click-bar-label" id="clickBarLabel">C60 Clicks</div>
+   <div style="display:flex;align-items:baseline;"><span class="click-bar-value" id="currentClickDisplay">--</span><span class="click-bar-unit">clicks</span></div>
  </div>
- <div class="click-bar-right">
+ <div class="click-bar-right" style="display:flex;align-items:center;">
    <button class="click-bar-settings" onclick="openModal('settingsModal')">
      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
    </button>
@@ -698,9 +797,8 @@ body {
 
  <!-- Tab: Recipes -->
  <div class="page" id="page-recipes">
-   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+   <div style="margin-bottom:16px;">
      <h1 class="section-title" style="margin-bottom:0;">레시피</h1>
-     <button class="btn btn-primary btn-sm" onclick="openAddRecipeModal()">+ 추가</button>
    </div>
    <div class="pick-source-tabs" id="recipeTypeTabs">
      <button class="pick-source-tab active" onclick="recipeTypeFilter='all';renderRecipes()">전체</button>
@@ -793,6 +891,11 @@ body {
      <button class="modal-close" onclick="closeModal('clickModal')">&times;</button>
    </div>
    <p class="section-sub">현재 그라인더 클릭수를 선택하세요</p>
+   <!-- v2.5.6.5: 그라인더 2개 이상일 때만 노출 -->
+   <div id="clickGrinderPickerWrap" style="display:none;margin-bottom:16px;">
+     <div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px;">그라인더</div>
+     <div id="clickGrinderPicker" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+   </div>
    <div class="click-grid" id="clickGrid"></div>
    <div class="input-group" style="margin-top:20px;">
      <label>원두 메모 (선택)</label>
@@ -801,6 +904,14 @@ body {
    <div class="click-history" style="margin-top:16px;">
      <h3 style="font-size:16px;font-weight:600;margin-bottom:12px;">히스토리</h3>
      <div id="clickHistory"></div>
+     <!-- v2.5.6.5: 그라인더 2개 이상 + 히스토리 5개 초과일 때만 노출 -->
+     <div id="clickHistoryMoreWrap" style="display:none;margin-top:12px;text-align:center;">
+       <button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="toggleClickHistoryExpanded()" id="clickHistoryMoreBtn">더보기</button>
+     </div>
+   </div>
+   <!-- v2.5.6.5: 선택 그라인더 ≠ 활성 그라인더일 때만 노출 -->
+   <div id="clickGrinderSwitchWrap" style="display:none;margin-top:20px;">
+     <button class="btn btn-primary" onclick="confirmGrinderSwitch()" id="clickGrinderSwitchBtn">전환</button>
    </div>
  </div>
 </div>
@@ -868,14 +979,19 @@ body {
        <span class="modal-title">설정</span>
        <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
      </div>
-     <div class="settings-menu-item" onclick="openSettingsSub('grinder')">
+     <div class="settings-menu-item" onclick="openSettingsSub('grinderList')">
        <span class="settings-menu-icon">⚙️</span>
-       <div class="settings-menu-body"><div class="settings-menu-name">그라인더 설정</div><div class="settings-menu-desc">클릭수 범위</div></div>
+       <div class="settings-menu-body"><div class="settings-menu-name">그라인더 관리</div><div class="settings-menu-desc" id="grinderListDesc">활성 그라인더 · 클릭수 범위 · 내 그라인더 목록</div></div>
        <span class="settings-menu-arrow">›</span>
      </div>
-     <div class="settings-menu-item" onclick="openSettingsSub('melodrip')">
-       <span class="settings-menu-icon">💧</span>
-       <div class="settings-menu-body"><div class="settings-menu-name">멜로드립 설정</div><div class="settings-menu-desc">장착형 무게 설정</div></div>
+     <div class="settings-menu-item" onclick="openSettingsSub('dripperList')">
+       <span class="settings-menu-icon">☕</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">드리퍼 관리</div><div class="settings-menu-desc" id="dripperListDesc">내 드리퍼 목록</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('presetList')">
+       <span class="settings-menu-icon">📖</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">레시피 템플릿</div><div class="settings-menu-desc" id="presetListDesc">빌트인 · 내 템플릿 관리 · 편집 · 숨김</div></div>
        <span class="settings-menu-arrow">›</span>
      </div>
      <div class="settings-menu-item" onclick="openSettingsSub('alerts')">
@@ -888,50 +1004,25 @@ body {
        <div class="settings-menu-body"><div class="settings-menu-name">데이터 관리</div><div class="settings-menu-desc">백업 · 복원 · 초기화</div></div>
        <span class="settings-menu-arrow">›</span>
      </div>
-     <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;">
-       FilterCoffee v2.5.5.1<br>Made with Matthew
+     <div class="settings-menu-item" onclick="openSettingsSub('advanced')">
+       <span class="settings-menu-icon">🧪</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">고급</div><div class="settings-menu-desc">AI 레시피 붙여넣기</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div class="settings-menu-item" onclick="openSettingsSub('patchNotesList')">
+       <span class="settings-menu-icon">📋</span>
+       <div class="settings-menu-body"><div class="settings-menu-name">패치노트</div><div class="settings-menu-desc">전체 업데이트 내역</div></div>
+       <span class="settings-menu-arrow">›</span>
+     </div>
+     <div style="text-align:center;margin-top:40px;color:var(--text-tertiary);font-size:12px;" id="settingsVersionInfo">
+       FilterCoffee <span id="settingsVersionText"></span><br>Made with Matthew
        <div style="margin-top:8px;"><button class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;padding:6px 14px;color:var(--text-tertiary);" onclick="closeModal('settingsModal');showPatchNotes(PATCH_NOTES[0])">패치노트 보기</button></div>
      </div>
    </div>
 
-   <!-- Sub: Grinder -->
-   <div class="settings-sub-view" id="settingsSubGrinder">
-     <div class="modal-header">
-       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
-       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
-     </div>
-     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">그라인더 설정</h3>
-     <div style="display:flex;gap:8px;">
-       <div class="input-group" style="flex:1;margin-bottom:0;">
-         <label>최소 클릭수</label>
-         <input type="number" id="clickMin" value="28" onchange="saveClickRange()">
-       </div>
-       <div class="input-group" style="flex:1;margin-bottom:0;">
-         <label>최대 클릭수</label>
-         <input type="number" id="clickMax" value="34" onchange="saveClickRange()">
-       </div>
-     </div>
-   </div>
-
-   <!-- Sub: MeloDrip -->
-   <div class="settings-sub-view" id="settingsSubMelodrip">
-     <div class="modal-header">
-       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
-       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
-     </div>
-     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">멜로드립 설정</h3>
-     <div class="input-group" style="margin-bottom:12px;">
-       <label>오레아 멜로드립 무게 (g)</label>
-       <input type="number" id="meloDripWeightOrea" placeholder="예: 30" onchange="saveMeloDripWeights()">
-       <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;">Orea MeloDrip 장착형 무게</div>
-     </div>
-     <div class="input-group" style="margin-bottom:0;">
-       <label>멜로드립 무게 (g)</label>
-       <input type="number" id="meloDripWeightOriginal" placeholder="예: 25" onchange="saveMeloDripWeights()">
-       <div style="font-size:12px;color:var(--text-tertiary);margin-top:4px;">일반 MeloDrip 장착형 무게</div>
-     </div>
-     <div style="font-size:12px;color:var(--text-tertiary);margin-top:8px;">장착형 사용 시 블루밍 이후 누적 그람수에 자동 반영됩니다</div>
-   </div>
+   <!-- Hidden legacy inputs for backward compatibility (grinder click range is now per-grinder, edited inside grinder list) -->
+   <input type="hidden" id="clickMin" value="28">
+   <input type="hidden" id="clickMax" value="34">
 
    <!-- Sub: Alerts -->
    <div class="settings-sub-view" id="settingsSubAlerts">
@@ -968,44 +1059,275 @@ body {
        <button class="btn btn-danger" onclick="confirmClearData()">전체 데이터 삭제</button>
      </div>
    </div>
+
+   <!-- Sub: Grinder List (v2.5.6.1) -->
+   <div class="settings-sub-view" id="settingsSubGrinderList">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">그라인더 관리</h3>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-bottom:16px;">활성 그라인더 선택 · 내 그라인더 추가 · 숨김/복구</p>
+     <div id="grinderListArea"></div>
+     <button class="btn btn-secondary btn-sm" style="width:100%;margin-top:12px;" onclick="openGrinderEditor()">+ 그라인더 추가</button>
+     <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+       <button class="btn btn-secondary btn-sm" id="grinderHiddenToggleBtn" style="width:auto;font-size:12px;color:var(--text-tertiary);" onclick="toggleHiddenGrinders()">숨긴 그라인더 보기</button>
+       <div id="grinderHiddenArea" style="display:none;margin-top:12px;"></div>
+     </div>
+   </div>
+
+   <!-- Sub: Dripper List (v2.5.6.1) -->
+   <div class="settings-sub-view" id="settingsSubDripperList">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">드리퍼 관리</h3>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-bottom:16px;">내 드리퍼 추가 · 숨김/복구</p>
+     <div id="dripperListArea"></div>
+     <button class="btn btn-secondary btn-sm" style="width:100%;margin-top:12px;" onclick="openDripperEditor()">+ 드리퍼 추가</button>
+     <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+       <button class="btn btn-secondary btn-sm" id="dripperHiddenToggleBtn" style="width:auto;font-size:12px;color:var(--text-tertiary);" onclick="toggleHiddenDrippers()">숨긴 드리퍼 보기</button>
+       <div id="dripperHiddenArea" style="display:none;margin-top:12px;"></div>
+     </div>
+   </div>
+
+   <!-- Sub: Grinder Editor (v2.5.6.1) -->
+   <div class="settings-sub-view" id="settingsSubGrinderEditor">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub('grinderList')">‹ 그라인더</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;" id="grinderEditorTitle">그라인더 추가</h3>
+     <div class="input-group"><label>브랜드</label><input type="text" id="grinderEditBrand" placeholder="예: Comandante"></div>
+     <div class="input-group"><label>모델명</label><input type="text" id="grinderEditModel" placeholder="예: C60"></div>
+     <div class="input-group">
+       <label>클릭당 μm</label>
+       <input type="number" id="grinderEditMicron" placeholder="예: 21" step="0.1" min="0.1">
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">참고: C60=21, C40=30, C40 Red Clix=15, Timemore C2=30, 1Zpresso J-Max=8.8</div>
+     </div>
+     <div style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;font-weight:500;">내 클릭수 범위 <span style="color:var(--text-tertiary);font-weight:normal;">(클릭 기록 화면에 표시할 범위)</span></div>
+     <div style="display:flex;gap:8px;">
+       <div class="input-group" style="flex:1;"><label>최소</label><input type="number" id="grinderEditMin" placeholder="28"></div>
+       <div class="input-group" style="flex:1;"><label>최대</label><input type="number" id="grinderEditMax" placeholder="34"></div>
+     </div>
+     <div style="display:flex;gap:8px;margin-top:8px;">
+       <button class="btn btn-primary" style="flex:1;" onclick="saveGrinderEdit()">저장</button>
+       <button class="btn btn-danger btn-sm" id="grinderEditDeleteBtn" style="display:none;flex:0 0 auto;" onclick="deleteUserGrinder()">삭제</button>
+     </div>
+   </div>
+
+   <!-- Sub: Dripper Editor (v2.5.6.1) -->
+   <div class="settings-sub-view" id="settingsSubDripperEditor">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub('dripperList')">‹ 드리퍼</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;" id="dripperEditorTitle">드리퍼 추가</h3>
+     <div class="input-group"><label>드리퍼 이름</label><input type="text" id="dripperEditName" placeholder="예: April Plastic"></div>
+     <div class="input-group"><label>브랜드 (선택)</label><input type="text" id="dripperEditBrand" placeholder="예: April"></div>
+     <div class="input-group">
+       <label>거치형 멜로드립 무게 (g, 선택)</label>
+       <input type="number" id="dripperEditMeloWeight" placeholder="예: 30" min="0" step="1">
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">이 드리퍼에 장착하는 거치형 멜로드립 무게. 레시피에서 거치형 선택 시 타이머 누적 무게에 자동 반영됩니다.</div>
+     </div>
+     <div style="display:flex;gap:8px;margin-top:8px;">
+       <button class="btn btn-primary" style="flex:1;" onclick="saveDripperEdit()">저장</button>
+       <button class="btn btn-danger btn-sm" id="dripperEditDeleteBtn" style="display:none;flex:0 0 auto;" onclick="deleteUserDripper()">삭제</button>
+     </div>
+   </div>
+
+   <!-- Sub: Advanced (v2.5.6.2) -->
+   <div class="settings-sub-view" id="settingsSubAdvanced">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">고급</h3>
+     <div style="background:var(--bg-card-alt);border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+         <div style="flex:1;min-width:0;">
+           <div style="font-weight:600;font-size:14px;">AI 레시피 붙여넣기</div>
+           <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;line-height:1.5;">원두 → 레시피 생성 시 AI에서 받은 텍스트를 붙여넣어 등록할 수 있는 옵션이 나타납니다.</div>
+         </div>
+         <div class="toggle-switch" id="aiPasteToggle" onclick="toggleAiPaste()"></div>
+       </div>
+     </div>
+     <div style="font-size:11px;color:var(--text-tertiary);padding:0 4px;">이 기능은 PWA 환경에서만 동작합니다.</div>
+   </div>
+
+   <!-- Sub: Patch Notes List (v2.5.6) -->
+   <div class="settings-sub-view" id="settingsSubPatchNotesList">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">패치노트</h3>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-bottom:16px;line-height:1.5;">FilterCoffee의 전체 업데이트 내역입니다.</p>
+     <div id="patchNotesListArea"></div>
+   </div>
+
+   <!-- Sub: Recipe Template List (v2.5.6.4) -->
+   <div class="settings-sub-view" id="settingsSubPresetList">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="closeSettingsSub()">‹ 설정</button>
+       <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:8px;">레시피 템플릿</h3>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-bottom:16px;line-height:1.5;">바리스타 레시피나 자주 쓰는 베이스 레시피를 템플릿으로 관리합니다. 빌트인은 숨김/복구, 내 템플릿은 편집/삭제 가능합니다.</p>
+     <div id="presetManageArea"></div>
+     <button class="btn btn-secondary btn-sm" style="width:100%;margin-top:12px;" onclick="openPresetEditor()">+ 새 템플릿 추가</button>
+     <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);">
+       <button class="btn btn-secondary btn-sm" id="presetHiddenToggleBtn" style="width:auto;font-size:12px;color:var(--text-tertiary);" onclick="togglePresetHiddenView()">숨긴 템플릿 보기</button>
+       <div id="presetHiddenArea" style="display:none;margin-top:12px;"></div>
+     </div>
+   </div>
+
+   <!-- Sub: Recipe Template Editor (v2.5.6.4) -->
+   <div class="settings-sub-view" id="settingsSubPresetEditor">
+     <div class="modal-header">
+       <button class="settings-sub-back" onclick="onPresetEditorBack()">‹ 템플릿</button>
+       <button class="modal-close" onclick="onPresetEditorClose()">&times;</button>
+     </div>
+     <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;" id="presetEditorTitle">새 템플릿</h3>
+
+     <!-- 처음부터 / 기존 복사 토글 (신규 등록 모드에서만 노출) -->
+     <div id="presetEditorSourceWrap" class="input-group">
+       <label>시작 방식</label>
+       <div class="toggle-group" id="presetEditorSourceToggle">
+         <button type="button" class="toggle-opt active" onclick="setPresetEditorMode('blank')">처음부터 만들기</button>
+         <button type="button" class="toggle-opt" onclick="setPresetEditorMode('copy')">기존 템플릿 복사</button>
+       </div>
+     </div>
+     <div class="input-group" id="presetCopySelectWrap" style="display:none;">
+       <label>복사할 템플릿</label>
+       <select id="presetCopySelect" onchange="applyPresetCopy()">
+         <option value="">— 선택 —</option>
+       </select>
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">선택하면 아래 폼이 자동으로 채워집니다. 그대로 또는 수정해서 저장할 수 있습니다.</div>
+     </div>
+
+     <div class="input-group"><label>템플릿 이름</label><input type="text" id="presetEditName" placeholder="예: The Dara 변형 v1"></div>
+     <div class="input-group"><label>작성자 (선택)</label><input type="text" id="presetEditAuthor" placeholder="예: James Hoffmann"></div>
+     <div class="input-group">
+       <label>드리퍼</label>
+       <select id="presetEditDripper"></select>
+     </div>
+     <div class="input-group" id="presetEditBottomWrap" style="display:none;">
+       <label>바텀 (Orea V4만)</label>
+       <div class="toggle-group">
+         <button type="button" class="toggle-opt" data-bottom="Fast" onclick="setPresetEditBottom('Fast')">Fast</button>
+         <button type="button" class="toggle-opt" data-bottom="Medium" onclick="setPresetEditBottom('Medium')">Medium</button>
+         <button type="button" class="toggle-opt" data-bottom="Slow" onclick="setPresetEditBottom('Slow')">Slow</button>
+         <button type="button" class="toggle-opt" data-bottom="Open" onclick="setPresetEditBottom('Open')">Open</button>
+       </div>
+     </div>
+     <div class="input-group">
+       <label>브루 타입</label>
+       <div class="toggle-group">
+         <button type="button" class="toggle-opt active" data-brewtype="핫" onclick="setPresetEditBrewType('핫')">핫</button>
+         <button type="button" class="toggle-opt" data-brewtype="아이스" onclick="setPresetEditBrewType('아이스')">아이스</button>
+       </div>
+     </div>
+     <div style="display:flex;gap:8px;">
+       <div class="input-group" style="flex:1;"><label>도즈 (g)</label><input type="number" id="presetEditDose" placeholder="16" step="0.1" min="0"></div>
+       <div class="input-group" style="flex:1;"><label>물량 (g)</label><input type="number" id="presetEditWater" placeholder="260" step="1" min="0"></div>
+     </div>
+     <div style="display:flex;gap:8px;">
+       <div class="input-group" style="flex:1;"><label>비율</label><input type="text" id="presetEditRatio" placeholder="1:16.3"></div>
+       <div class="input-group" style="flex:1;"><label>수온 (°C)</label><input type="number" id="presetEditTemp" placeholder="93" min="0" max="100"></div>
+     </div>
+     <div class="input-group">
+       <label>분쇄도 (μm)</label>
+       <input type="number" id="presetEditMicron" placeholder="720" step="1" min="0">
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">그라인더 독립 단위. 참고: C60 1클릭=21μm (예: 34클릭=714μm). 표시 시 활성 그라인더 클릭수로 환산됩니다.</div>
+     </div>
+     <div class="input-group">
+       <label>멜로드립</label>
+       <div class="toggle-group">
+         <button type="button" class="toggle-opt active" data-melo="미사용" onclick="setPresetEditMelo('미사용')">미사용</button>
+         <button type="button" class="toggle-opt" data-melo="오레아 멜로드립" onclick="setPresetEditMelo('오레아 멜로드립')">거치형</button>
+         <button type="button" class="toggle-opt" data-melo="핸들 멜로드립" onclick="setPresetEditMelo('핸들 멜로드립')">핸들</button>
+       </div>
+     </div>
+     <div class="input-group"><label>목표 시간</label><input type="text" id="presetEditTargetTime" placeholder="~3:00"></div>
+     <div class="input-group"><label>메모</label><input type="text" id="presetEditNotes" placeholder="예: 5단 펄스 / 공식 레시피"></div>
+
+     <!-- 푸어가이드 에디터 -->
+     <div class="input-group">
+       <label>푸어 가이드 <span style="color:var(--text-tertiary);font-weight:normal;font-size:11px;">(타이머 링 표시에 사용)</span></label>
+       <div id="presetPourGuideList" style="display:flex;flex-direction:column;gap:6px;"></div>
+       <button type="button" class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;margin-top:8px;" onclick="addPresetPourRow()">+ 푸어 추가</button>
+     </div>
+
+     <!-- 조정 가이드 에디터 -->
+     <div class="input-group">
+       <label>조정 가이드 <span style="color:var(--text-tertiary);font-weight:normal;font-size:11px;">(선택 · 증상 → 대응)</span></label>
+       <div id="presetAdjustList" style="display:flex;flex-direction:column;gap:6px;"></div>
+       <button type="button" class="btn btn-secondary btn-sm" style="width:auto;font-size:12px;margin-top:8px;" onclick="addPresetAdjustRow()">+ 조정 추가</button>
+     </div>
+
+     <div style="display:flex;gap:8px;margin-top:8px;">
+       <button class="btn btn-primary" style="flex:1;" onclick="savePresetEdit()">저장</button>
+       <button class="btn btn-danger btn-sm" id="presetEditDeleteBtn" style="display:none;flex:0 0 auto;" onclick="deleteUserPresetFromEditor()">삭제</button>
+     </div>
+   </div>
  </div>
 </div>
 
-<!-- Recipe Generator Modal -->
+<!-- Recipe Generator Modal (v2.5.6.3 — 2-stage flow) -->
 <div class="modal-overlay" id="recipeGenModal">
  <div class="modal">
    <div class="modal-header">
-     <span class="modal-title" id="recipeGenTitle">레시피 생성</span>
+     <span class="modal-title" id="recipeGenTitle">레시피 만들기</span>
      <button class="modal-close" onclick="closeModal('recipeGenModal')">&times;</button>
    </div>
    <div id="recipeGenBeanInfo" style="background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;"></div>
-   <div class="input-group"><label>핫 / 아이스</label><div class="toggle-group" id="genBrewTypeToggle"><button class="toggle-opt active" onclick="setGenBrewType('핫')">핫</button><button class="toggle-opt" onclick="setGenBrewType('아이스')">아이스</button></div></div>
-   <div class="input-group"><label>드리퍼</label><div class="toggle-group" id="genDripperToggle"><button class="toggle-opt active" onclick="setGenDripper('V4')">Orea V4</button><button class="toggle-opt" onclick="setGenDripper('Baby O')">Baby O</button></div></div>
-   <div class="input-group" id="genDoseGroup" style="display:none;"><label>도즈 (Baby O)</label><div class="toggle-group" id="genDoseToggle"><button class="toggle-opt" onclick="setGenDose(10)">10g</button><button class="toggle-opt" onclick="setGenDose(12)">12g</button><button class="toggle-opt" onclick="setGenDose(14)">14g</button><button class="toggle-opt active" onclick="setGenDose(16)">16g</button></div></div>
-   <div class="input-group"><label>맛 방향</label><div class="toggle-group" id="genFlavorToggle"><button class="toggle-opt active" onclick="setGenFlavor('밸런스')">밸런스</button><button class="toggle-opt" onclick="setGenFlavor('산미')">산미</button></div></div>
-   <div class="input-group"><label>멜로드립</label><div class="toggle-group" id="genMeloToggle"><button class="toggle-opt active" onclick="setGenMelo('미사용')">미사용</button><button class="toggle-opt" onclick="setGenMelo('오레아')">오레아(거치형)</button><button class="toggle-opt" onclick="setGenMelo('핸들')">핸들(그립형)</button></div></div>
-   <div id="genBottomInfo" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);"></div>
-   <div id="genPreview" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;"></div>
-   <button class="btn btn-primary" onclick="generateAndSaveRecipe()">레시피 생성</button>
- </div>
-</div>
 
-<!-- Add Recipe Modal (Paste) -->
-<div class="modal-overlay" id="addRecipeModal">
- <div class="modal">
-   <div class="modal-header">
-     <span class="modal-title">레시피 추가</span>
-     <button class="modal-close" onclick="closeModal('addRecipeModal')">&times;</button>
+   <!-- Stage 1: 드리퍼 선택 + 멜로드립 선택 + 레시피 방식 선택 -->
+   <div id="genStage1">
+     <div class="input-group"><label>드리퍼 선택</label><div id="genDripperList" class="preset-picker-list"></div></div>
+     <div class="input-group" id="genMeloDripStage1Wrap" style="display:none;">
+       <label>멜로드립 (필수)</label>
+       <div class="toggle-group" id="genMeloDripStage1Toggle">
+         <button class="toggle-opt active" onclick="setGenMeloDripStage1('미사용')">미사용</button>
+         <button class="toggle-opt" onclick="setGenMeloDripStage1('오레아 멜로드립')">거치형</button>
+         <button class="toggle-opt" onclick="setGenMeloDripStage1('핸들 멜로드립')">핸들</button>
+       </div>
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">거치형 선택 시 드리퍼에 설정된 무게가 타이머 누적에 자동 반영됩니다</div>
+       <div id="genBloomIncludeWrap" style="display:none;margin-top:10px;padding:10px 12px;background:var(--bg-card-alt);border-radius:10px;">
+         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;">
+           <input type="checkbox" id="genBloomIncludeCheck" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+           <span>블루밍부터 거치형 무게 반영</span>
+         </label>
+         <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;margin-left:26px;">블루밍 단계부터 거치형을 사용하는 경우 체크하세요</div>
+       </div>
+     </div>
+     <div id="genRecipePickerWrap" style="display:none;">
+       <div class="input-group"><label id="genRecipePickerLabel">레시피 선택</label><div id="genRecipePicker" class="preset-picker-list"></div></div>
+     </div>
    </div>
-   <div class="input-group">
-     <label>내 원두 선택 (선택)</label>
-     <select id="addRecipeBeanSelect"><option value="">선택 안 함</option></select>
+
+   <!-- Stage 2a: Matthew 엔진 조정 UI (V4/BabyO 선택 시만) -->
+   <div id="genStage2Matthew" style="display:none;">
+     <button class="btn btn-secondary btn-sm" style="margin-bottom:12px;" onclick="backToGenStage1()">‹ 다른 레시피 선택</button>
+     <div class="input-group"><label>핫 / 아이스</label><div class="toggle-group" id="genBrewTypeToggle"><button class="toggle-opt active" onclick="setGenBrewType('핫')">핫</button><button class="toggle-opt" onclick="setGenBrewType('아이스')">아이스</button></div></div>
+     <div class="input-group" id="genDoseGroup" style="display:none;"><label>도즈 (Baby O)</label><div class="toggle-group" id="genDoseToggle"><button class="toggle-opt" onclick="setGenDose(10)">10g</button><button class="toggle-opt" onclick="setGenDose(12)">12g</button><button class="toggle-opt" onclick="setGenDose(14)">14g</button><button class="toggle-opt active" onclick="setGenDose(16)">16g</button></div></div>
+     <div class="input-group"><label>맛 방향</label><div class="toggle-group" id="genFlavorToggle"><button class="toggle-opt active" onclick="setGenFlavor('밸런스')">밸런스</button><button class="toggle-opt" onclick="setGenFlavor('산미')">산미</button></div></div>
+     <div id="genMeloDripInfo" style="background:var(--bg-card-alt);border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--text-secondary);"></div>
+     <div id="genBottomInfo" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);"></div>
+     <div id="genPreview" style="display:none;background:var(--bg-card-alt);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;"></div>
+     <button class="btn btn-primary" onclick="generateAndSaveRecipe()">레시피 생성</button>
    </div>
-   <div class="input-group">
-     <label>클로드 레시피 붙여넣기</label>
-     <textarea class="paste-area" id="recipePasteArea" placeholder="클로드에서 받은 레시피를 여기에 붙여넣으세요..."></textarea>
+
+   <!-- Stage 2b: AI 붙여넣기 UI -->
+   <div id="genStage2AiPaste" style="display:none;">
+     <button class="btn btn-secondary btn-sm" style="margin-bottom:12px;" onclick="backToGenStage1()">‹ 다른 레시피 선택</button>
+     <div class="input-group"><label>레시피 텍스트 붙여넣기</label>
+       <textarea id="genAiPasteArea" class="paste-area" placeholder="레시피 전문을 복사해서 붙여넣으세요 (드리퍼, 도즈, 물량, 수온, 클릭수 등을 자동 추출합니다)"></textarea>
+     </div>
+     <button class="btn btn-primary" onclick="generateFromAiPaste()">파싱해서 레시피 생성</button>
    </div>
-   <button class="btn btn-primary" onclick="parseAndSaveRecipe()">파싱해서 저장</button>
  </div>
 </div>
 
@@ -1041,7 +1363,14 @@ body {
      <div class="input-group" style="flex:1;" id="eg-dose"><label>도즈 (g) <span class="required">*</span></label><input type="number" id="editDose"><div class="field-hint">필수 항목입니다</div></div>
      <div class="input-group" style="flex:1;" id="eg-water"><label>물량 (g) <span class="required">*</span></label><input type="number" id="editWater"><div class="field-hint">필수 항목입니다</div></div>
    </div>
-   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button><button class="toggle-opt" onclick="setMeloDrip('오레아 멜로드립')">오레아</button><button class="toggle-opt" onclick="setMeloDrip('핸들 멜로드립')">핸들</button><button class="toggle-opt" onclick="setMeloDrip('멜로드립')">멜로드립</button></div><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group" id="eg-meloDrip"><label>멜로드립 <span class="required">*</span></label><div class="toggle-group" id="editMeloDripToggle"><button class="toggle-opt" onclick="setMeloDrip('미사용')">미사용</button><button class="toggle-opt" onclick="setMeloDrip('오레아 멜로드립')">거치형</button><button class="toggle-opt" onclick="setMeloDrip('핸들 멜로드립')">핸들</button><button class="toggle-opt" onclick="setMeloDrip('멜로드립')">멜로드립</button></div><div class="field-hint">필수 항목입니다</div></div>
+   <div class="input-group" id="editBloomIncludeWrap" style="display:none;padding:10px 12px;background:var(--bg-card-alt);border-radius:10px;">
+     <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;margin:0;">
+       <input type="checkbox" id="editBloomIncludeCheck" style="width:18px;height:18px;accent-color:var(--accent);cursor:pointer;">
+       <span>블루밍부터 거치형 무게 반영</span>
+     </label>
+     <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;margin-left:26px;">블루밍 단계부터 거치형을 사용하는 경우 체크하세요</div>
+   </div>
    <div class="input-group"><label>핫/아이스</label><div class="toggle-group" id="editBrewTypeToggle"><button class="toggle-opt" onclick="setEditBrewType('핫')">핫</button><button class="toggle-opt" onclick="setEditBrewType('아이스')">아이스</button></div></div>
    <div class="input-group" id="eg-bottom" style="display:none;"><label>바텀</label><div class="toggle-group" id="editBottomToggle"><button class="toggle-opt" onclick="setEditBottom('Classic')">Classic</button><button class="toggle-opt" onclick="setEditBottom('Open')">Open</button><button class="toggle-opt" onclick="setEditBottom('Apex')">Apex</button><button class="toggle-opt" onclick="setEditBottom('Fast')">Fast</button></div></div>
    <input type="hidden" id="editBottom">
@@ -1247,6 +1576,441 @@ function getMissingFields(recipe) {
 // ─── Data Store ───
 const DB_KEY = 'filterCoffee';
 const GITHUB_BASE = 'https://raw.githubusercontent.com/ma7th3w/FilterCoffee/main/monthly/';
+
+// ─── Grinder Presets (μm per click) ───
+// C60 기준 21μm/click. 다른 그라인더는 제조사 공식 μm 기반.
+// 사용자 추가 그라인더는 data.grinders[]에 별도 저장.
+const GRINDER_PRESETS = [
+ { id: 'builtin_c60',         brand: 'Comandante', model: 'C60',          micronPerClick: 21, builtin: true, defaultMin: 28, defaultMax: 34 },
+ { id: 'builtin_c40',         brand: 'Comandante', model: 'C40 MK4',      micronPerClick: 30, builtin: true, defaultMin: 20, defaultMax: 26 },
+ { id: 'builtin_c40_redclix', brand: 'Comandante', model: 'C40 Red Clix', micronPerClick: 15, builtin: true, defaultMin: 40, defaultMax: 48 },
+ { id: 'builtin_1z_j_max',    brand: '1Zpresso',   model: 'J-Max',        micronPerClick: 8.8, builtin: true, defaultMin: 60, defaultMax: 75 },
+ { id: 'builtin_1z_k_max',    brand: '1Zpresso',   model: 'K-Max',        micronPerClick: 15, builtin: true, defaultMin: 40, defaultMax: 50 },
+ { id: 'builtin_timemore_c2', brand: 'Timemore',   model: 'C2/C3',        micronPerClick: 30, builtin: true, defaultMin: 20, defaultMax: 26 },
+ { id: 'builtin_timemore_078',brand: 'Timemore',   model: '078/078S',     micronPerClick: 8,  builtin: true, defaultMin: 60, defaultMax: 80 },
+];
+
+// ─── Dripper Built-ins ───
+// 빌트인 6종. 사용자는 추가 및 숨김 가능. 숨김은 data.hiddenDrippers[]에 id 저장.
+const DRIPPER_BUILTINS = [
+ { id: 'builtin_orea_v4',  name: 'Orea V4',     brand: 'Orea',  builtin: true, hasBottom: true,  bottoms: ['Fast','Open','Classic'] },
+ { id: 'builtin_o1_babyo', name: 'O1 Baby O',   brand: 'Orea',  builtin: true, hasBottom: false, doses: [10,12,14,16] },
+ { id: 'builtin_v60',      name: 'Hario V60',   brand: 'Hario', builtin: true, hasBottom: false },
+ { id: 'builtin_switch',   name: 'Hario Switch',brand: 'Hario', builtin: true, hasBottom: false },
+ { id: 'builtin_neo',      name: 'Hario Neo',   brand: 'Hario', builtin: true, hasBottom: false },
+ { id: 'builtin_alpha',    name: 'Hario Alpha', brand: 'Hario', builtin: true, hasBottom: false },
+];
+
+// ─── Recipe Source Tier (v2.5.6.2, internal only — not shown in UI as filter) ───
+// Internal field: `source` stored as 'preset' | 'matthew' | 'custom'.
+// Labels centralized for easy renaming if needed.
+const RECIPE_SOURCE_LABELS = {
+ preset:  '프리셋',
+ matthew: 'Matthew',
+ custom:  '커스텀'
+};
+function recipeSourceLabel(src) { return RECIPE_SOURCE_LABELS[src] || RECIPE_SOURCE_LABELS.custom; }
+
+// ─── AI Paste Feature Flag (v2.5.6.2) ───
+// Controls whether AI paste option appears inside the recipe creation flow (v2.5.6.3).
+function isAiPasteEnabled() { return localStorage.getItem('fc_aiPasteEnabled') === '1'; }
+function setAiPasteEnabled(on) { localStorage.setItem('fc_aiPasteEnabled', on ? '1' : '0'); }
+
+// ─── Melodrip Display Helper (v2.5.6.3.1) ───
+// 저장값은 '오레아 멜로드립' 그대로 유지(백업/복원 호환). 표시만 '거치형'으로 변환.
+function formatMeloDripDisplay(v) {
+ if (!v) return v;
+ if (v === '오레아 멜로드립') return '거치형 멜로드립';
+ return v;
+}
+
+// ─── Recipe Presets (v2.5.6.3) ───
+// 빌트인 공식 바리스타 레시피 라이브러리. 읽기전용.
+// grindMicron = μm 기준(그라인더 독립). 표시 시 활성 그라인더로 환산.
+// 환산 근거: C40 clix × 30μm/click (제조사 공식값).
+// 사용자가 "이 레시피로 시작" 시 data.recipes[]에 복사본이 생성되며,
+// parentPresetId로 원본 추적. 원본 프리셋은 절대 변경되지 않음.
+const RECIPE_PRESETS = [
+ // ─── Orea V4 (5) ───
+ // Easy Does It: Orea 공식 5-pour. 블룸 48g (3×dose) + 4×53g pulse.
+ { id: 'preset_v4_easy_does_it', dripperId: 'builtin_orea_v4', name: 'Easy Does It', author: 'Orea',
+   brewType: '핫', dose: 16, water: 260, ratio: '1:16.3', temp: 93, grindMicron: 720,
+   bottom: 'Fast', meloDrip: '미사용', targetTime: '~3:00',
+   notes: '5단 펄스 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '48g', action: '블루밍 — 원두를 적시고 스월 1회' },
+     { time: '0:45', amount: '53g', action: '1차 푸어 — 센터에서 원형으로 천천히' },
+     { time: '1:15', amount: '53g', action: '2차 푸어 — 센터 → 바깥 원형' },
+     { time: '1:45', amount: '53g', action: '3차 푸어 — 센터 → 바깥 원형' },
+     { time: '2:15', amount: '53g', action: '4차 푸어 — 센터에 부어 마무리' },
+   ]
+ },
+ // The Dara: 4-pour. 블룸 36g + 3×pulse
+ { id: 'preset_v4_the_dara', dripperId: 'builtin_orea_v4', name: 'The Dara', author: 'Orea',
+   brewType: '핫', dose: 12, water: 200, ratio: '1:16.7', temp: 92, grindMicron: 660,
+   bottom: 'Open', meloDrip: '미사용', targetTime: '~3:00',
+   notes: '4단 펄스 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '36g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '55g', action: '1차 푸어 — 센터에서 원형' },
+     { time: '1:15', amount: '55g', action: '2차 푸어 — 센터 → 바깥' },
+     { time: '1:45', amount: '54g', action: '3차 푸어 — 중앙 마무리' },
+   ]
+ },
+ // The Fine: 2-pour (미세분쇄). 블룸 + 1 big pour
+ { id: 'preset_v4_the_fine', dripperId: 'builtin_orea_v4', name: 'The Fine', author: 'Orea',
+   brewType: '핫', dose: 16, water: 260, ratio: '1:16.3', temp: 90, grindMicron: 555,
+   bottom: 'Fast', meloDrip: '미사용', targetTime: '~3:00',
+   notes: '2단 미세분쇄 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '48g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '212g', action: '1차 푸어 — 한 번에 천천히 원형으로' },
+   ]
+ },
+ // The Aussie: 5-pour, 거친 분쇄, 1:12.5.
+ { id: 'preset_v4_the_aussie', dripperId: 'builtin_orea_v4', name: 'The Aussie', author: 'Orea',
+   brewType: '핫', dose: 20, water: 250, ratio: '1:12.5', temp: 94, grindMicron: 840,
+   bottom: 'Fast', meloDrip: '미사용', targetTime: '~3:00',
+   notes: '5단 거칠게 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '60g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '48g', action: '1차 푸어 — 센터에서 원형' },
+     { time: '1:15', amount: '48g', action: '2차 푸어 — 센터 → 바깥' },
+     { time: '1:45', amount: '48g', action: '3차 푸어 — 센터 → 바깥' },
+     { time: '2:15', amount: '46g', action: '4차 푸어 — 센터 마무리' },
+   ]
+ },
+ // WBrC 2024 Wölfl / Mikael Jasin: 4-pour.
+ { id: 'preset_v4_wolfl_2024', dripperId: 'builtin_orea_v4', name: 'WBrC 2024 Wölfl', author: 'Mikael Jasin',
+   brewType: '핫', dose: 17, water: 270, ratio: '1:15.9', temp: 93, grindMicron: 690,
+   bottom: 'Fast', meloDrip: '미사용', targetTime: '~2:25',
+   notes: 'WBrC 2024 챔피언',
+   pourGuide: [
+     { time: '0:00', amount: '60g', action: '블루밍 — 스월로 충분히 적심' },
+     { time: '0:40', amount: '70g', action: '1차 푸어 — 센터 원형' },
+     { time: '1:05', amount: '70g', action: '2차 푸어 — 센터 → 바깥' },
+     { time: '1:30', amount: '70g', action: '3차 푸어 — 마무리 센터' },
+   ]
+ },
+
+ // ─── Orea O1 Baby O (3) ───
+ // Easy Does It O1: 5-pour
+ { id: 'preset_o1_easy_does_it', dripperId: 'builtin_o1_babyo', name: 'Easy Does It O1', author: 'Orea',
+   brewType: '핫', dose: 16, water: 260, ratio: '1:16.3', temp: 94, grindMicron: 720,
+   bottom: '', meloDrip: '미사용', targetTime: '~3:40',
+   notes: '5단 펄스 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '48g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '53g', action: '1차 푸어 — 센터 원형' },
+     { time: '1:15', amount: '53g', action: '2차 푸어 — 센터 → 바깥' },
+     { time: '1:45', amount: '53g', action: '3차 푸어 — 센터 → 바깥' },
+     { time: '2:15', amount: '53g', action: '4차 푸어 — 센터 마무리' },
+   ]
+ },
+ // The Dara O1: 3-pour (더 작은 드리퍼에 맞게 단축)
+ { id: 'preset_o1_the_dara', dripperId: 'builtin_o1_babyo', name: 'The Dara O1', author: 'Orea',
+   brewType: '핫', dose: 12, water: 200, ratio: '1:16.7', temp: 92, grindMicron: 660,
+   bottom: '', meloDrip: '미사용', targetTime: '~3:30',
+   notes: '3단 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '36g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '82g', action: '1차 푸어 — 센터에서 원형' },
+     { time: '1:30', amount: '82g', action: '2차 푸어 — 센터 마무리' },
+   ]
+ },
+ // The Fine O1: 3-pour 고추출 (미세분쇄)
+ { id: 'preset_o1_the_fine', dripperId: 'builtin_o1_babyo', name: 'The Fine O1', author: 'Orea',
+   brewType: '핫', dose: 12, water: 200, ratio: '1:16.7', temp: 90, grindMicron: 465,
+   bottom: '', meloDrip: '미사용', targetTime: '~4:30',
+   notes: '3단 고추출 / Orea 공식',
+   pourGuide: [
+     { time: '0:00', amount: '36g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:45', amount: '82g', action: '1차 푸어 — 천천히 센터' },
+     { time: '2:00', amount: '82g', action: '2차 푸어 — 센터 마무리' },
+   ]
+ },
+
+ // ─── Hario V60 (1) ───
+ // 용챔 V60 10g: 용챔 유튜브 기반
+ { id: 'preset_v60_yongchamp_10g', dripperId: 'builtin_v60', name: '용챔 V60 10g', author: '용챔',
+   brewType: '핫', dose: 10, water: 170, ratio: '1:17', temp: 96, grindMicron: 840,
+   bottom: '', meloDrip: '미사용', targetTime: '~1:40',
+   notes: '투과식 / 정형용 바리스타',
+   pourGuide: [
+     { time: '0:00', amount: '30g', action: '블루밍 — 원두 적시고 스월 1회' },
+     { time: '0:30', amount: '70g', action: '1차 푸어 — 센터에서 원형' },
+     { time: '0:50', amount: '70g', action: '2차 푸어 — 센터 마무리' },
+   ]
+ },
+
+ // ─── Hario Switch (2) ───
+ // 용챔 Switch 17g: 블룸 50g (스위치 닫음) → 40초 열고 70 → 1:20에 90 → 1:50에 50
+ { id: 'preset_switch_yongchamp_17g', dripperId: 'builtin_switch', name: '용챔 Switch 17g', author: '용챔',
+   brewType: '핫', dose: 17, water: 260, ratio: '1:15.3', temp: 95, grindMicron: 870,
+   bottom: '', meloDrip: '미사용', targetTime: '~2:30',
+   notes: '침출 블룸 → 투과 / 정형용 바리스타',
+   pourGuide: [
+     { time: '0:00', amount: '50g', action: '블루밍 — 스위치 닫은 채 50g, 원두 적시고 대기' },
+     { time: '0:40', amount: '70g', action: '스위치 열기 → 1차 푸어, 센터에서 바깥 원형' },
+     { time: '1:20', amount: '90g', action: '2차 푸어 — 센터에서 원형' },
+     { time: '1:50', amount: '50g', action: '3차 푸어 — 센터 마무리' },
+   ]
+ },
+ // 용챔 Switch 20g: 비슷한 방식, 대용량
+ { id: 'preset_switch_yongchamp_20g', dripperId: 'builtin_switch', name: '용챔 Switch 20g', author: '용챔',
+   brewType: '핫', dose: 20, water: 300, ratio: '1:15', temp: 94, grindMicron: 780,
+   bottom: '', meloDrip: '미사용', targetTime: '~2:30',
+   notes: '약배전 기준 / 정형용 바리스타',
+   pourGuide: [
+     { time: '0:00', amount: '60g', action: '블루밍 — 스위치 닫은 채 60g, 원두 적시고 대기' },
+     { time: '0:40', amount: '80g', action: '스위치 열기 → 1차 푸어, 센터 원형' },
+     { time: '1:20', amount: '100g', action: '2차 푸어 — 센터에서 원형' },
+     { time: '1:50', amount: '60g', action: '3차 푸어 — 센터 마무리' },
+   ]
+ },
+];
+
+// ─── Preset Helpers ───
+// v2.5.6.4: 빌트인 프리셋(RECIPE_PRESETS) + 사용자 템플릿(data.userPresets)을 통합 관리.
+// 내부 식별은 'preset'으로 유지, 사용자 노출 문구만 "레시피 템플릿"으로 표기.
+// 사용자 템플릿은 id가 'user_preset_'로 시작. isUserPreset(id)로 구분.
+
+// HTML 이스케이프 유틸 (사용자 입력 값을 innerHTML에 꽂을 때 보호)
+function escapeHtml(s) {
+ if (s == null) return '';
+ return String(s)
+   .replace(/&/g, '&amp;')
+   .replace(/</g, '&lt;')
+   .replace(/>/g, '&gt;')
+   .replace(/"/g, '&quot;')
+   .replace(/'/g, '&#39;');
+}
+
+function isUserPreset(id) {
+ return typeof id === 'string' && id.indexOf('user_preset_') === 0;
+}
+// 빌트인 + 사용자 템플릿 전체 반환 (숨김 무관)
+function getAllPresets() {
+ const user = Array.isArray(data.userPresets) ? data.userPresets : [];
+ return RECIPE_PRESETS.concat(user);
+}
+// 표시 가능한 프리셋만 반환 (data.hiddenPresets 제외; 사용자 템플릿은 숨김 적용 안 함 — 직접 삭제)
+function getVisiblePresets() {
+ const hidden = data.hiddenPresets || [];
+ const builtinVisible = RECIPE_PRESETS.filter(p => !hidden.includes(p.id));
+ const user = Array.isArray(data.userPresets) ? data.userPresets : [];
+ return builtinVisible.concat(user);
+}
+// 특정 드리퍼의 visible 프리셋 (빌트인 + 사용자 통합)
+function getPresetsByDripper(dripperId) {
+ return getVisiblePresets().filter(p => p.dripperId === dripperId);
+}
+// id로 프리셋 조회 — 빌트인/사용자 모두 조회 (숨김 여부 무관, 파생 추적용)
+function getPresetById(id) {
+ if (!id) return null;
+ const fromBuiltin = RECIPE_PRESETS.find(p => p.id === id);
+ if (fromBuiltin) return fromBuiltin;
+ const user = Array.isArray(data.userPresets) ? data.userPresets : [];
+ return user.find(p => p.id === id) || null;
+}
+function hidePreset(id) {
+ // 사용자 템플릿은 숨김 개념이 없으므로 차단
+ if (isUserPreset(id)) return;
+ if (!Array.isArray(data.hiddenPresets)) data.hiddenPresets = [];
+ if (!data.hiddenPresets.includes(id)) data.hiddenPresets.push(id);
+ saveData();
+}
+function restorePreset(id) {
+ if (!Array.isArray(data.hiddenPresets)) return;
+ data.hiddenPresets = data.hiddenPresets.filter(x => x !== id);
+ saveData();
+}
+
+// v2.5.6.4: 사용자 레시피 템플릿 CRUD
+function addUserPreset(preset) {
+ if (!Array.isArray(data.userPresets)) data.userPresets = [];
+ const id = 'user_preset_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+ const now = new Date().toISOString();
+ const obj = Object.assign({}, preset, { id, createdAt: now });
+ data.userPresets.push(obj);
+ saveData();
+ return obj;
+}
+function updateUserPreset(id, patch) {
+ if (!Array.isArray(data.userPresets)) return null;
+ const p = data.userPresets.find(x => x.id === id);
+ if (!p) return null;
+ Object.assign(p, patch);
+ saveData();
+ return p;
+}
+function deleteUserPreset(id) {
+ if (!Array.isArray(data.userPresets)) return;
+ data.userPresets = data.userPresets.filter(x => x.id !== id);
+ saveData();
+}
+
+// ─── Recipe Grind Helpers (v2.5.6.3) ───
+// 레시피는 grindMicron(μm) 기반. 표시/입력은 활성 그라인더 클릭수로 환산.
+// 기존 recipe.grind(클릭수) 필드는 legacy 호환용으로 유지.
+
+// 레시피에서 활성 그라인더 기준 클릭수 계산 (표시용)
+// 1) grindMicron이 있으면 그것을 환산
+// 2) 없으면 legacy grind(C60 32클릭 같은 값) × 21μm 로 가정 후 환산
+// 3) 둘 다 없으면 null
+function getRecipeDisplayClicks(recipe) {
+ if (!recipe) return null;
+ const g = getActiveGrinder();
+ if (!g) return null;
+ let micron = null;
+ if (recipe.grindMicron != null && recipe.grindMicron !== '') {
+   micron = parseInt(recipe.grindMicron);
+ } else if (recipe.grind != null && recipe.grind !== '') {
+   // Legacy: assume C60 reference (21μm/click)
+   micron = parseInt(recipe.grind) * 21;
+ }
+ if (micron == null || isNaN(micron)) return null;
+ return Math.round(micron / g.micronPerClick);
+}
+// 클릭수 입력 → μm 변환 (저장용). 기준 그라인더: 활성.
+function clicksInputToMicron(clicks) {
+ const g = getActiveGrinder();
+ if (!g || clicks == null || clicks === '') return null;
+ return Math.round(parseInt(clicks) * g.micronPerClick);
+}
+// Matthew 엔진은 C60 기준 클릭수를 반환 → μm 변환은 항상 C60(21μm) 기준으로.
+function matthewClicksToMicron(clicks) {
+ if (clicks == null || clicks === '') return null;
+ return Math.round(parseInt(clicks) * 21);
+}
+
+// ─── Grinder Helpers ───
+function getAllGrinders() {
+ // Returns active + hidden flags resolved. Presets + user-added merged.
+ const hidden = data.hiddenGrinders || [];
+ const userAdded = data.grinders || [];
+ const presets = GRINDER_PRESETS.map(g => ({ ...g, hidden: hidden.includes(g.id) }));
+ const users   = userAdded.map(g => ({ ...g, builtin: false, hidden: hidden.includes(g.id) }));
+ return [...presets, ...users];
+}
+function getGrinderById(id) {
+ if (!id) return null;
+ return getAllGrinders().find(g => g.id === id) || null;
+}
+function getActiveGrinder() {
+ const id = data.activeGrinderId || 'builtin_c60';
+ return getGrinderById(id) || getGrinderById('builtin_c60');
+}
+// Click ↔ μm conversions (both directions)
+function clicksToMicrons(clicks, grinderId) {
+ const g = grinderId ? getGrinderById(grinderId) : getActiveGrinder();
+ if (!g || clicks == null) return null;
+ return Math.round(clicks * g.micronPerClick);
+}
+function micronsToClicks(microns, grinderId) {
+ const g = grinderId ? getGrinderById(grinderId) : getActiveGrinder();
+ if (!g || microns == null) return null;
+ return Math.round((microns / g.micronPerClick) * 10) / 10; // 0.1 click resolution
+}
+
+// ─── Dripper Helpers ───
+function getAllDrippers() {
+ const hidden = data.hiddenDrippers || [];
+ const userAdded = data.drippers || [];
+ const builtins = DRIPPER_BUILTINS.map(d => ({ ...d, hidden: hidden.includes(d.id) }));
+ const users = userAdded.map(d => ({ ...d, builtin: false, hidden: hidden.includes(d.id) }));
+ return [...builtins, ...users];
+}
+function getDripperById(id) {
+ if (!id) return null;
+ return getAllDrippers().find(d => d.id === id) || null;
+}
+
+// v2.5.6.3.3: 드리퍼별 거치형 멜로드립 무게
+// 빌트인 드리퍼: data.dripperSettings[id].meloWeight 에 user override 저장
+// 사용자 드리퍼: dripper 객체 자체의 meloWeight 필드 사용
+// 없으면 null 반환.
+function getDripperMeloWeight(id) {
+ if (!id) return null;
+ const d = getDripperById(id);
+ if (!d) return null;
+ // 빌트인: dripperSettings에서 조회
+ if (d.builtin) {
+   const s = (data.dripperSettings || {})[id];
+   if (s && typeof s.meloWeight === 'number' && s.meloWeight > 0) return s.meloWeight;
+   return null;
+ }
+ // 사용자 드리퍼
+ if (typeof d.meloWeight === 'number' && d.meloWeight > 0) return d.meloWeight;
+ return null;
+}
+// 드리퍼에 거치형 무게 저장. null이면 제거.
+function setDripperMeloWeight(id, weight) {
+ if (!id) return;
+ const d = getDripperById(id);
+ if (!d) return;
+ if (d.builtin) {
+   if (!data.dripperSettings || typeof data.dripperSettings !== 'object') data.dripperSettings = {};
+   if (!data.dripperSettings[id]) data.dripperSettings[id] = {};
+   if (weight == null) {
+     delete data.dripperSettings[id].meloWeight;
+   } else {
+     data.dripperSettings[id].meloWeight = weight;
+   }
+ } else {
+   const userDripper = (data.drippers || []).find(x => x.id === id);
+   if (userDripper) userDripper.meloWeight = weight;
+ }
+ saveData();
+}
+// 레시피의 dripper(이름) 문자열 → 드리퍼 id 조회 (fuzzy)
+function findDripperIdByName(dripperName) {
+ if (!dripperName) return null;
+ const cleanName = dripperName.split('—')[0].trim();
+ const all = getAllDrippers();
+ // 정확 일치 먼저
+ let match = all.find(d => d.name === cleanName);
+ if (match) return match.id;
+ // 부분 일치
+ match = all.find(d => cleanName.includes(d.name) || d.name.includes(cleanName));
+ return match ? match.id : null;
+}
+
+// Returns effective click range for a grinder: user override > preset default > {28,34}
+function getGrinderRange(grinderId) {
+ const id = grinderId || (data.activeGrinderId || 'builtin_c60');
+ const override = (data.grinderSettings || {})[id];
+ if (override && typeof override.min === 'number' && typeof override.max === 'number') {
+   return { min: override.min, max: override.max };
+ }
+ const g = getGrinderById(id);
+ if (g && g.defaultMin != null && g.defaultMax != null) {
+   return { min: g.defaultMin, max: g.defaultMax };
+ }
+ return { min: 28, max: 34 };
+}
+
+function setGrinderRange(grinderId, min, max) {
+ if (!data.grinderSettings || typeof data.grinderSettings !== 'object') data.grinderSettings = {};
+ data.grinderSettings[grinderId] = { min: parseInt(min), max: parseInt(max) };
+ // If this is the active grinder, sync legacy clickRange for backward compat
+ if (grinderId === (data.activeGrinderId || 'builtin_c60')) {
+   data.clickRange = { min: parseInt(min), max: parseInt(max) };
+ }
+ saveData();
+}
+
+// Update the top click-bar label to reflect active grinder name
+function updateClickBarLabel() {
+ const el = document.getElementById('clickBarLabel');
+ if (!el) return;
+ const g = getActiveGrinder();
+ if (!g) { el.textContent = 'Clicks'; return; }
+ // Prefer model name to keep it short; fall back to brand+model if very short
+ const text = g.model + ' Clicks';
+ el.textContent = text;
+}
+
 let data = loadData();
 let currentBrewRating = 0;
 let selectedRecipeId = null;
@@ -1267,6 +2031,10 @@ let pickCategory = 'all';
 let pickCache = {};
 let beanFilter = 'active';
 let recipeTypeFilter = 'all';
+// v2.5.6.5: 클릭모달에서 미리보기 중인 그라인더 ID (null이면 활성 그라인더 사용)
+let previewGrinderId = null;
+// v2.5.6.5: 히스토리 펼침 상태
+let clickHistoryExpanded = false;
 
 function loadData() {
  const saved = localStorage.getItem(DB_KEY);
@@ -1276,9 +2044,81 @@ function loadData() {
    if (!d.wishlist) d.wishlist = [];
    // Migrate: strip 'g' suffix from bean weight
    d.beans.forEach(b => { if (b.weight && typeof b.weight === 'string') b.weight = b.weight.replace(/\s*g$/i, ''); });
+   // v2.5.6.1 — additive migrations (non-destructive)
+   if (!Array.isArray(d.grinders)) d.grinders = [];
+   if (!Array.isArray(d.drippers)) d.drippers = [];
+   if (!Array.isArray(d.hiddenGrinders)) d.hiddenGrinders = [];
+   if (!Array.isArray(d.hiddenDrippers)) d.hiddenDrippers = [];
+   if (!d.activeGrinderId) d.activeGrinderId = 'builtin_c60';
+   if (!d.grinderSettings || typeof d.grinderSettings !== 'object') d.grinderSettings = {};
+   // Seed existing clickRange onto C60 (first-time migration) so user's current range is preserved
+   if (d.clickRange && !d.grinderSettings['builtin_c60']) {
+     d.grinderSettings['builtin_c60'] = { min: d.clickRange.min, max: d.clickRange.max };
+   }
+   // v2.5.6.2 — recipe source tier migration (non-destructive, internal only)
+   // All legacy recipes become 'matthew'. `parentPresetId` reserved for preset-derived recipes.
+   if (Array.isArray(d.recipes)) {
+     d.recipes.forEach(r => {
+       if (!r.source) r.source = 'matthew';
+     });
+   }
+   // v2.5.6.3 — grinder independence for recipes + grinder stamp for brews
+   // 레시피: grindMicron 필드 추가. 기존 grind(클릭수)는 C60 기준으로 간주해 21μm 곱 환산.
+   //        recipe.grind 필드는 legacy 호환용으로 유지 (삭제하지 않음).
+   if (Array.isArray(d.recipes)) {
+     d.recipes.forEach(r => {
+       if ((r.grindMicron == null || r.grindMicron === '') && r.grind != null && r.grind !== '') {
+         const n = parseInt(r.grind);
+         if (!isNaN(n)) r.grindMicron = n * 21;
+       }
+     });
+   }
+   // 추출 기록: grinderId stamp (없으면 C60 자동 할당 — Matthew는 지금까지 C60만 사용).
+   if (Array.isArray(d.brews)) {
+     d.brews.forEach(b => {
+       if (!b.grinderId) b.grinderId = 'builtin_c60';
+     });
+   }
+   // 프리셋 숨김 배열 (새로 추가되는 v2.5.6.3 스키마)
+   if (!Array.isArray(d.hiddenPresets)) d.hiddenPresets = [];
+   // v2.5.6.4: 사용자 레시피 템플릿 배열
+   if (!Array.isArray(d.userPresets)) d.userPresets = [];
+   // v2.5.6.3.3 — 드리퍼별 설정 오브젝트 + 레거시 멜로드립 무게 이전
+   if (!d.dripperSettings || typeof d.dripperSettings !== 'object') d.dripperSettings = {};
+   // 1회 마이그레이션: fc_meloDripWeightOrea → builtin_orea_v4.meloWeight
+   // 플래그로 중복 실행 방지. 이전 후 레거시 키는 제거.
+   if (!d._meloMigratedV3) {
+     const legacyOrea = parseFloat(localStorage.getItem('fc_meloDripWeightOrea')) || parseFloat(localStorage.getItem('fc_meloDripWeight')) || 0;
+     if (legacyOrea > 0) {
+       if (!d.dripperSettings['builtin_orea_v4']) d.dripperSettings['builtin_orea_v4'] = {};
+       // 이미 사용자가 설정한 값이 있으면 건드리지 않음
+       if (d.dripperSettings['builtin_orea_v4'].meloWeight == null) {
+         d.dripperSettings['builtin_orea_v4'].meloWeight = legacyOrea;
+       }
+     }
+     d._meloMigratedV3 = true;
+     // 레거시 키 제거 (Matthew 허락: 아무도 안 쓰고, 데이터는 드리퍼로 이전됨)
+     localStorage.removeItem('fc_meloDripWeight');
+     localStorage.removeItem('fc_meloDripWeightOrea');
+     localStorage.removeItem('fc_meloDripWeightOriginal');
+   }
    return d;
  }
- return { currentClicks: null, currentBean: '', clickRange: { min: 28, max: 34 }, clickHistory: [], recipes: [], brews: [], beans: [], wishlist: [] };
+ return {
+   currentClicks: null, currentBean: '', clickRange: { min: 28, max: 34 },
+   clickHistory: [], recipes: [], brews: [], beans: [], wishlist: [],
+   // v2.5.6.1 defaults
+   grinders: [], drippers: [], hiddenGrinders: [], hiddenDrippers: [],
+   activeGrinderId: 'builtin_c60',
+   grinderSettings: {},
+   // v2.5.6.3 defaults
+   hiddenPresets: [],
+   // v2.5.6.4 defaults
+   userPresets: [],
+   // v2.5.6.3.3 defaults
+   dripperSettings: {},
+   _meloMigratedV3: true
+ };
 }
 
 function saveData() { localStorage.setItem(DB_KEY, JSON.stringify(data)); }
@@ -1297,13 +2137,23 @@ function switchTab(el) {
 }
 
 // ─── Click Tracker ───
+// v2.5.6.5: 클릭모달에서 현재 미리보기 중인 그라인더 ID 반환 (없으면 활성)
+function getClickModalGrinderId() {
+ return previewGrinderId || (data.activeGrinderId || 'builtin_c60');
+}
+
 function renderClickGrid() {
  const grid = document.getElementById('clickGrid');
  if (!grid) return;
  grid.innerHTML = '';
- for (let i = data.clickRange.min; i <= data.clickRange.max; i++) {
+ // v2.5.6.5: 선택 그라인더의 범위 기준
+ const gId = getClickModalGrinderId();
+ const range = getGrinderRange(gId);
+ // 현재 클릭값은 그라인더별 저장이 아니므로 활성 그라인더 == 미리보기일 때만 active 표시
+ const isActivePreview = (gId === (data.activeGrinderId || 'builtin_c60'));
+ for (let i = range.min; i <= range.max; i++) {
    const btn = document.createElement('button');
-   btn.className = 'click-btn' + (data.currentClicks === i ? ' active' : '');
+   btn.className = 'click-btn' + (isActivePreview && data.currentClicks === i ? ' active' : '');
    btn.textContent = i;
    btn.onclick = () => setClicks(i);
    grid.appendChild(btn);
@@ -1313,21 +2163,168 @@ function renderClickGrid() {
 function setClicks(n) {
  const beanEl = document.getElementById('clickBeanInput');
  const bean = beanEl ? beanEl.value.trim() : '';
+ // v2.5.6.5: 미리보기 중인 그라인더가 활성이 아니면, 먼저 전환하고 클릭수 저장
+ const targetGrinderId = getClickModalGrinderId();
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ const didSwitch = (targetGrinderId !== activeId);
+ if (didSwitch) {
+   // 자동 전환 (별도 [전환] 버튼 누르지 않아도 클릭값 선택만으로 전환 의도 명확)
+   data.activeGrinderId = targetGrinderId;
+   const range = getGrinderRange(targetGrinderId);
+   data.clickRange = { min: range.min, max: range.max };
+   const minEl = document.getElementById('clickMin');
+   const maxEl = document.getElementById('clickMax');
+   if (minEl) minEl.value = range.min;
+   if (maxEl) maxEl.value = range.max;
+   updateClickBarLabel();
+   previewGrinderId = null; // 이제 활성 == 미리보기
+ }
  data.currentClicks = n; data.currentBean = bean;
- data.clickHistory.unshift({ clicks: n, bean, date: new Date().toISOString() });
+ const gIdForHistory = data.activeGrinderId || 'builtin_c60';
+ data.clickHistory.unshift({ clicks: n, bean, date: new Date().toISOString(), grinderId: gIdForHistory });
  if (data.clickHistory.length > 100) data.clickHistory.pop();
  saveData(); updateClickBar(); renderClickGrid(); renderClickHistory();
+ renderClickGrinderPicker(); // 전환 후 picker UI 갱신
+ updateClickGrinderSwitchBtn();
+ // v2.5.6.5: 자동 전환이 일어난 경우 설정 → 그라인더 관리 화면도 동기화 + 레시피 재렌더
+ if (didSwitch && typeof renderGrinderList === 'function') renderGrinderList();
+ if (didSwitch && typeof renderRecipes === 'function') renderRecipes();
 }
 
 function updateClickBar() {
  document.getElementById('currentClickDisplay').textContent = data.currentClicks ?? '--';
+ updateClickBarLabel();
 }
 
 function renderClickHistory() {
  const c = document.getElementById('clickHistory');
  if (!c) return;
- if (!data.clickHistory.length) { c.innerHTML = '<div class="empty-state"><p>아직 기록이 없습니다</p></div>'; return; }
- c.innerHTML = data.clickHistory.slice(0, 20).map(h => `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}</div><div class="click-history-date">${formatDateTime(h.date)}</div></div>`).join('');
+ // v2.5.6.5: 그라인더가 2개 이상이면 선택 그라인더 기준 필터, 1개면 전체
+ const visibleGrinders = getAllGrinders().filter(g => !g.hidden);
+ const isMulti = visibleGrinders.length >= 2;
+ let list = data.clickHistory;
+ if (isMulti) {
+   const gId = getClickModalGrinderId();
+   list = data.clickHistory.filter(h => (h.grinderId || 'builtin_c60') === gId);
+ }
+ // 더보기 버튼 제어
+ const moreWrap = document.getElementById('clickHistoryMoreWrap');
+ const moreBtn = document.getElementById('clickHistoryMoreBtn');
+ if (!list.length) {
+   c.innerHTML = '<div class="empty-state"><p>아직 기록이 없습니다</p></div>';
+   if (moreWrap) moreWrap.style.display = 'none';
+   return;
+ }
+ let sliced;
+ if (isMulti) {
+   sliced = clickHistoryExpanded ? list.slice(0, 100) : list.slice(0, 5);
+   if (moreWrap) {
+     moreWrap.style.display = list.length > 5 ? '' : 'none';
+     if (moreBtn) moreBtn.textContent = clickHistoryExpanded ? '접기' : '더보기';
+   }
+ } else {
+   sliced = list.slice(0, 20);
+   if (moreWrap) moreWrap.style.display = 'none';
+ }
+ c.innerHTML = sliced.map(h => {
+   const gId = h.grinderId || 'builtin_c60';
+   const g = getGrinderById(gId);
+   const gName = g ? g.model : '';
+   // 싱글 그라인더 모드에서는 그라인더명 표시(기존 유지), 멀티에서는 이미 필터됐으니 생략
+   const grinderLabel = (!isMulti && gName) ? `<div class="click-history-bean" style="color:var(--text-tertiary);font-size:11px;">${gName}</div>` : '';
+   return `<div class="click-history-item"><div><div class="click-history-clicks">${h.clicks}</div>${h.bean ? `<div class="click-history-bean">${h.bean}</div>` : ''}${grinderLabel}</div><div class="click-history-date">${formatDateTime(h.date)}</div></div>`;
+ }).join('');
+}
+
+// v2.5.6.5: 그라인더 picker 렌더 (숨기지 않은 그라인더 버튼 나열)
+function renderClickGrinderPicker() {
+ const wrap = document.getElementById('clickGrinderPickerWrap');
+ const picker = document.getElementById('clickGrinderPicker');
+ if (!wrap || !picker) return;
+ const visibleGrinders = getAllGrinders().filter(g => !g.hidden);
+ if (visibleGrinders.length < 2) {
+   wrap.style.display = 'none';
+   return;
+ }
+ wrap.style.display = '';
+ const selectedId = getClickModalGrinderId();
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ picker.innerHTML = visibleGrinders.map(g => {
+   const isSelected = g.id === selectedId;
+   const isActive = g.id === activeId;
+   const dot = isActive ? '<span class="active-dot"></span>' : '';
+   return `<button class="click-grinder-btn${isSelected ? ' selected' : ''}" onclick="selectClickGrinder('${g.id}')">${dot}${escapeHtml(g.model)}</button>`;
+ }).join('');
+}
+
+// v2.5.6.5: 그라인더 버튼 선택 → 미리보기 모드 전환
+function selectClickGrinder(id) {
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ previewGrinderId = (id === activeId) ? null : id;
+ clickHistoryExpanded = false; // 그라인더 전환 시 더보기 상태 리셋
+ renderClickGrinderPicker();
+ renderClickGrid();
+ renderClickHistory();
+ updateClickGrinderSwitchBtn();
+}
+
+// v2.5.6.5: [전환] 버튼 노출 제어 (선택 그라인더 ≠ 활성 그라인더일 때만)
+function updateClickGrinderSwitchBtn() {
+ const wrap = document.getElementById('clickGrinderSwitchWrap');
+ if (!wrap) return;
+ const visibleGrinders = getAllGrinders().filter(g => !g.hidden);
+ if (visibleGrinders.length < 2) {
+   wrap.style.display = 'none';
+   return;
+ }
+ const selectedId = getClickModalGrinderId();
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ wrap.style.display = (selectedId !== activeId) ? '' : 'none';
+}
+
+// v2.5.6.5: [전환] 버튼 클릭 → 활성 그라인더 변경 (모달은 그대로)
+function confirmGrinderSwitch() {
+ const targetId = getClickModalGrinderId();
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ if (targetId === activeId) return;
+ const g = getGrinderById(targetId);
+ if (!g) return;
+ data.activeGrinderId = targetId;
+ const range = getGrinderRange(targetId);
+ data.clickRange = { min: range.min, max: range.max };
+ const minEl = document.getElementById('clickMin');
+ const maxEl = document.getElementById('clickMax');
+ if (minEl) minEl.value = range.min;
+ if (maxEl) maxEl.value = range.max;
+ saveData();
+ previewGrinderId = null; // 이제 활성 == 미리보기
+ updateClickBar();
+ updateClickBarLabel();
+ renderClickGrinderPicker();
+ renderClickGrid();
+ renderClickHistory();
+ updateClickGrinderSwitchBtn();
+ if (typeof renderGrinderList === 'function') renderGrinderList();
+ // v2.5.6.5: 레시피 카드의 클릭수 표시 재렌더 (활성 그라인더 기준 동적 환산)
+ if (typeof renderRecipes === 'function') renderRecipes();
+ showToast(`${g.model}(으)로 전환됐습니다`);
+}
+
+// v2.5.6.5: 히스토리 더보기/접기 토글
+function toggleClickHistoryExpanded() {
+ clickHistoryExpanded = !clickHistoryExpanded;
+ renderClickHistory();
+}
+
+// v2.5.6.5: 클릭모달 오픈 전용 핸들러 — 미리보기/더보기 상태 초기화 후 렌더
+function openClickModal() {
+ previewGrinderId = null;
+ clickHistoryExpanded = false;
+ renderClickGrinderPicker();
+ renderClickGrid();
+ renderClickHistory();
+ updateClickGrinderSwitchBtn();
+ openModal('clickModal');
 }
 
 // ─── Bean Management ───
@@ -1593,12 +2590,18 @@ function createRecipeFromBean() {
  openRecipeGenModal(b);
 }
 
-// ─── Recipe Generator Engine ───
-let genState = { beanId: '', brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용' };
+// ─── Recipe Generator (v2.5.6.3 — 2-stage flow) ───
+// genState: Stage 2a(Matthew 엔진)에서 사용하는 기존 파라미터 + 현재 선택한 드리퍼 id.
+let genState = { beanId: '', brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용', dripperId: '' };
+let genSelectedDripperId = '';
+// v2.5.6.3.1: Stage 1에서 선택한 멜로드립 값. 프리셋/엔진/AI 모두 공통.
+let genMeloDripStage1 = '미사용';
 
 function openRecipeGenModal(bean) {
- genState = { beanId: bean.id, brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용' };
- document.getElementById('recipeGenTitle').textContent = `${bean.name} 레시피 생성`;
+ genState = { beanId: bean.id, brewType: '핫', dripper: 'V4', dose: 16, flavor: '밸런스', melo: '미사용', dripperId: '' };
+ genSelectedDripperId = '';
+ genMeloDripStage1 = '미사용';
+ document.getElementById('recipeGenTitle').textContent = `${bean.name} 레시피 만들기`;
  // Bean info display
  const info = [];
  if (bean.roastLevel) info.push(bean.roastLevel);
@@ -1608,30 +2611,258 @@ function openRecipeGenModal(bean) {
  document.getElementById('recipeGenBeanInfo').innerHTML = info.length
    ? `<div style="font-weight:600;margin-bottom:4px;">${bean.name}</div><div style="color:var(--text-secondary);">${info.join(' · ')}</div>`
    : `<div style="font-weight:600;">${bean.name}</div>`;
- // Reset toggles
- setGenBrewType('핫'); setGenDripper('V4'); setGenFlavor('밸런스'); setGenMelo('미사용'); setGenDose(16);
- // Validation warnings
  if (!bean.roastLevel || !bean.processing) {
    document.getElementById('recipeGenBeanInfo').innerHTML += `<div style="color:var(--warning);margin-top:8px;font-size:12px;">⚠ ${!bean.roastLevel ? '로스팅 레벨' : ''}${!bean.roastLevel && !bean.processing ? ', ' : ''}${!bean.processing ? '프로세싱' : ''} 미입력 — 원두 편집에서 추가해주세요</div>`;
  }
- updateGenPreview();
+ // Stage 1 진입: 드리퍼 리스트 렌더 + 멜로드립/레시피 목록 숨김
+ renderGenStage1DripperList();
+ document.getElementById('genStage1').style.display = '';
+ document.getElementById('genMeloDripStage1Wrap').style.display = 'none';
+ document.getElementById('genRecipePickerWrap').style.display = 'none';
+ document.getElementById('genStage2Matthew').style.display = 'none';
+ document.getElementById('genStage2AiPaste').style.display = 'none';
+ // 멜로드립 토글 초기화
+ setGenMeloDripStage1('미사용');
  openModal('recipeGenModal');
 }
 
+// Stage 1 멜로드립 토글 핸들러
+function setGenMeloDripStage1(v) {
+ genMeloDripStage1 = v;
+ document.querySelectorAll('#genMeloDripStage1Toggle .toggle-opt').forEach(btn => {
+   const map = {'미사용':'미사용','오레아 멜로드립':'거치형','핸들 멜로드립':'핸들'};
+   btn.classList.toggle('active', map[v] === btn.textContent);
+ });
+ // v2.5.6.3.3: 거치형일 때만 블루밍 반영 체크박스 노출
+ const bloomWrap = document.getElementById('genBloomIncludeWrap');
+ if (bloomWrap) {
+   bloomWrap.style.display = (v === '오레아 멜로드립') ? '' : 'none';
+   if (v !== '오레아 멜로드립') {
+     const chk = document.getElementById('genBloomIncludeCheck');
+     if (chk) chk.checked = false;
+   }
+ }
+ // Stage 1에서 이미 드리퍼/레시피 목록이 떠있다면, 레시피 카드 표시 갱신 (meloDrip 표기 반영)
+ if (genSelectedDripperId) renderGenStage1RecipePicker(genSelectedDripperId);
+}
+
+// Stage 1-A: 드리퍼 선택 리스트
+function renderGenStage1DripperList() {
+ const visible = getAllDrippers().filter(d => !d.hidden);
+ const container = document.getElementById('genDripperList');
+ if (!container) return;
+ container.innerHTML = visible.map(d => {
+   const sel = genSelectedDripperId === d.id ? 'selected' : '';
+   const brandPart = d.brand ? `<span class="preset-picker-card-author">${d.brand}</span>` : '';
+   return `<div class="preset-picker-card ${sel}" onclick="onGenDripperPicked('${d.id}')">
+     <div class="preset-picker-card-title">${d.name}</div>
+     ${brandPart}
+   </div>`;
+ }).join('') || '<div style="color:var(--text-tertiary);font-size:13px;">사용 가능한 드리퍼가 없습니다. 설정에서 추가해 주세요.</div>';
+}
+
+// Stage 1-B: 드리퍼 선택 후 → 멜로드립 토글 + 해당 드리퍼의 레시피 목록 노출
+function onGenDripperPicked(dripperId) {
+ genSelectedDripperId = dripperId;
+ renderGenStage1DripperList();
+ document.getElementById('genMeloDripStage1Wrap').style.display = '';
+ renderGenStage1RecipePicker(dripperId);
+ document.getElementById('genRecipePickerWrap').style.display = '';
+}
+
+// Stage 1-C: 드리퍼별 레시피 목록 (프리셋 + Matthew 엔진[V4/BabyO] + AI 붙여넣기[토글 ON])
+function renderGenStage1RecipePicker(dripperId) {
+ const container = document.getElementById('genRecipePicker');
+ if (!container) return;
+ const presets = getPresetsByDripper(dripperId);
+ const isMatthewEligible = (dripperId === 'builtin_orea_v4' || dripperId === 'builtin_o1_babyo');
+ const aiOn = isAiPasteEnabled();
+
+ let html = '';
+ // v2.5.6.5.1: Matthew 엔진 카드를 프리셋보다 먼저 (V4/BabyO만)
+ if (isMatthewEligible) {
+   const isV4 = (dripperId === 'builtin_orea_v4');
+   html += `<div class="preset-picker-card" onclick="enterMatthewEngine('${isV4 ? 'V4' : 'Baby O'}')">
+     <div class="preset-picker-card-title">Matthew<span class="preset-picker-card-badge">자동 생성</span></div>
+     <div class="preset-picker-card-author">원두 정보 기반 맞춤 레시피</div>
+     <div class="preset-picker-card-meta">도즈 · 맛방향 · 멜로드립 조정 가능</div>
+   </div>`;
+ }
+ // 프리셋 카드
+ presets.forEach(p => {
+   const activeG = getActiveGrinder();
+   const clicks = activeG ? Math.round(p.grindMicron / activeG.micronPerClick) : null;
+   const metaParts = [];
+   metaParts.push(`${p.dose}g / ${p.water}g${p.ratio ? ' (' + p.ratio + ')' : ''}`);
+   if (p.temp) metaParts.push(`${p.temp}°C`);
+   if (clicks != null && activeG) metaParts.push(`${activeG.model} ${clicks}클릭`);
+   if (p.targetTime) metaParts.push(p.targetTime);
+   html += `<div class="preset-picker-card" onclick="selectPresetAndCreate('${p.id}')">
+     <div class="preset-picker-card-title">${p.name}<span class="preset-picker-card-badge">프리셋</span></div>
+     ${p.author ? `<div class="preset-picker-card-author">${p.author}</div>` : ''}
+     <div class="preset-picker-card-meta">${metaParts.join(' · ')}</div>
+   </div>`;
+ });
+ // AI 붙여넣기 카드 (토글 ON일 때만, 맨 아래)
+ if (aiOn) {
+   html += `<div class="preset-picker-card" onclick="enterAiPaste()">
+     <div class="preset-picker-card-title">AI 붙여넣기<span class="preset-picker-card-badge">텍스트</span></div>
+     <div class="preset-picker-card-meta">레시피 전문을 붙여넣어 자동 추출</div>
+   </div>`;
+ }
+ // v2.5.6.4: "+ 새 템플릿 추가" 진입점 — 빠른 등록 후 즉시 사용 가능
+ html += `<div class="preset-picker-card" onclick="openPresetEditorFromGenFlow()" style="border-style:dashed;">
+   <div class="preset-picker-card-title">+ 새 템플릿 추가<span class="preset-picker-card-badge">내 템플릿</span></div>
+   <div class="preset-picker-card-meta">바리스타 레시피나 자주 쓰는 베이스 레시피 등록</div>
+ </div>`;
+ if (!html) {
+   html = '<div style="color:var(--text-tertiary);font-size:13px;padding:12px 0;">이 드리퍼에는 아직 사용 가능한 레시피가 없습니다.</div>';
+ }
+ container.innerHTML = html;
+ // 라벨 업데이트 (드리퍼 이름 반영)
+ const dripper = getDripperById(dripperId);
+ const lbl = document.getElementById('genRecipePickerLabel');
+ if (lbl) lbl.textContent = dripper ? `${dripper.name} 레시피 선택` : '레시피 선택';
+}
+
+// Stage 1 → Stage 2a(Matthew 엔진) 전환
+function enterMatthewEngine(dripperShort) {
+ genState.dripper = dripperShort;
+ genState.dripperId = genSelectedDripperId;
+ // v2.5.6.3.1: Stage 1에서 고른 멜로드립 값을 엔진 입력으로 매핑 (UI 토글 제거됨).
+ // '미사용' | '오레아 멜로드립' | '핸들 멜로드립' → 엔진 내부값 '미사용' | '오레아' | '핸들'
+ const meloMap = { '미사용':'미사용', '오레아 멜로드립':'오레아', '핸들 멜로드립':'핸들' };
+ const engineMelo = meloMap[genMeloDripStage1] || '미사용';
+ genState.melo = engineMelo;
+ document.getElementById('genStage1').style.display = 'none';
+ document.getElementById('genStage2Matthew').style.display = '';
+ document.getElementById('genStage2AiPaste').style.display = 'none';
+ // Reset Matthew 엔진 토글 (dripper/dose/flavor만 리셋, 멜로는 Stage 1 값 유지)
+ setGenBrewType('핫'); setGenDripper(dripperShort); setGenFlavor('밸런스'); setGenDose(16);
+ // Stage 1에서 고른 멜로드립을 안내 표시
+ const infoEl = document.getElementById('genMeloDripInfo');
+ if (infoEl) {
+   infoEl.textContent = `멜로드립: ${formatMeloDripDisplay(genMeloDripStage1)} (이전 단계에서 선택됨)`;
+ }
+ updateGenPreview();
+}
+
+// Stage 1 → Stage 2b(AI 붙여넣기) 전환
+function enterAiPaste() {
+ document.getElementById('genStage1').style.display = 'none';
+ document.getElementById('genStage2Matthew').style.display = 'none';
+ document.getElementById('genStage2AiPaste').style.display = '';
+ const ta = document.getElementById('genAiPasteArea');
+ if (ta) ta.value = '';
+}
+
+// Stage 2 → Stage 1 돌아가기
+function backToGenStage1() {
+ document.getElementById('genStage1').style.display = '';
+ document.getElementById('genStage2Matthew').style.display = 'none';
+ document.getElementById('genStage2AiPaste').style.display = 'none';
+}
+
+// 프리셋 선택 → 즉시 data.recipes[]에 복사본 생성 (source:'custom', parentPresetId)
+function selectPresetAndCreate(presetId) {
+ const p = getPresetById(presetId);
+ if (!p) { alert('프리셋을 찾을 수 없습니다.'); return; }
+ const bean = data.beans.find(x => x.id === genState.beanId);
+ if (!bean) { alert('원두 정보를 찾을 수 없습니다.'); return; }
+ const activeG = getActiveGrinder();
+ const displayClicks = activeG && p.grindMicron != null
+   ? Math.round(p.grindMicron / activeG.micronPerClick)
+   : '';
+ const dripperObj = getDripperById(p.dripperId);
+ const dripperName = dripperObj ? dripperObj.name : '';
+ const recipe = {
+   id: Date.now().toString(),
+   name: bean.name || '',
+   roastery: bean.roastery || '',
+   origin: bean.origin || '',
+   variety: bean.variety || '',
+   processing: bean.processing || '',
+   roasting: bean.roastLevel || '',
+   notes: bean.cupNotes || '',
+   dripper: dripperName + (p.bottom ? ' — ' + p.bottom : ''),
+   bottom: p.bottom || '',
+   dose: (p.dose != null ? p.dose.toString() : ''),
+   water: (p.water != null ? p.water.toString() : ''),
+   ratio: p.ratio || '',
+   temp: (p.temp != null ? p.temp.toString() : ''),
+   grind: displayClicks !== '' ? displayClicks.toString() : '',
+   grindMicron: p.grindMicron,
+   meloDrip: (genMeloDripStage1 || p.meloDrip || '미사용'),
+   // v2.5.6.3.3: 거치형 선택 시 블루밍 반영 여부를 레시피에 stamp
+   meloBloomInclude: (genMeloDripStage1 === '오레아 멜로드립') ? !!document.getElementById('genBloomIncludeCheck')?.checked : false,
+   targetTime: p.targetTime || '',
+   brewType: p.brewType || '핫',
+   // v2.5.6.3.1: 프리셋의 pourGuide와 adjustments를 복사 (타이머 작동에 필요)
+   pourGuide: Array.isArray(p.pourGuide) ? p.pourGuide.map(x => ({ ...x })) : [],
+   adjustments: Array.isArray(p.adjustments) ? p.adjustments.map(x => ({ ...x })) : [],
+   beanId: bean.id,
+   raw: '',
+   createdAt: new Date().toISOString(),
+   source: 'custom',
+   parentPresetId: p.id
+ };
+ data.recipes.unshift(recipe);
+ saveData();
+ closeModal('recipeGenModal');
+ renderRecipes();
+ showToast(`${p.name} 레시피가 생성되었습니다`);
+}
+
+// AI 붙여넣기 → parseRecipeText() 호출 → 레시피 저장
+function generateFromAiPaste() {
+ const ta = document.getElementById('genAiPasteArea');
+ const text = ta ? ta.value.trim() : '';
+ if (!text) { alert('레시피 텍스트를 붙여넣어 주세요.'); return; }
+ if (typeof parseRecipeText !== 'function') { alert('파서를 사용할 수 없습니다.'); return; }
+ const parsed = parseRecipeText(text);
+ const bean = data.beans.find(x => x.id === genState.beanId);
+ // 원두 정보가 있으면 보충
+ if (bean) {
+   if (!parsed.name) parsed.name = bean.name || '';
+   if (!parsed.roastery) parsed.roastery = bean.roastery || '';
+   if (!parsed.origin) parsed.origin = bean.origin || '';
+   if (!parsed.variety) parsed.variety = bean.variety || '';
+   if (!parsed.processing) parsed.processing = bean.processing || '';
+   if (!parsed.roasting) parsed.roasting = bean.roastLevel || '';
+   if (!parsed.notes) parsed.notes = bean.cupNotes || '';
+   parsed.beanId = bean.id;
+ }
+ parsed.source = 'custom';
+ // v2.5.6.3.1: 파서가 멜로드립을 못 뽑았으면 Stage 1에서 선택한 값으로 보충
+ if (!parsed.meloDrip) parsed.meloDrip = genMeloDripStage1 || '미사용';
+ // v2.5.6.3.3: 거치형 선택 + 블루밍 반영 체크 시 stamp
+ parsed.meloBloomInclude = (parsed.meloDrip === '오레아 멜로드립') ? !!document.getElementById('genBloomIncludeCheck')?.checked : false;
+ // grindMicron 계산: 입력 클릭수는 활성 그라인더 기준으로 간주
+ if (parsed.grind) {
+   const m = clicksInputToMicron(parsed.grind);
+   if (m != null) parsed.grindMicron = m;
+ }
+ data.recipes.unshift(parsed);
+ saveData();
+ closeModal('recipeGenModal');
+ renderRecipes();
+ showToast('레시피가 생성되었습니다');
+}
+// v2.5.6.4.1: Stage 2a(Matthew 엔진) 핫/아이스 토글. 이전 버전에서 정의 누락으로 ReferenceError 발생 → 복원.
 function setGenBrewType(v) {
  genState.brewType = v;
  document.querySelectorAll('#genBrewTypeToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === v));
  updateGenPreview();
 }
-function setGenDripper(v) {
- genState.dripper = v;
- document.querySelectorAll('#genDripperToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent.includes(v)));
- document.getElementById('genDoseGroup').style.display = v === 'Baby O' ? '' : 'none';
- updateGenPreview();
-}
 function setGenDose(v) {
  genState.dose = v;
  document.querySelectorAll('#genDoseToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === v + 'g'));
+ updateGenPreview();
+}
+// v2.5.6.3: Stage 2a(Matthew 엔진) 내부에서 드리퍼 상태 설정. 기존 토글 UI는 없어졌지만 함수는 상태 세팅용으로 유지.
+function setGenDripper(v) {
+ genState.dripper = v;
+ document.getElementById('genDoseGroup').style.display = v === 'Baby O' ? '' : 'none';
  updateGenPreview();
 }
 function setGenFlavor(v) {
@@ -1641,7 +2872,9 @@ function setGenFlavor(v) {
 }
 function setGenMelo(v) {
  genState.melo = v;
- const map = {'미사용':'미사용','오레아':'오레아(거치형)','핸들':'핸들(그립형)'};
+ // v2.5.6.3.1: Stage 2a의 멜로드립 토글은 제거됐지만 함수는 상태 세팅용으로 유지.
+ // 혹시 다른 경로로 UI가 뜰 경우를 대비해 라벨 맵만 정리. ('오레아' → '거치형')
+ const map = {'미사용':'미사용','오레아':'거치형','핸들':'핸들'};
  document.querySelectorAll('#genMeloToggle .toggle-opt').forEach(btn => btn.classList.toggle('active', btn.textContent === map[v]));
  updateGenPreview();
 }
@@ -1665,14 +2898,21 @@ function updateGenPreview() {
  // Preview
  const prev = document.getElementById('genPreview');
  prev.style.display = '';
+ // v2.5.6.3: 엔진은 C60 기준 클릭수 반환 → 활성 그라인더 기준으로 환산 표시.
+ const _activeG = getActiveGrinder();
+ const _previewMicron = matthewClicksToMicron(result.grind);
+ const _previewClicks = (_activeG && _previewMicron != null)
+   ? Math.round(_previewMicron / _activeG.micronPerClick)
+   : result.grind;
+ const _previewGrinderLabel = _activeG ? _activeG.model : 'C60';
  prev.innerHTML = `
    <div style="font-weight:600;margin-bottom:8px;">미리보기</div>
    <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 12px;">
      <span style="color:var(--text-tertiary);">드리퍼</span><span>${result.dripper}${result.bottom ? ' · ' + result.bottom : ''}</span>
      <span style="color:var(--text-tertiary);">도즈/물량</span><span>${result.dose}g → ${result.water}g (${result.ratio})</span>
      <span style="color:var(--text-tertiary);">수온</span><span>${result.temp}°C</span>
-     <span style="color:var(--text-tertiary);">클릭수</span><span>C60 ${result.grind}클릭<br><span style="font-size:11px;font-weight:400;color:var(--text-tertiary);">${result.grindBreakdown}</span></span>
-     <span style="color:var(--text-tertiary);">멜로드립</span><span>${result.meloDrip}</span>
+     <span style="color:var(--text-tertiary);">클릭수</span><span>${_previewGrinderLabel} ${_previewClicks}클릭<br><span style="font-size:11px;font-weight:400;color:var(--text-tertiary);">${result.grindBreakdown}</span></span>
+     <span style="color:var(--text-tertiary);">멜로드립</span><span>${formatMeloDripDisplay(result.meloDrip)}</span>
      <span style="color:var(--text-tertiary);">목표 시간</span><span>${result.targetTime}</span>
      <span style="color:var(--text-tertiary);">푸어링</span><span>${result.pourGuide.length}단계</span>
      ${result.brewType === '아이스' ? (() => { const ice = calcRecommendedIce(result); return ice ? `<span style="color:var(--text-tertiary);">추천 얼음량</span><span>${ice.ice}g</span>` : ''; })() : ''}
@@ -1953,11 +3193,17 @@ function generateAndSaveRecipe() {
    notes: result.notes, dripper: result.dripper, bottom: result.bottom,
    dose: result.dose, water: result.water, ratio: result.ratio,
    temp: result.temp, grind: result.grind, grindBreakdown: result.grindBreakdown,
+   // v2.5.6.3: Matthew 엔진은 C60 클릭수 기준으로 출력 → 21μm/click으로 μm 저장.
+   // 이후 표시는 활성 그라인더 기준으로 동적 환산됨.
+   grindMicron: matthewClicksToMicron(result.grind),
    meloDrip: result.meloDrip, flavor: result.flavor,
+   // v2.5.6.3.3: Stage 1에서 고른 블루밍 반영 여부 stamp (거치형일 때만 유효)
+   meloBloomInclude: (result.meloDrip === '오레아 멜로드립') ? !!document.getElementById('genBloomIncludeCheck')?.checked : false,
    targetTime: result.targetTime, brewType: result.brewType,
    pourGuide: result.pourGuide, adjustments: result.adjustments,
    beanId: result.beanId, raw: '', createdAt: new Date().toISOString(),
-   generatedBy: 'engine'
+   generatedBy: 'engine',
+   source: 'matthew' // v2.5.6.2 — Matthew engine output
  };
  data.recipes.unshift(recipe);
  saveData();
@@ -2034,38 +3280,8 @@ function parseRecipeText(text) {
  return recipe;
 }
 
-function openAddRecipeModal() {
- document.getElementById('recipePasteArea').value = '';
- const beanSelect = document.getElementById('addRecipeBeanSelect');
- const activeBeans = data.beans.filter(b => !b.finished);
- beanSelect.innerHTML = '<option value="">선택 안 함</option>' + activeBeans.map(b => `<option value="${b.id}">${b.name}${b.roastery ? ' (' + b.roastery + ')' : ''}</option>`).join('');
- beanSelect.value = '';
- openModal('addRecipeModal');
-}
-
-function parseAndSaveRecipe() {
- const text = document.getElementById('recipePasteArea').value.trim();
- if (!text) return;
- const recipe = parseRecipeText(text);
- // 선택된 원두 정보로 비어있는 항목만 채우기
- const beanId = document.getElementById('addRecipeBeanSelect').value;
- if (beanId) {
-   const b = data.beans.find(x => x.id === beanId);
-   if (b) {
-     recipe.beanId = beanId;
-     if (!recipe.name && b.name) recipe.name = b.name;
-     if (!recipe.roastery && b.roastery) recipe.roastery = b.roastery;
-     if (!recipe.origin && b.origin) recipe.origin = b.origin;
-     if (!recipe.variety && b.variety) recipe.variety = b.variety;
-     if (!recipe.processing && b.processing) recipe.processing = b.processing;
-     if (!recipe.roasting && b.roastLevel) recipe.roasting = b.roastLevel;
-   }
- }
- data.recipes.unshift(recipe); saveData(); closeModal('addRecipeModal');
- const missing = getMissingFields(recipe);
- renderRecipes();
- if (missing.length > 0) openEditRecipeModal(recipe.id, true);
-}
+// Note: openAddRecipeModal/parseAndSaveRecipe removed in v2.5.6.2.
+// parseRecipeText() is retained for v2.5.6.3 recipe generation modal AI-paste option.
 
 // ─── Recipe Edit ───
 function openEditRecipeModal(id, fromParse) {
@@ -2084,7 +3300,10 @@ function openEditRecipeModal(id, fromParse) {
  document.getElementById('editRoasting').value = r.roasting || '';
  document.getElementById('editNotes').value = r.notes || '';
  document.getElementById('editDripper').value = r.dripper || '';
- document.getElementById('editGrind').value = r.grind || '';
+ // v2.5.6.3: 클릭수는 활성 그라인더 기준으로 환산해서 편집 필드에 표시.
+ // 기존 recipe.grind는 legacy 표시용, grindMicron이 진실의 원천.
+ const displayClicks = getRecipeDisplayClicks(r);
+ document.getElementById('editGrind').value = displayClicks != null ? displayClicks : (r.grind || '');
  document.getElementById('editTemp').value = r.temp || '';
  document.getElementById('editRatio').value = r.ratio || '';
  document.getElementById('editDose').value = r.dose || '';
@@ -2093,6 +3312,11 @@ function openEditRecipeModal(id, fromParse) {
  editBottomValue = r.bottom || ''; updateBottomToggle(); toggleBottomField();
  document.getElementById('editTargetTime').value = r.targetTime || '';
  editMeloDripValue = r.meloDrip || ''; updateMeloDripToggle();
+ // v2.5.6.3.3: 블루밍 반영 체크박스 초기화 (거치형일 때만 노출)
+ const _editBloomWrap = document.getElementById('editBloomIncludeWrap');
+ const _editBloomChk = document.getElementById('editBloomIncludeCheck');
+ if (_editBloomWrap) _editBloomWrap.style.display = (editMeloDripValue === '오레아 멜로드립') ? '' : 'none';
+ if (_editBloomChk) _editBloomChk.checked = !!r.meloBloomInclude;
  editBrewTypeValue = r.brewType || '핫'; setEditBrewType(editBrewTypeValue);
  updateRoasteryList();
  const missing = getMissingFields(r);
@@ -2102,8 +3326,20 @@ function openEditRecipeModal(id, fromParse) {
  openModal('editRecipeModal');
 }
 
-function setMeloDrip(val) { editMeloDripValue = val; updateMeloDripToggle(); }
-function updateMeloDripToggle() { document.querySelectorAll('#editMeloDripToggle .toggle-opt').forEach(btn => { const map = {'미사용':'미사용','오레아':'오레아 멜로드립','핸들':'핸들 멜로드립','멜로드립':'멜로드립'}; btn.classList.toggle('active', map[btn.textContent] === editMeloDripValue); }); }
+function setMeloDrip(val) {
+ editMeloDripValue = val;
+ updateMeloDripToggle();
+ // v2.5.6.3.3: 거치형 선택 시 블루밍 반영 체크박스 노출
+ const wrap = document.getElementById('editBloomIncludeWrap');
+ if (wrap) {
+   wrap.style.display = (val === '오레아 멜로드립') ? '' : 'none';
+   if (val !== '오레아 멜로드립') {
+     const chk = document.getElementById('editBloomIncludeCheck');
+     if (chk) chk.checked = false;
+   }
+ }
+}
+function updateMeloDripToggle() { document.querySelectorAll('#editMeloDripToggle .toggle-opt').forEach(btn => { const map = {'미사용':'미사용','거치형':'오레아 멜로드립','핸들':'핸들 멜로드립','멜로드립':'멜로드립'}; btn.classList.toggle('active', map[btn.textContent] === editMeloDripValue); }); }
 
 let editBottomValue = '';
 function setEditBottom(val) { editBottomValue = editBottomValue === val ? '' : val; document.getElementById('editBottom').value = editBottomValue; updateBottomToggle(); }
@@ -2131,7 +3367,12 @@ function saveEditedRecipe() {
  r.roasting = document.getElementById('editRoasting').value.trim();
  r.notes = document.getElementById('editNotes').value.trim();
  r.dripper = document.getElementById('editDripper').value.trim();
- r.grind = document.getElementById('editGrind').value.trim();
+ // v2.5.6.3: 편집 입력은 활성 그라인더 기준 클릭수. 저장은 μm으로.
+ // legacy r.grind도 같은 값으로 유지 (기존 UI/로직 호환).
+ const clicksInput = document.getElementById('editGrind').value.trim();
+ r.grind = clicksInput;
+ const m = clicksInputToMicron(clicksInput);
+ if (m != null) r.grindMicron = m;
  r.temp = document.getElementById('editTemp').value.trim();
  r.ratio = document.getElementById('editRatio').value.trim();
  r.dose = document.getElementById('editDose').value.trim();
@@ -2139,6 +3380,8 @@ function saveEditedRecipe() {
  r.bottom = editBottomValue;
  r.targetTime = document.getElementById('editTargetTime').value.trim();
  r.meloDrip = editMeloDripValue;
+ // v2.5.6.3.3: 거치형일 때만 meloBloomInclude 저장 (그 외에는 false 고정)
+ r.meloBloomInclude = (editMeloDripValue === '오레아 멜로드립') ? !!document.getElementById('editBloomIncludeCheck')?.checked : false;
  r.brewType = editBrewTypeValue;
  const missing = getMissingFields(r);
  if (missing.length > 0 && !confirm(`아직 ${missing.length}개 항목이 비어있습니다 (${missing.map(m => m.label).join(', ')}). 그래도 저장할까요?`)) return;
@@ -2174,10 +3417,13 @@ function renderRecipes() {
  const roasteries = [...new Set(data.recipes.map(r => r.roastery).filter(Boolean))];
  const drips = [...new Set(data.recipes.map(r => r.dripper?.split('—')[0]?.trim()).filter(Boolean))];
  filters.innerHTML = `<button class="filter-chip ${activeRecipeFilter === 'all' ? 'active' : ''}" onclick="activeRecipeFilter='all';renderRecipes()">전체</button>${roasteries.map(r => `<button class="filter-chip ${activeRecipeFilter === r ? 'active' : ''}" onclick="activeRecipeFilter='${r}';renderRecipes()">${r}</button>`).join('')}${procs.map(p => `<button class="filter-chip ${activeRecipeFilter === p ? 'active' : ''}" onclick="activeRecipeFilter='${p}';renderRecipes()">${p}</button>`).join('')}${drips.map(d => `<button class="filter-chip ${activeRecipeFilter === d ? 'active' : ''}" onclick="activeRecipeFilter='${d}';renderRecipes()">${d}</button>`).join('')}`;
- if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>레시피가 없습니다<br>클로드에서 받은 레시피를 붙여넣어 추가하세요</p></div>'; return; }
+ if (!filtered.length) { container.innerHTML = '<div class="empty-state"><p>레시피가 없습니다<br>원두 상세에서 레시피를 생성해보세요</p></div>'; return; }
  container.innerHTML = filtered.map(r => {
    const missing = getMissingFields(r);
-   return `<div class="card recipe-card" onclick="openRecipeDetail('${r.id}')"><div class="recipe-card-header"><div class="recipe-card-name">${r.name || '이름 없음'}</div>${r.grind ? `<div style="font-family:'DM Mono';font-size:16px;font-weight:600;color:var(--accent);">${r.grind}C</div>` : ''}</div>${r.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">${r.roastery}</div>` : ''}<div class="recipe-card-tags">${r.processing ? `<span class="tag">${normalizeProcessing(r.processing)}</span>` : ''}${r.roasting ? `<span class="tag">${r.roasting}</span>` : ''}${r.brewType === '아이스' ? '<span class="tag">🧊아이스</span>' : ''}${r.dripper ? `<span class="tag">${r.dripper.split('—')[0].trim()}</span>` : ''}${r.ratio ? `<span class="tag">${r.ratio}</span>` : ''}${r.meloDrip ? `<span class="tag">멜로드립 ${r.meloDrip}</span>` : ''}</div>${r.notes ? `<div class="recipe-card-meta">${r.notes}</div>` : ''}${missing.length ? `<div class="recipe-card-missing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>${missing.length}개 항목 미입력</div>` : ''}</div>`;
+   // v2.5.6.3: 카드 클릭수는 활성 그라인더 기준 환산값.
+   const displayClicks = getRecipeDisplayClicks(r);
+   const clicksLabel = displayClicks != null ? `${displayClicks}C` : (r.grind ? `${r.grind}C` : '');
+   return `<div class="card recipe-card" onclick="openRecipeDetail('${r.id}')"><div class="recipe-card-header"><div class="recipe-card-name">${r.name || '이름 없음'}</div>${clicksLabel ? `<div style="font-family:'DM Mono';font-size:16px;font-weight:600;color:var(--accent);">${clicksLabel}</div>` : ''}</div>${r.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">${r.roastery}</div>` : ''}<div class="recipe-card-tags">${r.processing ? `<span class="tag">${normalizeProcessing(r.processing)}</span>` : ''}${r.roasting ? `<span class="tag">${r.roasting}</span>` : ''}${r.brewType === '아이스' ? '<span class="tag">🧊아이스</span>' : ''}${r.dripper ? `<span class="tag">${r.dripper.split('—')[0].trim()}</span>` : ''}${r.ratio ? `<span class="tag">${r.ratio}</span>` : ''}${r.meloDrip ? `<span class="tag">멜로드립 ${formatMeloDripDisplay(r.meloDrip).replace(/\s*멜로드립$/, '')}</span>` : ''}</div>${r.notes ? `<div class="recipe-card-meta">${r.notes}</div>` : ''}${missing.length ? `<div class="recipe-card-missing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>${missing.length}개 항목 미입력</div>` : ''}</div>`;
  }).join('');
 }
 
@@ -2187,14 +3433,76 @@ function openRecipeDetail(id) {
  document.getElementById('recipeDetailTitle').textContent = r.name || '레시피 상세';
  const missing = getMissingFields(r);
  let html = '';
+ // v2.5.6.3: 파생 프리셋 표시 (빌트인 프리셋 기반인 경우 + 원본과 다른 필드만 비교)
+ if (r.parentPresetId) {
+   const parent = getPresetById(r.parentPresetId);
+   if (parent) {
+     const diffs = [];
+     const cmpFields = [
+       ['dose','도즈','g'], ['water','물량','g'], ['ratio','비율',''],
+       ['temp','수온','°C'], ['bottom','바텀',''], ['meloDrip','멜로드립',''],
+       ['targetTime','목표 시간',''], ['brewType','핫/아이스','']
+     ];
+     cmpFields.forEach(([k, label, unit]) => {
+       let pv = (parent[k] ?? '').toString();
+       let rv = (r[k] ?? '').toString();
+       // v2.5.6.3.3: meloDrip은 저장값을 사용자 표시값으로 변환 후 비교/표시
+       if (k === 'meloDrip') {
+         pv = pv ? formatMeloDripDisplay(pv) : pv;
+         rv = rv ? formatMeloDripDisplay(rv) : rv;
+       }
+       if (pv && rv && pv !== rv) diffs.push({ label, from: pv + unit, to: rv + unit });
+     });
+     // grindMicron 비교 → 활성 그라인더 기준 클릭수로 각각 환산
+     const actG = getActiveGrinder();
+     if (actG && parent.grindMicron != null && r.grindMicron != null && parent.grindMicron !== r.grindMicron) {
+       const pClicks = Math.round(parent.grindMicron / actG.micronPerClick);
+       const rClicks = Math.round(r.grindMicron / actG.micronPerClick);
+       if (pClicks !== rClicks) diffs.push({ label: '분쇄도', from: pClicks + '클릭', to: rClicks + '클릭' });
+     }
+     html += `<div class="preset-origin-banner"><div class="preset-origin-title">↳ <strong>${parent.name}</strong> 기반${parent.author ? ' · ' + parent.author : ''}</div>`;
+     if (diffs.length) {
+       html += `<div class="preset-origin-diffs">`;
+       diffs.forEach(d => {
+         html += `<div class="preset-origin-diff"><span class="preset-origin-diff-label">${d.label}</span><span class="preset-origin-diff-from">${d.from}</span><span class="preset-origin-diff-arrow">→</span><span class="preset-origin-diff-to">${d.to}</span></div>`;
+       });
+       html += `</div>`;
+     } else {
+       html += `<div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;">원본과 동일</div>`;
+     }
+     html += `</div>`;
+   }
+ }
  if (missing.length > 0) html += `<div class="missing-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>${missing.length}개 필수 항목 미입력 — 편집 버튼을 눌러 채워주세요</span></div>`;
  html += '<div class="recipe-detail-section"><h3>원두 정보</h3>';
  [['로스터리', r.roastery], ['산지', r.origin], ['품종', r.variety], ['프로세싱', normalizeProcessing(r.processing)], ['로스팅', r.roasting], ['예상 노트', r.notes]].forEach(([l, v]) => { html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`; });
  html += '</div><div class="recipe-detail-section"><h3>레시피</h3>';
- const breakdown = r.grindBreakdown || calcGrindBreakdown(r);
- const recipeFields = [['드리퍼', r.dripper], ['도즈', r.dose ? r.dose + 'g' : ''], ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''], ['수온', r.temp ? r.temp + '°C' : ''], ['그라인드', r.grind ? r.grind + '클릭' : ''], ['멜로드립', r.meloDrip], ['핫/아이스', r.brewType || '핫'], ['바텀', r.bottom], ['목표 시간', r.targetTime]];
+ // v2.5.6.3.1: 브레이크다운은 Matthew 엔진 레시피에만 표시. 프리셋/커스텀/AI 레시피엔 부적절.
+ const breakdown = (r.source === 'matthew')
+   ? (r.grindBreakdown || calcGrindBreakdown(r))
+   : '';
+ // v2.5.6.3: 그라인드 표시 = 활성 그라인더 모델명 + 환산 클릭수
+ const activeG = getActiveGrinder();
+ const displayClicks = getRecipeDisplayClicks(r);
+ const grinderLabel = activeG ? activeG.model : '';
+ const grindValue = displayClicks != null
+   ? `${grinderLabel ? grinderLabel + ' ' : ''}${displayClicks}클릭`
+   : (r.grind ? r.grind + '클릭' : '');
+ // v2.5.6.3.1: 바텀 필드는 V4 레시피일 때만 노출
+ const isV4Recipe = /v4/i.test(r.dripper || '');
+ const recipeFields = [
+   ['드리퍼', r.dripper],
+   ['도즈', r.dose ? r.dose + 'g' : ''],
+   ['물량', r.water ? r.water + 'g' + (r.ratio ? ' (' + r.ratio + ')' : '') : ''],
+   ['수온', r.temp ? r.temp + '°C' : ''],
+   ['그라인드', grindValue],
+   ['멜로드립', formatMeloDripDisplay(r.meloDrip)],
+   ['핫/아이스', r.brewType || '핫'],
+ ];
+ if (isV4Recipe) recipeFields.push(['바텀', r.bottom]);
+ recipeFields.push(['목표 시간', r.targetTime]);
  recipeFields.forEach(([l, v]) => {
-   if (l === '그라인드' && breakdown && r.grind) {
+   if (l === '그라인드' && breakdown && displayClicks != null) {
      html += `<div class="recipe-detail-row" style="flex-wrap:wrap;"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value">${v}</span><span class="recipe-grind-breakdown">${breakdown}</span></div>`;
    } else {
      html += `<div class="recipe-detail-row"><span class="recipe-detail-label">${l}</span><span class="recipe-detail-value${v ? '' : ' empty'}">${v || '미입력'}</span></div>`;
@@ -2292,7 +3600,9 @@ function onBrewRecipeSelect() {
  document.getElementById('brewRoastery').value = r.roastery || '';
  if (r.brewType) { brewTypeValue = r.brewType; setBrewType(r.brewType); }
  document.getElementById('brewDripper').value = (r.dripper || '').split('—')[0].trim();
- document.getElementById('brewClicks').value = r.grind || '';
+ // v2.5.6.3: 레시피 → 추출 prefill 시 활성 그라인더 기준 클릭수로 환산.
+ const _brewClicks = getRecipeDisplayClicks(r);
+ document.getElementById('brewClicks').value = (_brewClicks != null) ? _brewClicks : (r.grind || '');
  document.getElementById('brewTemp').value = r.temp || '';
  document.getElementById('brewTime').value = r.targetTime || '';
  document.getElementById('brewDose').value = r.dose || '';
@@ -2319,7 +3629,7 @@ function saveBrew() {
  const recipeId = document.getElementById('brewRecipeSelect').value;
  const beanId = document.getElementById('brewBeanSelect').value;
  const recipe = recipeId ? data.recipes.find(r => r.id === recipeId) : null;
- const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), waterType: document.getElementById('brewWaterType').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, radar: { ...currentRadar }, adjustTempDelta: currentAdjustTemp, adjustClickDelta: currentAdjustClick, adjustResult: currentAdjustResult, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
+ const brewData = { recipeId: recipeId || null, beanId: beanId || null, bean, roastery: document.getElementById('brewRoastery').value.trim(), brewType: brewTypeValue, dripper: document.getElementById('brewDripper').value.trim(), clicks: document.getElementById('brewClicks').value, grinderId: (data.activeGrinderId || 'builtin_c60'), temp: document.getElementById('brewTemp').value, time: document.getElementById('brewTime').value.trim(), dose: document.getElementById('brewDose').value, water: document.getElementById('brewWater').value, meloDrip: document.getElementById('brewMeloDrip').value.trim(), waterType: document.getElementById('brewWaterType').value.trim(), date: document.getElementById('brewDate').value, rating: currentBrewRating, radar: { ...currentRadar }, adjustTempDelta: currentAdjustTemp, adjustClickDelta: currentAdjustClick, adjustResult: currentAdjustResult, note: document.getElementById('brewNote').value.trim(), adjust: document.getElementById('brewAdjust').value.trim(), origin: recipe?.origin || '', processing: recipe?.processing || '', variety: recipe?.variety || '' };
 
  if (editingBrewId) {
    // 편집 모드: 기존 기록 업데이트
@@ -2330,6 +3640,8 @@ function saveBrew() {
        const oldBean = data.beans.find(b => b.id === existing.beanId);
        if (oldBean) oldBean.weight = ((parseFloat(oldBean.weight) || 0) + parseFloat(existing.dose)).toString();
      }
+     // v2.5.6: 편집 시 grinderId는 기록 시점의 진실로 보존 — 활성 그라인더로 덮어쓰지 않음
+     brewData.grinderId = existing.grinderId || brewData.grinderId;
      Object.assign(existing, brewData);
      // 새 도즈 차감
      if (beanId && brewData.dose) {
@@ -2384,7 +3696,7 @@ function renderBrews() {
  Object.keys(groups).sort().reverse().forEach(key => {
    if (key !== 'unknown') { const [y, m] = key.split('-'); html += `<div class="group-header">${y}년 ${parseInt(m)}월</div>`; } else html += `<div class="group-header">날짜 없음</div>`;
    groups[key].forEach(b => {
-     html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + b.meloDrip : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${(b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${[b.adjustTempDelta ? `수온${b.adjustTempDelta > 0 ? '+' : ''}${b.adjustTempDelta}°C` : '', b.adjustClickDelta ? `클릭${b.adjustClickDelta > 0 ? '+' : ''}${b.adjustClickDelta}` : '', b.adjustResult || ''].filter(Boolean).join(' · ')}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
+     html += `<div class="card brew-card" onclick="openBrewDetail('${b.id}')"><div class="brew-card-top"><span class="brew-card-bean">${b.bean}</span><span class="brew-card-date">${b.date ? formatDateShort(b.date) : ''}</span></div>${b.roastery ? `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:2px;">${b.roastery}</div>` : ''}<div class="brew-card-info">${[b.brewType === '아이스' ? '🧊아이스' : '', b.dripper, b.clicks ? b.clicks + 'C' : '', b.temp ? b.temp + '°C' : '', b.meloDrip ? '멜로드립 ' + formatMeloDripDisplay(b.meloDrip).replace(/\s*멜로드립$/, '') : ''].filter(Boolean).join(' · ')}</div>${b.rating ? `<div class="brew-card-stars">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div>` : ''}${(b.adjustTempDelta || b.adjustClickDelta || b.adjustResult) ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${[b.adjustTempDelta ? `수온${b.adjustTempDelta > 0 ? '+' : ''}${b.adjustTempDelta}°C` : '', b.adjustClickDelta ? `클릭${b.adjustClickDelta > 0 ? '+' : ''}${b.adjustClickDelta}` : '', b.adjustResult || ''].filter(Boolean).join(' · ')}</div>` : ''}${b.note ? `<div class="brew-card-note">${b.note.length > 60 ? b.note.substring(0, 60) + '...' : b.note}</div>` : ''}</div>`;
    });
  });
  container.innerHTML = html;
@@ -2393,7 +3705,28 @@ function renderBrews() {
 function openBrewDetail(id) {
  selectedBrewId = id;
  const b = data.brews.find(x => x.id === id); if (!b) return;
- let html = `<div class="recipe-detail-section"><h3>추출 정보</h3><div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>${b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : ''}${b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : ''}${b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : ''}${b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : ''}${b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : ''}${b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : ''}${b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : ''}${b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : ''}${b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : ''}${b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${b.meloDrip}</span></div>` : ''}${b.waterType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물</span><span class="recipe-detail-value">${b.waterType}</span></div>` : ''}</div>`;
+ // v2.5.6.6.1: 그라인더 모델명 표시 (드리퍼↔클릭수 사이), 레시피 행 추가 (원두 다음)
+ const brewGrinder = getGrinderById(b.grinderId || 'builtin_c60') || getGrinderById('builtin_c60');
+ const brewGrinderModel = brewGrinder ? brewGrinder.model : 'C60';
+ // 레시피 조회: recipeId 있으면 조회, 삭제된 레시피면 행 미표시 (graceful fallback)
+ const linkedRecipe = b.recipeId ? data.recipes.find(x => x.id === b.recipeId) : null;
+ const recipeRow = linkedRecipe ? `<div class="recipe-detail-row" style="cursor:pointer;" onclick="closeModal('brewDetailModal');openRecipeDetail('${linkedRecipe.id}');"><span class="recipe-detail-label">레시피</span><span class="recipe-detail-value" style="color:var(--accent);">${linkedRecipe.name || '이름 없음'} ›</span></div>` : '';
+ let html = `<div class="recipe-detail-section"><h3>추출 정보</h3>`
+   + `<div class="recipe-detail-row"><span class="recipe-detail-label">원두</span><span class="recipe-detail-value">${b.bean}</span></div>`
+   + recipeRow
+   + (b.roastery ? `<div class="recipe-detail-row"><span class="recipe-detail-label">로스터리</span><span class="recipe-detail-value">${b.roastery}</span></div>` : '')
+   + (b.date ? `<div class="recipe-detail-row"><span class="recipe-detail-label">날짜</span><span class="recipe-detail-value">${b.date}</span></div>` : '')
+   + (b.brewType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">핫/아이스</span><span class="recipe-detail-value">${b.brewType}</span></div>` : '')
+   + (b.dripper ? `<div class="recipe-detail-row"><span class="recipe-detail-label">드리퍼</span><span class="recipe-detail-value">${b.dripper}</span></div>` : '')
+   + `<div class="recipe-detail-row"><span class="recipe-detail-label">그라인더</span><span class="recipe-detail-value">${brewGrinderModel}</span></div>`
+   + (b.clicks ? `<div class="recipe-detail-row"><span class="recipe-detail-label">클릭수</span><span class="recipe-detail-value">${b.clicks}</span></div>` : '')
+   + (b.temp ? `<div class="recipe-detail-row"><span class="recipe-detail-label">수온</span><span class="recipe-detail-value">${b.temp}°C</span></div>` : '')
+   + (b.dose ? `<div class="recipe-detail-row"><span class="recipe-detail-label">도즈</span><span class="recipe-detail-value">${b.dose}g</span></div>` : '')
+   + (b.water ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물량</span><span class="recipe-detail-value">${b.water}g</span></div>` : '')
+   + (b.time ? `<div class="recipe-detail-row"><span class="recipe-detail-label">추출 시간</span><span class="recipe-detail-value">${b.time}</span></div>` : '')
+   + (b.meloDrip ? `<div class="recipe-detail-row"><span class="recipe-detail-label">멜로드립</span><span class="recipe-detail-value">${formatMeloDripDisplay(b.meloDrip)}</span></div>` : '')
+   + (b.waterType ? `<div class="recipe-detail-row"><span class="recipe-detail-label">물</span><span class="recipe-detail-value">${b.waterType}</span></div>` : '')
+   + `</div>`;
  // 평가
  if (b.rating) html += `<div class="recipe-detail-section"><h3>평가</h3><div style="color:var(--star);font-size:24px;">${'★'.repeat(b.rating)}${'☆'.repeat(5 - b.rating)}</div></div>`;
  // 레이더 차트
@@ -2722,7 +4055,7 @@ function toggleWish(beanId) {
 }
 
 // ─── Backup / Restore ───
-const FC_EXTRA_KEYS = ['fc_meloDripWeight', 'fc_meloDripWeightOrea', 'fc_meloDripWeightOriginal', 'fc_lastSeenVersion', 'fc_lastExportDate', 'fc_lastGrinderClean', 'fc_alertSettings', 'fc_dismissedAlerts'];
+const FC_EXTRA_KEYS = ['fc_lastSeenVersion', 'fc_lastExportDate', 'fc_lastGrinderClean', 'fc_alertSettings', 'fc_dismissedAlerts', 'fc_aiPasteEnabled'];
 
 function exportData() {
  const exportObj = { _mainData: data, _fcKeys: {} };
@@ -2757,10 +4090,412 @@ function importData(event) {
  reader.readAsText(file);
 }
 
+// Legacy — still routes to per-grinder setting for backward compat.
+// No longer called from UI; kept in case of external/import references.
 function saveClickRange() {
- data.clickRange.min = parseInt(document.getElementById('clickMin').value) || 28;
- data.clickRange.max = parseInt(document.getElementById('clickMax').value) || 34;
- saveData(); renderClickGrid();
+ const min = parseInt(document.getElementById('clickMin').value) || 28;
+ const max = parseInt(document.getElementById('clickMax').value) || 34;
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ setGrinderRange(activeId, min, max);
+ renderClickGrid();
+}
+
+// ─── Grinder / Dripper Management (v2.5.6.1) ───
+let editingGrinderId = null;
+let editingDripperId = null;
+
+function renderGrinderList() {
+ const area = document.getElementById('grinderListArea');
+ if (!area) return;
+ // Reset hidden area to collapsed state when list re-renders (fresh entry)
+ const hiddenArea = document.getElementById('grinderHiddenArea');
+ const hiddenBtn = document.getElementById('grinderHiddenToggleBtn');
+ if (hiddenArea && hiddenArea.style.display === '') {
+   // keep it open; just refresh content
+   renderHiddenGrinders();
+ } else if (hiddenArea) {
+   hiddenArea.style.display = 'none';
+   if (hiddenBtn) hiddenBtn.textContent = '숨긴 그라인더 보기';
+ }
+ const all = getAllGrinders().filter(g => !g.hidden);
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ if (!all.length) { area.innerHTML = '<div style="color:var(--text-tertiary);font-size:13px;text-align:center;padding:20px 0;">표시할 그라인더가 없습니다</div>'; return; }
+ area.innerHTML = all.map(g => {
+   const isActive = g.id === activeId;
+   const displayName = (g.brand ? g.brand + ' ' : '') + g.model;
+   const badgeHtml = g.builtin ? '<span style="font-size:10px;color:var(--text-tertiary);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">빌트인</span>' : '';
+   const activeBadge = isActive ? '<span style="font-size:10px;color:var(--accent);background:var(--accent-light);padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600;">활성</span>' : '';
+   const range = getGrinderRange(g.id);
+   const rangeEditor = isActive ? `
+     <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);">
+       <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;font-weight:500;">내 클릭수 범위</div>
+       <div style="display:flex;gap:6px;align-items:center;width:100%;">
+         <input type="number" id="activeGrinderMin" value="${range.min}" style="flex:1 1 0;min-width:0;width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);font-size:13px;box-sizing:border-box;" onchange="saveActiveGrinderRange()">
+         <span style="color:var(--text-tertiary);font-size:12px;flex:0 0 auto;">~</span>
+         <input type="number" id="activeGrinderMax" value="${range.max}" style="flex:1 1 0;min-width:0;width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg-card);font-size:13px;box-sizing:border-box;" onchange="saveActiveGrinderRange()">
+       </div>
+     </div>
+   ` : '';
+   return `
+     <div style="background:var(--bg-card-alt);border-radius:10px;padding:12px 14px;margin-bottom:8px;${isActive ? 'border:1px solid var(--accent);' : ''}">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+         <div style="flex:1;min-width:0;">
+           <div style="font-weight:600;font-size:14px;">${displayName}${badgeHtml}${activeBadge}</div>
+           <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">클릭당 ${g.micronPerClick}μm${!isActive ? ` · 범위 ${range.min}–${range.max}` : ''}</div>
+         </div>
+         <div style="display:flex;gap:4px;flex-shrink:0;">
+           ${!isActive ? `<button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="setActiveGrinder('${g.id}')">활성화</button>` : ''}
+           ${!g.builtin ? `<button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="openGrinderEditor('${g.id}')">편집</button>` : ''}
+           <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="hideGrinder('${g.id}')" ${isActive ? 'disabled title="활성 그라인더는 숨길 수 없습니다"' : ''}>숨김</button>
+         </div>
+       </div>
+       ${rangeEditor}
+     </div>
+   `;
+ }).join('');
+}
+
+function saveActiveGrinderRange() {
+ const minEl = document.getElementById('activeGrinderMin');
+ const maxEl = document.getElementById('activeGrinderMax');
+ if (!minEl || !maxEl) return;
+ let min = parseInt(minEl.value);
+ let max = parseInt(maxEl.value);
+ if (isNaN(min) || isNaN(max)) return;
+ if (min < 0) min = 0;
+ if (max < min) max = min;
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ setGrinderRange(activeId, min, max);
+ // Also update legacy hidden inputs to keep any other code in sync
+ const hMin = document.getElementById('clickMin'); if (hMin) hMin.value = min;
+ const hMax = document.getElementById('clickMax'); if (hMax) hMax.value = max;
+ renderClickGrid();
+}
+
+function setActiveGrinder(id) {
+ const g = getGrinderById(id);
+ if (!g) return;
+ data.activeGrinderId = id;
+ // Load this grinder's saved range (user override or preset default)
+ const range = getGrinderRange(id);
+ data.clickRange = { min: range.min, max: range.max };
+ // Update legacy hidden inputs
+ const minEl = document.getElementById('clickMin');
+ const maxEl = document.getElementById('clickMax');
+ if (minEl) minEl.value = range.min;
+ if (maxEl) maxEl.value = range.max;
+ saveData();
+ // v2.5.6.5: 활성 그라인더 변경 시 클릭모달 미리보기 상태도 동기화
+ previewGrinderId = null;
+ renderClickGrid();
+ renderClickHistory();
+ renderClickGrinderPicker();
+ updateClickGrinderSwitchBtn();
+ updateClickBarLabel();
+ renderGrinderList();
+ // v2.5.6.5: 레시피 카드의 클릭수 표시는 활성 그라인더 기준 동적 환산 → 재렌더
+ if (typeof renderRecipes === 'function') renderRecipes();
+}
+
+function hideGrinder(id) {
+ if (id === (data.activeGrinderId || 'builtin_c60')) { alert('활성 그라인더는 숨길 수 없습니다. 먼저 다른 그라인더를 활성화해 주세요.'); return; }
+ if (!Array.isArray(data.hiddenGrinders)) data.hiddenGrinders = [];
+ if (!data.hiddenGrinders.includes(id)) data.hiddenGrinders.push(id);
+ saveData();
+ // v2.5.6.5: 숨긴 그라인더가 클릭모달 미리보기 대상이었으면 리셋
+ if (previewGrinderId === id) previewGrinderId = null;
+ renderGrinderList();
+ renderClickGrinderPicker();
+ renderClickGrid();
+ renderClickHistory();
+ updateClickGrinderSwitchBtn();
+}
+
+function unhideGrinder(id) {
+ if (!Array.isArray(data.hiddenGrinders)) return;
+ data.hiddenGrinders = data.hiddenGrinders.filter(x => x !== id);
+ saveData();
+ renderGrinderList();
+ renderHiddenGrinders();
+ // v2.5.6.5: 클릭모달 picker 갱신 (복구된 그라인더가 버튼으로 노출되도록)
+ renderClickGrinderPicker();
+ updateClickGrinderSwitchBtn();
+}
+
+function toggleHiddenGrinders() {
+ const area = document.getElementById('grinderHiddenArea');
+ const btn = document.getElementById('grinderHiddenToggleBtn');
+ if (!area || !btn) return;
+ const isOpen = area.style.display !== 'none';
+ if (isOpen) {
+   area.style.display = 'none';
+   btn.textContent = '숨긴 그라인더 보기';
+ } else {
+   renderHiddenGrinders();
+   area.style.display = '';
+   btn.textContent = '숨긴 그라인더 접기';
+ }
+}
+
+function renderHiddenGrinders() {
+ const area = document.getElementById('grinderHiddenArea');
+ if (!area) return;
+ const hiddenIds = data.hiddenGrinders || [];
+ if (!hiddenIds.length) {
+   area.innerHTML = '<div style="color:var(--text-tertiary);font-size:12px;text-align:center;padding:12px 0;">숨긴 그라인더가 없습니다</div>';
+   return;
+ }
+ const items = getAllGrinders().filter(g => hiddenIds.includes(g.id));
+ area.innerHTML = items.map(g => {
+   const displayName = (g.brand ? g.brand + ' ' : '') + g.model;
+   const badgeHtml = g.builtin ? '<span style="font-size:10px;color:var(--text-tertiary);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">빌트인</span>' : '';
+   return `
+     <div style="background:var(--bg-card-alt);border-radius:10px;padding:10px 12px;margin-bottom:6px;opacity:0.7;">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+         <div style="flex:1;min-width:0;">
+           <div style="font-weight:500;font-size:13px;">${displayName}${badgeHtml}</div>
+           <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">클릭당 ${g.micronPerClick}μm</div>
+         </div>
+         <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;flex-shrink:0;" onclick="unhideGrinder('${g.id}')">복구</button>
+       </div>
+     </div>
+   `;
+ }).join('');
+}
+
+function showHiddenGrinders() { toggleHiddenGrinders(); }
+
+function openGrinderEditor(id) {
+ editingGrinderId = id || null;
+ const g = id ? getGrinderById(id) : null;
+ document.getElementById('grinderEditorTitle').textContent = id ? '그라인더 편집' : '그라인더 추가';
+ document.getElementById('grinderEditBrand').value = g?.brand || '';
+ document.getElementById('grinderEditModel').value = g?.model || '';
+ document.getElementById('grinderEditMicron').value = g?.micronPerClick || '';
+ // Prefer user override range; fallback to preset default
+ const range = id ? getGrinderRange(id) : { min: '', max: '' };
+ document.getElementById('grinderEditMin').value = range.min || '';
+ document.getElementById('grinderEditMax').value = range.max || '';
+ const delBtn = document.getElementById('grinderEditDeleteBtn');
+ delBtn.style.display = (g && !g.builtin) ? '' : 'none';
+ openSettingsSub('grinderEditor');
+}
+
+function saveGrinderEdit() {
+ const brand = document.getElementById('grinderEditBrand').value.trim();
+ const model = document.getElementById('grinderEditModel').value.trim();
+ const micron = parseFloat(document.getElementById('grinderEditMicron').value);
+ const dmin = parseInt(document.getElementById('grinderEditMin').value);
+ const dmax = parseInt(document.getElementById('grinderEditMax').value);
+ if (!model) { alert('모델명을 입력해 주세요.'); return; }
+ if (!micron || micron <= 0) { alert('클릭당 μm를 올바르게 입력해 주세요.'); return; }
+ if (!Array.isArray(data.grinders)) data.grinders = [];
+ if (!data.grinderSettings || typeof data.grinderSettings !== 'object') data.grinderSettings = {};
+ let targetId;
+ if (editingGrinderId) {
+   const g = data.grinders.find(x => x.id === editingGrinderId);
+   if (g) {
+     g.brand = brand; g.model = model; g.micronPerClick = micron;
+     if (!isNaN(dmin)) g.defaultMin = dmin;
+     if (!isNaN(dmax)) g.defaultMax = dmax;
+     targetId = g.id;
+   }
+ } else {
+   targetId = 'user_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+   data.grinders.push({
+     id: targetId, brand, model, micronPerClick: micron,
+     defaultMin: !isNaN(dmin) ? dmin : 28,
+     defaultMax: !isNaN(dmax) ? dmax : 34
+   });
+ }
+ // Also save as user-specific range override so "내 클릭수 범위" is explicit
+ if (targetId && !isNaN(dmin) && !isNaN(dmax)) {
+   data.grinderSettings[targetId] = { min: dmin, max: dmax };
+   if (targetId === (data.activeGrinderId || 'builtin_c60')) {
+     data.clickRange = { min: dmin, max: dmax };
+   }
+ }
+ saveData();
+ editingGrinderId = null;
+ closeSettingsSub('grinderList');
+ renderClickGrid();
+ updateClickBarLabel();
+ // v2.5.6.5: 클릭모달 picker/전환버튼도 갱신 (열려있는 경우 대비)
+ renderClickGrinderPicker();
+ updateClickGrinderSwitchBtn();
+}
+
+function deleteUserGrinder() {
+ if (!editingGrinderId) return;
+ if (!confirm('이 그라인더를 삭제할까요? (기존 레시피의 클릭수 기록은 유지됩니다)')) return;
+ if (editingGrinderId === data.activeGrinderId) {
+   data.activeGrinderId = 'builtin_c60';
+   // Sync clickRange to C60 range
+   const r = getGrinderRange('builtin_c60');
+   data.clickRange = { min: r.min, max: r.max };
+   // v2.5.6.5: legacy hidden inputs도 동기화 (다른 코드 호환)
+   const minEl = document.getElementById('clickMin');
+   const maxEl = document.getElementById('clickMax');
+   if (minEl) minEl.value = r.min;
+   if (maxEl) maxEl.value = r.max;
+ }
+ data.grinders = (data.grinders || []).filter(g => g.id !== editingGrinderId);
+ data.hiddenGrinders = (data.hiddenGrinders || []).filter(x => x !== editingGrinderId);
+ if (data.grinderSettings) delete data.grinderSettings[editingGrinderId];
+ saveData();
+ editingGrinderId = null;
+ // v2.5.6.5: 삭제한 그라인더가 클릭모달 미리보기 대상이었으면 리셋
+ previewGrinderId = null;
+ closeSettingsSub('grinderList');
+ renderClickGrid();
+ renderClickHistory();
+ updateClickBarLabel();
+ renderClickGrinderPicker();
+ updateClickGrinderSwitchBtn();
+}
+
+function renderDripperList() {
+ const area = document.getElementById('dripperListArea');
+ if (!area) return;
+ // Reset hidden area to collapsed state when list re-renders (fresh entry)
+ const hiddenArea = document.getElementById('dripperHiddenArea');
+ const hiddenBtn = document.getElementById('dripperHiddenToggleBtn');
+ if (hiddenArea && hiddenArea.style.display === '') {
+   renderHiddenDrippers();
+ } else if (hiddenArea) {
+   hiddenArea.style.display = 'none';
+   if (hiddenBtn) hiddenBtn.textContent = '숨긴 드리퍼 보기';
+ }
+ const all = getAllDrippers().filter(d => !d.hidden);
+ if (!all.length) { area.innerHTML = '<div style="color:var(--text-tertiary);font-size:13px;text-align:center;padding:20px 0;">표시할 드리퍼가 없습니다</div>'; return; }
+ area.innerHTML = all.map(d => {
+   const badgeHtml = d.builtin ? '<span style="font-size:10px;color:var(--text-tertiary);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">빌트인</span>' : '';
+   const sub = [d.brand, d.hasBottom ? '바텀 지원' : null].filter(Boolean).join(' · ');
+   return `
+     <div style="background:var(--bg-card-alt);border-radius:10px;padding:12px 14px;margin-bottom:8px;">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+         <div style="flex:1;min-width:0;">
+           <div style="font-weight:600;font-size:14px;">${d.name}${badgeHtml}</div>
+           ${sub ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${sub}</div>` : ''}
+         </div>
+         <div style="display:flex;gap:4px;flex-shrink:0;">
+           ${!d.builtin ? `<button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="openDripperEditor('${d.id}')">편집</button>` : ''}
+           <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="hideDripper('${d.id}')">숨김</button>
+         </div>
+       </div>
+     </div>
+   `;
+ }).join('');
+}
+
+function hideDripper(id) {
+ if (!Array.isArray(data.hiddenDrippers)) data.hiddenDrippers = [];
+ if (!data.hiddenDrippers.includes(id)) data.hiddenDrippers.push(id);
+ saveData();
+ renderDripperList();
+}
+
+function unhideDripper(id) {
+ if (!Array.isArray(data.hiddenDrippers)) return;
+ data.hiddenDrippers = data.hiddenDrippers.filter(x => x !== id);
+ saveData();
+ renderDripperList();
+ renderHiddenDrippers();
+}
+
+function toggleHiddenDrippers() {
+ const area = document.getElementById('dripperHiddenArea');
+ const btn = document.getElementById('dripperHiddenToggleBtn');
+ if (!area || !btn) return;
+ const isOpen = area.style.display !== 'none';
+ if (isOpen) {
+   area.style.display = 'none';
+   btn.textContent = '숨긴 드리퍼 보기';
+ } else {
+   renderHiddenDrippers();
+   area.style.display = '';
+   btn.textContent = '숨긴 드리퍼 접기';
+ }
+}
+
+function renderHiddenDrippers() {
+ const area = document.getElementById('dripperHiddenArea');
+ if (!area) return;
+ const hiddenIds = data.hiddenDrippers || [];
+ if (!hiddenIds.length) {
+   area.innerHTML = '<div style="color:var(--text-tertiary);font-size:12px;text-align:center;padding:12px 0;">숨긴 드리퍼가 없습니다</div>';
+   return;
+ }
+ const items = getAllDrippers().filter(d => hiddenIds.includes(d.id));
+ area.innerHTML = items.map(d => {
+   const badgeHtml = d.builtin ? '<span style="font-size:10px;color:var(--text-tertiary);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">빌트인</span>' : '';
+   const sub = [d.brand].filter(Boolean).join(' · ');
+   return `
+     <div style="background:var(--bg-card-alt);border-radius:10px;padding:10px 12px;margin-bottom:6px;opacity:0.7;">
+       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+         <div style="flex:1;min-width:0;">
+           <div style="font-weight:500;font-size:13px;">${d.name}${badgeHtml}</div>
+           ${sub ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${sub}</div>` : ''}
+         </div>
+         <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;flex-shrink:0;" onclick="unhideDripper('${d.id}')">복구</button>
+       </div>
+     </div>
+   `;
+ }).join('');
+}
+
+function showHiddenDrippers() { toggleHiddenDrippers(); }
+
+function openDripperEditor(id) {
+ editingDripperId = id || null;
+ const d = id ? getDripperById(id) : null;
+ document.getElementById('dripperEditorTitle').textContent = id ? '드리퍼 편집' : '드리퍼 추가';
+ document.getElementById('dripperEditName').value = d?.name || '';
+ document.getElementById('dripperEditBrand').value = d?.brand || '';
+ // v2.5.6.3.3: 거치형 멜로드립 무게 (빌트인은 user override 영역에서 값 조회)
+ const mw = getDripperMeloWeight(id);
+ document.getElementById('dripperEditMeloWeight').value = (mw != null && mw !== 0) ? mw : '';
+ const delBtn = document.getElementById('dripperEditDeleteBtn');
+ delBtn.style.display = (d && !d.builtin) ? '' : 'none';
+ openSettingsSub('dripperEditor');
+}
+
+function saveDripperEdit() {
+ const name = document.getElementById('dripperEditName').value.trim();
+ const brand = document.getElementById('dripperEditBrand').value.trim();
+ if (!name) { alert('드리퍼 이름을 입력해 주세요.'); return; }
+ // v2.5.6.3.3: meloWeight 파싱 (빈값/0/음수는 null로 취급)
+ const mwRaw = document.getElementById('dripperEditMeloWeight').value;
+ const mwNum = parseInt(mwRaw);
+ const mw = (!isNaN(mwNum) && mwNum > 0) ? mwNum : null;
+ if (!Array.isArray(data.drippers)) data.drippers = [];
+ if (editingDripperId) {
+   // 빌트인 드리퍼 편집: 이름/브랜드는 변경 불가지만 meloWeight만 user override로 저장
+   const dObj = getDripperById(editingDripperId);
+   if (dObj && dObj.builtin) {
+     setDripperMeloWeight(editingDripperId, mw);
+   } else {
+     // 사용자 드리퍼: 이름/브랜드/meloWeight 모두 편집 가능
+     const d = data.drippers.find(x => x.id === editingDripperId);
+     if (d) { d.name = name; d.brand = brand; d.meloWeight = mw; }
+   }
+ } else {
+   const id = 'user_dr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+   data.drippers.push({ id, name, brand, hasBottom: false, meloWeight: mw });
+ }
+ saveData();
+ editingDripperId = null;
+ closeSettingsSub('dripperList');
+}
+
+function deleteUserDripper() {
+ if (!editingDripperId) return;
+ if (!confirm('이 드리퍼를 삭제할까요? (기존 레시피의 드리퍼 기록은 유지됩니다)')) return;
+ data.drippers = (data.drippers || []).filter(d => d.id !== editingDripperId);
+ data.hiddenDrippers = (data.hiddenDrippers || []).filter(x => x !== editingDripperId);
+ saveData();
+ editingDripperId = null;
+ closeSettingsSub('dripperList');
 }
 
 function confirmClearData() { if (confirm('모든 데이터를 삭제할까요? 이 작업은 되돌릴 수 없습니다.')) { localStorage.removeItem(DB_KEY); FC_EXTRA_KEYS.forEach(k => localStorage.removeItem(k)); location.reload(); } }
@@ -2819,12 +4554,15 @@ function buildTimerSteps(recipe) {
  // Calculate cumulative amounts
  let cumulative = 0;
  const meloDripType = recipe.meloDrip || '';
+ // v2.5.6.3.3: 거치형(오레아 멜로드립) 무게는 레시피의 드리퍼에서 조회.
+ // 핸들/일반 멜로드립은 장착 의미가 없거나 관리 대상이 아니므로 가산하지 않음.
  let meloDripWeight = 0;
  if (meloDripType === '오레아 멜로드립') {
-   meloDripWeight = parseFloat(localStorage.getItem('fc_meloDripWeightOrea')) || parseFloat(localStorage.getItem('fc_meloDripWeight')) || 0;
- } else if (meloDripType === '멜로드립') {
-   meloDripWeight = parseFloat(localStorage.getItem('fc_meloDripWeightOriginal')) || 0;
+   const dripperId = findDripperIdByName(recipe.dripper);
+   meloDripWeight = getDripperMeloWeight(dripperId) || 0;
  }
+ // v2.5.6.3.3: 블루밍부터 반영할지 여부 (레시피별 설정, 거치형일 때만 유효)
+ const bloomInclude = !!recipe.meloBloomInclude;
  recipe.pourGuide.forEach((p, i) => {
    const sec = parseTimeToSeconds(p.time);
    let stage = p.action || '';
@@ -2838,15 +4576,18 @@ function buildTimerSteps(recipe) {
    if (!isDrawdown && pourAmount > 0) {
      cumulative += pourAmount;
    }
-   // Add meloDrip offset after blooming (for 장착형)
+   // v2.5.6.3.3: 거치형 무게 누적 반영
+   // - 드로우다운 제외
+   // - 블루밍은 meloBloomInclude가 true일 때만 포함
    let displayCumulative = cumulative;
-   if (meloDripWeight > 0 && !displayStage.includes('블루밍') && !isDrawdown && cumulative > 0) {
+   const isBloom = displayStage.includes('블루밍');
+   if (meloDripWeight > 0 && !isDrawdown && cumulative > 0 && (!isBloom || bloomInclude)) {
      displayCumulative = cumulative + meloDripWeight;
    }
    let amount = isDrawdown ? '' : displayCumulative + 'g';
    let ttsAmount = isDrawdown ? '' : displayCumulative + '그람';
    let ttsText = '';
-   if (displayStage.includes('블루밍')) {
+   if (isBloom) {
      ttsText = ttsAmount ? `블루밍, ${ttsAmount}까지` : '블루밍';
    } else if (isDrawdown) {
      ttsText = '드로우다운';
@@ -3311,10 +5052,17 @@ function generateShareCard() {
 
  const drip = [b.dripper, bottom].filter(Boolean).join(' · ');
  if (drip) row('드리퍼', drip);
- if (b.clicks) { const um = Math.round(parseInt(b.clicks) * 21); row('그라인드', `C60 ${b.clicks}클릭 (≈${um}μm)`); }
+ // v2.5.6.3: 공유카드는 추출 기록의 grinderId 기준으로 표시 (기록 시점의 그라인더 = 진실).
+ if (b.clicks) {
+   const bg = getGrinderById(b.grinderId || 'builtin_c60') || getGrinderById('builtin_c60');
+   const mpc = bg ? bg.micronPerClick : 21;
+   const modelLabel = bg ? bg.model : 'C60';
+   const um = Math.round(parseInt(b.clicks) * mpc);
+   row('그라인드', `${modelLabel} ${b.clicks}클릭 (≈${um}μm)`);
+ }
  if (b.temp) row('수온', `${b.temp}°C`);
  if (b.dose && b.water) { const r = '1:' + (parseFloat(b.water) / parseFloat(b.dose)).toFixed(1); row('도즈 / 물량', `${b.dose}g → ${b.water}g (${r})`); }
- if (b.meloDrip) row('멜로드립', b.meloDrip);
+ if (b.meloDrip) row('멜로드립', formatMeloDripDisplay(b.meloDrip));
  if (b.waterType) row('물', b.waterType);
  if (targetTime) row('목표 시간', targetTime);
  if (b.time && b.time !== targetTime) row('실제 시간', b.time);
@@ -3539,25 +5287,6 @@ function resetBrewAdjustments() {
  updateAdjustDisplay();
 }
 
-// ─── MeloDrip Weight Setting (2 types) ───
-function saveMeloDripWeights() {
- const orea = document.getElementById('meloDripWeightOrea').value;
- const orig = document.getElementById('meloDripWeightOriginal').value;
- localStorage.setItem('fc_meloDripWeight', orea || '');
- localStorage.setItem('fc_meloDripWeightOrea', orea || '');
- localStorage.setItem('fc_meloDripWeightOriginal', orig || '');
-}
-function loadMeloDripWeight() {
- // Migration: old single value → orea
- const legacy = localStorage.getItem('fc_meloDripWeight') || '';
- const orea = localStorage.getItem('fc_meloDripWeightOrea') || legacy;
- const orig = localStorage.getItem('fc_meloDripWeightOriginal') || '';
- const elOrea = document.getElementById('meloDripWeightOrea');
- const elOrig = document.getElementById('meloDripWeightOriginal');
- if (elOrea) elOrea.value = orea;
- if (elOrig) elOrig.value = orig;
-}
-
 // ─── MeloDrip type migration ───
 function migrateMeloDripValues() {
  // Convert old values to new naming
@@ -3571,8 +5300,67 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.5.1';
+const APP_VERSION = 'v2.5.6';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.6',
+   date: '2026.04.21',
+   items: [
+     // ── 그라인더 시스템 ──
+     { type: 'new', text: '그라인더 관리 통합 — 활성 그라인더 선택, 내 클릭수 범위 편집, 빌트인 7종(Comandante C60 · C40 MK4 · C40 Red Clix · 1Zpresso J-Max · K-Max · Timemore C2 · 078) + 사용자 추가/숨김/복구' },
+     { type: 'new', text: '그라인더별 내 클릭수 범위 저장 — 그라인더를 전환해도 각 그라인더의 범위가 독립적으로 유지' },
+     { type: 'new', text: '클릭수 설정 모달에 그라인더 전환 UI — 그라인더 2개 이상일 때 상단 버튼으로 노출, 탭하면 클릭 그리드/히스토리가 해당 그라인더 기준으로 바로 미리보기' },
+     { type: 'new', text: '미리보기 중인 그라인더에서 클릭 버튼을 누르면 자동으로 활성 그라인더 전환 + 클릭수 저장, [전환] 버튼은 클릭수 변경 없이 그라인더만 바꿀 때 사용' },
+     { type: 'improve', text: '그라인더별 클릭 히스토리 분리 — 선택한 그라인더의 최근 5개 우선 노출, [더보기]로 전체 확인' },
+     { type: 'improve', text: '클릭모달과 설정 → 그라인더 관리의 활성 상태 양방향 동기화 — 어느 쪽에서 전환해도 즉시 반영' },
+     { type: 'improve', text: '상단 클릭바 라벨이 활성 그라인더 이름으로 자동 변경' },
+     { type: 'improve', text: 'μm 기반 그라인드 변환 엔진 — 레시피는 μm로 저장, 활성 그라인더 기준으로 자동 환산 표시 (C60 활성이면 C60 클릭수, C40 활성이면 C40 클릭수)' },
+
+     // ── 드리퍼 시스템 ──
+     { type: 'new', text: '드리퍼 관리 — 빌트인 6종 (Orea V4 · O1 Baby O · Hario V60 · Switch · Hario Neo · Hario Alpha) + 사용자 추가·편집·숨김·복구' },
+     { type: 'improve', text: '멜로드립 설정을 드리퍼별 관리로 이전 — 각 드리퍼의 거치형 멜로드립 무게를 드리퍼 편집에서 설정' },
+     { type: 'improve', text: '멜로드립 명칭 통일 — "오레아" 표기를 "거치형"으로 변경 (타 브랜드 거치형도 포괄). 레시피 생성/편집/설정/상세/추출/공유카드 모두 "거치형"으로 노출, 기존 저장값은 그대로 유지' },
+     { type: 'fix', text: 'Hario Neo / Hario Alpha 드리퍼 브랜드명 정정' },
+
+     // ── 레시피 시스템 ──
+     { type: 'new', text: '레시피 시스템 리디자인 — 원두 → 드리퍼 → 레시피 선택 (템플릿 / Matthew 엔진 / AI 붙여넣기) 2단계 플로우' },
+     { type: 'new', text: '빌트인 레시피 템플릿 11종 — Orea V4 5개 (Easy Does It · The Dara · The Fine · The Aussie · WBrC 2024 Wölfl), O1 Baby O 3개, Hario V60 1개(용챔 10g), Switch 2개(용챔 17g·20g)' },
+     { type: 'new', text: '빌트인 템플릿 11개 모두에 푸어링 가이드 내장 — 선택 후 바로 타이머 사용 가능' },
+     { type: 'new', text: '레시피 템플릿 관리 기능 — 유명 바리스타 레시피나 자주 쓰는 베이스 레시피를 템플릿으로 등록, 원하는 원두로 바로 변형' },
+     { type: 'new', text: '설정 1뎁스에 "레시피 템플릿" 메뉴 — 빌트인/사용자 템플릿을 드리퍼별로 그룹 관리, 편집·삭제·숨김·복구' },
+     { type: 'new', text: '레시피 생성 시 템플릿 목록 맨 아래 "+ 새 템플릿 추가" 진입점 — 등록 즉시 목록 반영되어 바로 선택 가능' },
+     { type: 'new', text: '새 템플릿 등록 시 "기존 템플릿 복사" 옵션 — 빌트인/사용자 템플릿을 베이스로 폼 자동 채움' },
+     { type: 'new', text: '템플릿 파생 추적 — 레시피 상세에 "↳ 원본 템플릿 기반" 배지 + 원본과 다른 필드만 비교 표시' },
+     { type: 'new', text: '레시피마다 "블루밍부터 거치형 무게 반영" 체크박스 — 거치형 선택 시 노출, 레시피 생성/편집 양쪽에서 설정 가능' },
+
+     // ── 추출 ──
+     { type: 'new', text: '추출 기록에 사용 그라인더 자동 스탬프 — 공유카드에 기록 시점 그라인더 모델명 표시' },
+     { type: 'new', text: '추출 상세에 레시피 연결 표시 — 해당 추출에 사용한 레시피를 탭하면 레시피 상세로 바로 이동' },
+     { type: 'new', text: '추출 상세에 그라인더 행 추가 — 드리퍼와 클릭수 사이에 사용한 그라인더 모델명 표시' },
+
+     // ── Matthew 엔진 ──
+     { type: 'improve', text: 'Matthew 자동 생성 레시피 카드를 템플릿 목록 최상단으로 배치 — 원두 기반 맞춤 추천을 더 빠르게 선택' },
+     { type: 'improve', text: 'Matthew 엔진 미리보기가 활성 그라인더 기준 클릭수로 표시 (엔진 내부 계산은 C60 기준 유지)' },
+     { type: 'improve', text: 'Matthew 엔진 조정 화면에서 멜로드립 토글 제거 (이전 단계에서 이미 선택)' },
+
+     // ── 시스템 / 스키마 ──
+     { type: 'new', text: '설정 1뎁스에 "📋 패치노트" 메뉴 — 전체 업데이트 내역 한눈에 확인 가능' },
+     { type: 'improve', text: '내부 레시피 스키마 정비 — source 필드 추가로 템플릿/파생 추적 지원' },
+     { type: 'improve', text: '기존 레시피 자동 마이그레이션 — 모두 Matthew 엔진 출처로 태깅 (데이터 손실 없음)' },
+     { type: 'improve', text: '기존 "오레아 거치형 무게" 설정 값은 Orea V4 드리퍼의 거치형 무게로 자동 이전 (데이터 손실 없음)' },
+     { type: 'remove', text: '레시피 탭의 "+ 추가" 버튼 제거 — 레시피는 이제 원두 상세에서만 생성' },
+
+     // ── 고급 / 기타 ──
+     { type: 'new', text: '설정 → 고급 → AI 레시피 붙여넣기 토글 (기본 OFF, PWA 전용) — 레시피 생성 시 AI 텍스트 붙여넣기로 등록' },
+
+     // ── 버그 수정 ──
+     { type: 'fix', text: '타이머 누적 무게 계산이 레시피의 드리퍼 설정과 블루밍 반영 체크박스를 따르도록 개선' },
+     { type: 'fix', text: '템플릿/커스텀 레시피 상세에서 Matthew 엔진 공식 브레이크다운(기준 33, 라이트 -1 등)이 잘못 표시되던 문제 — 이제 Matthew 엔진 레시피에만 표시' },
+     { type: 'fix', text: '레시피 상세의 "바텀" 필드는 Orea V4 레시피에서만 표시' },
+     { type: 'fix', text: '템플릿 레시피 타이머에서 마지막 푸어 이후 "드로우다운" 구간이 0초로 잡혀 링이 정상 표시되지 않던 문제 — 마지막 푸어가 목표시간까지 자연스럽게 이어짐' },
+     { type: 'fix', text: 'Matthew 엔진 진입 시 핫/아이스 토글이 동작하지 않고 콘솔 에러가 발생하던 문제 — 누락된 setGenBrewType 함수 복원' },
+   ]
+ },
  {
    version: 'v2.5.5.1',
    date: '2025.04.20',
@@ -3691,7 +5479,8 @@ const PATCH_NOTES = [
 function checkPatchNotes() {
  const seen = localStorage.getItem('fc_lastSeenVersion');
  if (seen === APP_VERSION) return;
- const current = PATCH_NOTES.find(p => p.version === APP_VERSION);
+ // 안전장치: APP_VERSION과 정확히 일치하는 노트가 없으면 최신 노트 사용
+ const current = PATCH_NOTES.find(p => p.version === APP_VERSION) || PATCH_NOTES[0];
  if (!current) return;
  // 첫 사용자(seen이 null)인데 데이터가 있으면 기존 사용자 → 패치노트 보여주기
  if (!seen) {
@@ -3724,6 +5513,31 @@ function showPatchNotes(notes) {
 function closePatchNotes() {
  localStorage.setItem('fc_lastSeenVersion', APP_VERSION);
  closeModal('patchNotesModal');
+}
+
+// v2.5.6: 전체 패치노트 리스트 렌더 (설정 → 패치노트)
+function renderPatchNotesList() {
+ const badgeLabel = { new: 'NEW', fix: 'FIX', improve: '개선', remove: '제거' };
+ const area = document.getElementById('patchNotesListArea');
+ if (!area) return;
+ if (!PATCH_NOTES || !PATCH_NOTES.length) {
+   area.innerHTML = '<div class="empty-state"><p>패치노트가 없습니다</p></div>';
+   return;
+ }
+ area.innerHTML = PATCH_NOTES.map(n => `
+   <div class="card" style="margin-bottom:12px;">
+     <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px;">
+       <span style="font-weight:600;font-size:15px;color:var(--accent);">${n.version}</span>
+       <span style="font-size:12px;color:var(--text-tertiary);">${n.date || ''}</span>
+     </div>
+     ${(n.items || []).map(item => `
+       <div class="patch-item">
+         <span class="patch-badge ${item.type}">${badgeLabel[item.type] || item.type}</span>
+         <span>${item.text}</span>
+       </div>
+     `).join('')}
+   </div>
+ `).join('');
 }
 
 // ─── CupNotes migration: recipe.notes → bean.cupNotes ───
@@ -3779,14 +5593,514 @@ function toggleAlertSetting(el) {
 }
 // ─── Settings Sub-modal Navigation ───
 function openSettingsSub(name) {
- const map = { grinder: 'settingsSubGrinder', melodrip: 'settingsSubMelodrip', alerts: 'settingsSubAlerts', data: 'settingsSubData' };
+ const map = {
+   alerts: 'settingsSubAlerts', data: 'settingsSubData',
+   grinderList: 'settingsSubGrinderList', dripperList: 'settingsSubDripperList',
+   grinderEditor: 'settingsSubGrinderEditor', dripperEditor: 'settingsSubDripperEditor',
+   presetList: 'settingsSubPresetList', presetEditor: 'settingsSubPresetEditor',
+   advanced: 'settingsSubAdvanced',
+   patchNotesList: 'settingsSubPatchNotesList'
+ };
  document.querySelectorAll('#settingsModal .settings-sub-view').forEach(v => v.classList.remove('active'));
  const sub = document.getElementById(map[name]);
  if (sub) sub.classList.add('active');
+ // Render dynamic content on open
+ if (name === 'grinderList') renderGrinderList();
+ if (name === 'dripperList') renderDripperList();
+ if (name === 'presetList') renderPresetManage();
+ if (name === 'advanced') syncAiPasteToggle();
+ if (name === 'patchNotesList') renderPatchNotesList();
 }
-function closeSettingsSub() {
+function closeSettingsSub(target) {
+ // Optionally go back to a specific sub-view instead of the main view
  document.querySelectorAll('#settingsModal .settings-sub-view').forEach(v => v.classList.remove('active'));
+ if (target) { openSettingsSub(target); return; }
  document.getElementById('settingsMainView').classList.add('active');
+}
+
+// v2.5.6.2: AI paste toggle in advanced settings
+function syncAiPasteToggle() {
+ const el = document.getElementById('aiPasteToggle');
+ if (!el) return;
+ el.classList.toggle('on', isAiPasteEnabled());
+}
+function toggleAiPaste() {
+ setAiPasteEnabled(!isAiPasteEnabled());
+ syncAiPasteToggle();
+}
+
+// v2.5.6.4: 레시피 템플릿 관리 (빌트인 숨김/복구 + 사용자 템플릿 편집/삭제)
+function renderPresetManage() {
+ const hidden = data.hiddenPresets || [];
+ const userPresets = Array.isArray(data.userPresets) ? data.userPresets : [];
+ // 노출 중 빌트인 + 전체 사용자 템플릿
+ const visibleBuiltin = RECIPE_PRESETS.filter(p => !hidden.includes(p.id));
+ const all = visibleBuiltin.concat(userPresets);
+ const area = document.getElementById('presetManageArea');
+ if (!area) return;
+ if (!all.length) {
+   area.innerHTML = '<div style="color:var(--text-tertiary);font-size:12px;padding:8px 0;">등록된 템플릿이 없습니다. "+ 새 템플릿 추가"로 등록하세요.</div>';
+ } else {
+   // 드리퍼별 그룹
+   const byDripper = {};
+   all.forEach(p => {
+     const d = getDripperById(p.dripperId);
+     const key = d ? d.name : '기타';
+     if (!byDripper[key]) byDripper[key] = [];
+     byDripper[key].push(p);
+   });
+   let html = '';
+   Object.keys(byDripper).forEach(dripName => {
+     html += `<div style="font-size:11px;color:var(--text-tertiary);margin:8px 0 4px;text-transform:uppercase;letter-spacing:0.5px;">${escapeHtml(dripName)}</div>`;
+     byDripper[dripName].forEach(p => {
+       const userMade = isUserPreset(p.id);
+       const badge = userMade
+         ? '<span style="font-size:10px;color:var(--accent);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">내 템플릿</span>'
+         : '<span style="font-size:10px;color:var(--text-tertiary);background:var(--bg-input);padding:2px 6px;border-radius:4px;margin-left:6px;">빌트인</span>';
+       const actionBtn = userMade
+         ? `<button class="btn btn-secondary btn-sm" style="width:auto;font-size:11px;padding:4px 10px;" onclick="openPresetEditor('${p.id}')">편집</button>`
+         : `<button class="btn btn-secondary btn-sm" style="width:auto;font-size:11px;padding:4px 10px;" onclick="onHidePreset('${p.id}')">숨기기</button>`;
+       html += `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-light);">
+         <div style="flex:1;min-width:0;">
+           <div style="font-size:13px;font-weight:500;">${escapeHtml(p.name)}${badge}</div>
+           ${p.author ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${escapeHtml(p.author)}</div>` : ''}
+         </div>
+         ${actionBtn}
+       </div>`;
+     });
+   });
+   area.innerHTML = html;
+ }
+ // 숨긴 프리셋 영역
+ renderPresetHiddenArea();
+}
+function renderPresetHiddenArea() {
+ const hidden = data.hiddenPresets || [];
+ const area = document.getElementById('presetHiddenArea');
+ const btn = document.getElementById('presetHiddenToggleBtn');
+ if (!area || !btn) return;
+ if (!hidden.length) {
+   area.innerHTML = '<div style="color:var(--text-tertiary);font-size:12px;padding:8px 0;">숨긴 템플릿이 없습니다.</div>';
+   btn.textContent = '숨긴 템플릿 보기 (0)';
+   return;
+ }
+ btn.textContent = `숨긴 템플릿 보기 (${hidden.length})`;
+ const items = hidden.map(id => getPresetById(id)).filter(Boolean);
+ area.innerHTML = items.map(p => {
+   const d = getDripperById(p.dripperId);
+   return `<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-light);">
+     <div style="flex:1;min-width:0;">
+       <div style="font-size:13px;font-weight:500;color:var(--text-secondary);">${escapeHtml(p.name)}</div>
+       <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${d ? escapeHtml(d.name) : ''}${p.author ? ' · ' + escapeHtml(p.author) : ''}</div>
+     </div>
+     <button class="btn btn-secondary btn-sm" style="width:auto;font-size:11px;padding:4px 10px;" onclick="onRestorePreset('${p.id}')">복구</button>
+   </div>`;
+ }).join('');
+}
+function togglePresetHiddenView() {
+ const area = document.getElementById('presetHiddenArea');
+ const btn = document.getElementById('presetHiddenToggleBtn');
+ if (!area) return;
+ const isHidden = area.style.display === 'none';
+ area.style.display = isHidden ? '' : 'none';
+ if (isHidden) renderPresetHiddenArea();
+}
+// v2.5.6.4: 레시피 생성 플로우에서 "+ 새 템플릿 추가"로 진입.
+// 현재 Stage 1 상태(선택된 원두/드리퍼/멜로)를 기억해두고, 저장 또는 뒤로가기 시 복귀.
+let presetEditorReturnState = null;
+function openPresetEditorFromGenFlow() {
+ // 현재 Stage 1 상태 백업
+ presetEditorReturnState = {
+   beanId: genState && genState.beanId ? genState.beanId : null,
+   dripperId: genSelectedDripperId || '',
+   melo: (typeof genMeloDripStage1 !== 'undefined') ? genMeloDripStage1 : '미사용'
+ };
+ // 레시피 생성 모달 닫고 설정 → 템플릿 에디터 열기
+ closeModal('recipeGenModal');
+ openModal('settingsModal');
+ // 현재 선택된 드리퍼가 있으면 그걸 기본 선택 상태로
+ openPresetEditor();
+ // 드리퍼 prefill
+ if (presetEditorReturnState.dripperId) {
+   const sel = document.getElementById('presetEditDripper');
+   if (sel) { sel.value = presetEditorReturnState.dripperId; updatePresetEditBottomVisibility(); }
+ }
+}
+// 설정 모달을 닫을 때, gen-flow에서 진입한 경우면 레시피 생성 모달로 복귀
+function returnToGenFlowIfNeeded() {
+ if (!presetEditorReturnState) return false;
+ const st = presetEditorReturnState;
+ presetEditorReturnState = null;
+ closeModal('settingsModal');
+ // 원두 찾기
+ if (!st.beanId) return true;
+ const bean = (data.beans || []).find(x => x.id === st.beanId);
+ if (!bean) return true;
+ // 레시피 생성 모달 재오픈 → Stage 1 초기화
+ openRecipeGenModal(bean);
+ // 드리퍼/멜로 복원 (UI 갱신)
+ if (st.dripperId) {
+   // setTimeout으로 모달 DOM 렌더 직후 상태 반영
+   setTimeout(() => {
+     if (typeof onGenDripperPicked === 'function') onGenDripperPicked(st.dripperId);
+     if (st.melo && typeof setGenMeloDripStage1 === 'function') setGenMeloDripStage1(st.melo);
+   }, 0);
+ }
+ return true;
+}
+
+function onHidePreset(id) {
+ hidePreset(id);
+ renderPresetManage();
+}
+function onRestorePreset(id) {
+ restorePreset(id);
+ renderPresetManage();
+ // 숨긴 목록 영역을 펼친 상태로 유지
+ const area = document.getElementById('presetHiddenArea');
+ if (area) area.style.display = '';
+}
+
+// ─── Recipe Template Editor (v2.5.6.4) ───
+// editingPresetId: 편집 중인 사용자 템플릿 ID (신규 등록 시 null)
+// presetEditState: 토글류(멜로/브루타입/바텀) 값 보관
+let editingPresetId = null;
+let presetEditState = { brewType: '핫', meloDrip: '미사용', bottom: '', mode: 'blank' };
+
+// 푸어/조정 에디터 DOM 관리용 helpers
+function clearChildren(el) { while (el && el.firstChild) el.removeChild(el.firstChild); }
+function createPourRow(time, amount, action) {
+ const row = document.createElement('div');
+ row.className = 'preset-pour-row';
+ row.style.cssText = 'display:flex;gap:6px;align-items:center;';
+ const mkInput = (placeholder, value, flex) => {
+   const i = document.createElement('input');
+   i.type = 'text';
+   i.placeholder = placeholder;
+   i.value = value || '';
+   i.style.cssText = `flex:${flex};min-width:0;`;
+   return i;
+ };
+ const tEl = mkInput('0:00', time, '0 0 60px');
+ tEl.dataset.field = 'time';
+ const aEl = mkInput('53g', amount, '0 0 64px');
+ aEl.dataset.field = 'amount';
+ const actEl = mkInput('푸어 설명', action, '1');
+ actEl.dataset.field = 'action';
+ const del = document.createElement('button');
+ del.type = 'button';
+ del.className = 'btn btn-secondary btn-sm';
+ del.style.cssText = 'width:auto;font-size:11px;padding:4px 8px;flex:0 0 auto;';
+ del.textContent = '×';
+ del.onclick = () => row.remove();
+ row.appendChild(tEl); row.appendChild(aEl); row.appendChild(actEl); row.appendChild(del);
+ return row;
+}
+function addPresetPourRow() {
+ const list = document.getElementById('presetPourGuideList');
+ if (!list) return;
+ list.appendChild(createPourRow('', '', ''));
+}
+function createAdjustRow(symptom, fix) {
+ const row = document.createElement('div');
+ row.className = 'preset-adjust-row';
+ row.style.cssText = 'display:flex;gap:6px;align-items:center;';
+ const mkInput = (placeholder, value, flex) => {
+   const i = document.createElement('input');
+   i.type = 'text';
+   i.placeholder = placeholder;
+   i.value = value || '';
+   i.style.cssText = `flex:${flex};min-width:0;`;
+   return i;
+ };
+ const sEl = mkInput('증상 (예: 떫음)', symptom, '1');
+ sEl.dataset.field = 'symptom';
+ const fEl = mkInput('대응 (예: 분쇄 +1클릭)', fix, '1');
+ fEl.dataset.field = 'fix';
+ const del = document.createElement('button');
+ del.type = 'button';
+ del.className = 'btn btn-secondary btn-sm';
+ del.style.cssText = 'width:auto;font-size:11px;padding:4px 8px;flex:0 0 auto;';
+ del.textContent = '×';
+ del.onclick = () => row.remove();
+ row.appendChild(sEl); row.appendChild(fEl); row.appendChild(del);
+ return row;
+}
+function addPresetAdjustRow() {
+ const list = document.getElementById('presetAdjustList');
+ if (!list) return;
+ list.appendChild(createAdjustRow('', ''));
+}
+
+// 토글 버튼 상태 세터
+function setPresetEditBrewType(v) {
+ presetEditState.brewType = v;
+ document.querySelectorAll('#settingsSubPresetEditor [data-brewtype]').forEach(b => {
+   b.classList.toggle('active', b.dataset.brewtype === v);
+ });
+}
+function setPresetEditMelo(v) {
+ presetEditState.meloDrip = v;
+ document.querySelectorAll('#settingsSubPresetEditor [data-melo]').forEach(b => {
+   b.classList.toggle('active', b.dataset.melo === v);
+ });
+}
+function setPresetEditBottom(v) {
+ presetEditState.bottom = v;
+ document.querySelectorAll('#settingsSubPresetEditor [data-bottom]').forEach(b => {
+   b.classList.toggle('active', b.dataset.bottom === v);
+ });
+}
+function setPresetEditorMode(mode) {
+ presetEditState.mode = mode;
+ document.querySelectorAll('#presetEditorSourceToggle .toggle-opt').forEach(b => b.classList.remove('active'));
+ const btns = document.querySelectorAll('#presetEditorSourceToggle .toggle-opt');
+ if (mode === 'blank' && btns[0]) btns[0].classList.add('active');
+ if (mode === 'copy' && btns[1]) btns[1].classList.add('active');
+ const copyWrap = document.getElementById('presetCopySelectWrap');
+ if (copyWrap) copyWrap.style.display = (mode === 'copy') ? '' : 'none';
+ if (mode === 'copy') populatePresetCopySelect();
+}
+
+// '기존 템플릿 복사' 드롭다운 채우기
+function populatePresetCopySelect() {
+ const sel = document.getElementById('presetCopySelect');
+ if (!sel) return;
+ const all = getAllPresets();
+ // 드리퍼별 그룹
+ const byDripper = {};
+ all.forEach(p => {
+   const d = getDripperById(p.dripperId);
+   const key = d ? d.name : '기타';
+   if (!byDripper[key]) byDripper[key] = [];
+   byDripper[key].push(p);
+ });
+ let html = '<option value="">— 선택 —</option>';
+ Object.keys(byDripper).forEach(dripName => {
+   html += `<optgroup label="${escapeHtml(dripName)}">`;
+   byDripper[dripName].forEach(p => {
+     const tag = isUserPreset(p.id) ? ' (내 템플릿)' : '';
+     html += `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}${tag}</option>`;
+   });
+   html += '</optgroup>';
+ });
+ sel.innerHTML = html;
+ sel.value = '';
+}
+
+// 드리퍼 선택 <select> 옵션 채우기 (숨김 제외한 전체 드리퍼)
+function populatePresetDripperSelect(selectedId) {
+ const sel = document.getElementById('presetEditDripper');
+ if (!sel) return;
+ const list = typeof getAllDrippers === 'function' ? getAllDrippers() : [];
+ const hiddenIds = data.hiddenDrippers || [];
+ const visible = list.filter(d => !hiddenIds.includes(d.id));
+ let html = '';
+ visible.forEach(d => {
+   html += `<option value="${escapeHtml(d.id)}"${d.id === selectedId ? ' selected' : ''}>${escapeHtml(d.name)}</option>`;
+ });
+ sel.innerHTML = html;
+ // 변경 시 바텀 토글 표시 여부 갱신
+ sel.onchange = () => updatePresetEditBottomVisibility();
+ updatePresetEditBottomVisibility();
+}
+function updatePresetEditBottomVisibility() {
+ const sel = document.getElementById('presetEditDripper');
+ const wrap = document.getElementById('presetEditBottomWrap');
+ if (!sel || !wrap) return;
+ const d = getDripperById(sel.value);
+ const show = !!(d && d.hasBottom);
+ wrap.style.display = show ? '' : 'none';
+ if (!show) { presetEditState.bottom = ''; }
+}
+
+// 에디터 열기 — id 있으면 편집 모드, 없으면 신규 등록 모드
+function openPresetEditor(id) {
+ editingPresetId = id || null;
+ const isEdit = !!(id && isUserPreset(id));
+ const preset = isEdit ? getPresetById(id) : null;
+
+ // 제목 / 소스 토글 표시
+ document.getElementById('presetEditorTitle').textContent = isEdit ? '템플릿 편집' : '새 템플릿';
+ document.getElementById('presetEditorSourceWrap').style.display = isEdit ? 'none' : '';
+ document.getElementById('presetEditDeleteBtn').style.display = isEdit ? '' : 'none';
+
+ // 소스 모드 초기화 (신규는 blank 기본)
+ presetEditState = { brewType: '핫', meloDrip: '미사용', bottom: '', mode: 'blank' };
+ if (!isEdit) setPresetEditorMode('blank');
+
+ // 폼 초기화 (편집이면 기존 값으로 채움)
+ document.getElementById('presetEditName').value = preset?.name || '';
+ document.getElementById('presetEditAuthor').value = preset?.author || '';
+ populatePresetDripperSelect(preset?.dripperId || 'builtin_orea_v4');
+ document.getElementById('presetEditDose').value = preset?.dose != null ? preset.dose : '';
+ document.getElementById('presetEditWater').value = preset?.water != null ? preset.water : '';
+ document.getElementById('presetEditRatio').value = preset?.ratio || '';
+ document.getElementById('presetEditTemp').value = preset?.temp != null ? preset.temp : '';
+ document.getElementById('presetEditMicron').value = preset?.grindMicron != null ? preset.grindMicron : '';
+ document.getElementById('presetEditTargetTime').value = preset?.targetTime || '';
+ document.getElementById('presetEditNotes').value = preset?.notes || '';
+
+ setPresetEditBrewType(preset?.brewType || '핫');
+ setPresetEditMelo(preset?.meloDrip || '미사용');
+ setPresetEditBottom(preset?.bottom || '');
+ // 바텀 토글 상태 반영
+ updatePresetEditBottomVisibility();
+
+ // 푸어가이드
+ const pourList = document.getElementById('presetPourGuideList');
+ clearChildren(pourList);
+ const pours = Array.isArray(preset?.pourGuide) ? preset.pourGuide : [];
+ if (pours.length === 0) {
+   // 신규면 기본 블루밍 행 1개 제공
+   if (!isEdit) pourList.appendChild(createPourRow('0:00', '', '블루밍'));
+ } else {
+   pours.forEach(p => pourList.appendChild(createPourRow(p.time, p.amount, p.action)));
+ }
+
+ // 조정 가이드
+ const adjList = document.getElementById('presetAdjustList');
+ clearChildren(adjList);
+ const adjs = Array.isArray(preset?.adjustments) ? preset.adjustments : [];
+ adjs.forEach(a => adjList.appendChild(createAdjustRow(a.symptom, a.fix)));
+
+ openSettingsSub('presetEditor');
+}
+
+// 복사할 템플릿을 선택했을 때 폼에 반영
+function applyPresetCopy() {
+ const sel = document.getElementById('presetCopySelect');
+ if (!sel || !sel.value) return;
+ const src = getPresetById(sel.value);
+ if (!src) return;
+ // 이름은 "(복사)" 접미어로 구분 — 저장 시 사용자가 수정할 수 있음
+ document.getElementById('presetEditName').value = (src.name || '') + ' (복사)';
+ document.getElementById('presetEditAuthor').value = src.author || '';
+ populatePresetDripperSelect(src.dripperId || 'builtin_orea_v4');
+ document.getElementById('presetEditDose').value = src.dose != null ? src.dose : '';
+ document.getElementById('presetEditWater').value = src.water != null ? src.water : '';
+ document.getElementById('presetEditRatio').value = src.ratio || '';
+ document.getElementById('presetEditTemp').value = src.temp != null ? src.temp : '';
+ document.getElementById('presetEditMicron').value = src.grindMicron != null ? src.grindMicron : '';
+ document.getElementById('presetEditTargetTime').value = src.targetTime || '';
+ document.getElementById('presetEditNotes').value = src.notes || '';
+ setPresetEditBrewType(src.brewType || '핫');
+ setPresetEditMelo(src.meloDrip || '미사용');
+ setPresetEditBottom(src.bottom || '');
+ updatePresetEditBottomVisibility();
+ const pourList = document.getElementById('presetPourGuideList');
+ clearChildren(pourList);
+ (Array.isArray(src.pourGuide) ? src.pourGuide : []).forEach(p =>
+   pourList.appendChild(createPourRow(p.time, p.amount, p.action)));
+ const adjList = document.getElementById('presetAdjustList');
+ clearChildren(adjList);
+ (Array.isArray(src.adjustments) ? src.adjustments : []).forEach(a =>
+   adjList.appendChild(createAdjustRow(a.symptom, a.fix)));
+}
+
+// 푸어/조정 행들을 배열로 수집
+function collectPresetPours() {
+ const rows = document.querySelectorAll('#presetPourGuideList .preset-pour-row');
+ const out = [];
+ rows.forEach(r => {
+   const time = r.querySelector('[data-field="time"]').value.trim();
+   const amount = r.querySelector('[data-field="amount"]').value.trim();
+   const action = r.querySelector('[data-field="action"]').value.trim();
+   // 셋 다 빈 행은 skip
+   if (!time && !amount && !action) return;
+   out.push({ time, amount, action });
+ });
+ return out;
+}
+function collectPresetAdjustments() {
+ const rows = document.querySelectorAll('#presetAdjustList .preset-adjust-row');
+ const out = [];
+ rows.forEach(r => {
+   const symptom = r.querySelector('[data-field="symptom"]').value.trim();
+   const fix = r.querySelector('[data-field="fix"]').value.trim();
+   if (!symptom && !fix) return;
+   out.push({ symptom, fix });
+ });
+ return out;
+}
+
+// 저장 — 신규 등록 또는 기존 편집
+function savePresetEdit() {
+ const name = document.getElementById('presetEditName').value.trim();
+ if (!name) { alert('템플릿 이름을 입력해 주세요.'); return; }
+ const dripperId = document.getElementById('presetEditDripper').value;
+ if (!dripperId) { alert('드리퍼를 선택해 주세요.'); return; }
+ const d = getDripperById(dripperId);
+ const hasBottom = !!(d && d.hasBottom);
+
+ const doseRaw = document.getElementById('presetEditDose').value;
+ const waterRaw = document.getElementById('presetEditWater').value;
+ const tempRaw = document.getElementById('presetEditTemp').value;
+ const micronRaw = document.getElementById('presetEditMicron').value;
+ const dose = doseRaw !== '' ? parseFloat(doseRaw) : null;
+ const water = waterRaw !== '' ? parseInt(waterRaw) : null;
+ const temp = tempRaw !== '' ? parseInt(tempRaw) : null;
+ const grindMicron = micronRaw !== '' ? parseInt(micronRaw) : null;
+
+ const payload = {
+   dripperId,
+   name,
+   author: document.getElementById('presetEditAuthor').value.trim(),
+   brewType: presetEditState.brewType || '핫',
+   dose: (dose != null && !isNaN(dose)) ? dose : null,
+   water: (water != null && !isNaN(water)) ? water : null,
+   ratio: document.getElementById('presetEditRatio').value.trim(),
+   temp: (temp != null && !isNaN(temp)) ? temp : null,
+   grindMicron: (grindMicron != null && !isNaN(grindMicron)) ? grindMicron : null,
+   bottom: hasBottom ? (presetEditState.bottom || '') : '',
+   meloDrip: presetEditState.meloDrip || '미사용',
+   targetTime: document.getElementById('presetEditTargetTime').value.trim(),
+   notes: document.getElementById('presetEditNotes').value.trim(),
+   pourGuide: collectPresetPours(),
+   adjustments: collectPresetAdjustments()
+ };
+
+ if (editingPresetId && isUserPreset(editingPresetId)) {
+   updateUserPreset(editingPresetId, payload);
+   showToast('템플릿이 수정되었습니다');
+ } else {
+   addUserPreset(payload);
+   showToast('템플릿이 추가되었습니다');
+ }
+ editingPresetId = null;
+ // v2.5.6.4: 레시피 생성 플로우에서 진입했으면 그곳으로 복귀, 아니면 템플릿 리스트로
+ if (presetEditorReturnState) {
+   returnToGenFlowIfNeeded();
+ } else {
+   closeSettingsSub('presetList');
+ }
+}
+
+function deleteUserPresetFromEditor() {
+ if (!editingPresetId || !isUserPreset(editingPresetId)) return;
+ if (!confirm('이 템플릿을 삭제할까요? (이 템플릿에서 파생된 기존 레시피는 유지됩니다)')) return;
+ deleteUserPreset(editingPresetId);
+ editingPresetId = null;
+ closeSettingsSub('presetList');
+}
+
+// v2.5.6.4: 에디터에서 뒤로가기 — gen-flow에서 진입했으면 취소로 간주하고 복귀, 아니면 리스트로
+function onPresetEditorBack() {
+ editingPresetId = null;
+ if (presetEditorReturnState) {
+   returnToGenFlowIfNeeded();
+ } else {
+   closeSettingsSub('presetList');
+ }
+}
+// v2.5.6.4: 에디터에서 X (설정 모달 닫기) — gen-flow에서 진입했으면 레시피 생성 모달로 복귀
+function onPresetEditorClose() {
+ editingPresetId = null;
+ if (presetEditorReturnState) {
+   returnToGenFlowIfNeeded();
+ } else {
+   closeModal('settingsModal');
+ }
 }
 
 function renderAlertSettings() {
@@ -3937,18 +6251,24 @@ function isAlertDismissed(id, type) {
 
 // ─── Init ───
 function init() {
- document.getElementById('clickMin').value = data.clickRange.min;
- document.getElementById('clickMax').value = data.clickRange.max;
+ // v2.5.6.1: ensure legacy clickRange reflects active grinder's stored range
+ const activeId = data.activeGrinderId || 'builtin_c60';
+ const activeRange = getGrinderRange(activeId);
+ data.clickRange = { min: activeRange.min, max: activeRange.max };
+ document.getElementById('clickMin').value = activeRange.min;
+ document.getElementById('clickMax').value = activeRange.max;
  if (!data.beans) { data.beans = []; saveData(); }
  if (!data.wishlist) { data.wishlist = []; saveData(); }
  migrateMeloDripValues();
  migrateDripperBottom();
  migrateCupNotes();
- loadMeloDripWeight();
  updateClickBar(); renderClickGrid(); renderClickHistory();
  renderBeans(); renderRecipes(); renderBrews(); initStatYears(); initPickMonths();
  renderAlertSettings();
  checkAlerts();
+ // v2.5.6: 설정 하단 버전 표시 동적 주입
+ const vEl = document.getElementById('settingsVersionText');
+ if (vEl) vEl.textContent = APP_VERSION;
  // iOS PWA viewport fix — force layout recalculation on load
  requestAnimationFrame(() => { window.scrollTo(0, 0); });
  // Show patch notes if version updated
