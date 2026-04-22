@@ -170,7 +170,19 @@ body {
  width: 100%; padding: 12px 14px; border-radius: 12px;
  border: 1px solid var(--border); background: var(--bg-input);
  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text);
+ -webkit-text-fill-color: var(--text);
  outline: none; transition: border-color 0.2s; box-sizing: border-box;
+}
+/* v2.5.6.1: iOS Safari에서 input[type=number] 등이 시스템 기본(검정)으로 강제되는 문제 예방.
+   color만으로는 -webkit-text-fill-color를 덮지 못하는 버그가 있어 전역 안전장치로 명시. */
+input, select, textarea {
+ color: var(--text);
+ -webkit-text-fill-color: var(--text);
+}
+input::placeholder, textarea::placeholder {
+ color: var(--text-tertiary);
+ -webkit-text-fill-color: var(--text-tertiary);
+ opacity: 1;
 }
 .input-group input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; height: 46px; line-height: 46px; padding-top: 0; padding-bottom: 0; }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--accent); }
@@ -4577,14 +4589,21 @@ function buildTimerSteps(recipe) {
      cumulative += pourAmount;
    }
    // v2.5.6.3.3: 거치형 무게 누적 반영
-   // - 드로우다운 제외
    // - 블루밍은 meloBloomInclude가 true일 때만 포함
+   // v2.5.6.1: 드로우다운에서도 cumulative>0이면 총량 표시 (거치형 가산 포함)
    let displayCumulative = cumulative;
    const isBloom = displayStage.includes('블루밍');
-   if (meloDripWeight > 0 && !isDrawdown && cumulative > 0 && (!isBloom || bloomInclude)) {
+   if (meloDripWeight > 0 && cumulative > 0 && (!isBloom || bloomInclude)) {
      displayCumulative = cumulative + meloDripWeight;
    }
-   let amount = isDrawdown ? '' : displayCumulative + 'g';
+   // v2.5.6.1: 드로우다운 amount 표시 정책 변경 — cumulative>0이면 최종 누적값 표시.
+   // TTS는 기존 유지 ("드로우다운"만 발화, 총량은 읽지 않음).
+   let amount;
+   if (isDrawdown) {
+     amount = cumulative > 0 ? displayCumulative + 'g' : '';
+   } else {
+     amount = displayCumulative + 'g';
+   }
    let ttsAmount = isDrawdown ? '' : displayCumulative + '그람';
    let ttsText = '';
    if (isBloom) {
@@ -5300,8 +5319,16 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.6';
+const APP_VERSION = 'v2.5.6.1';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.6.1',
+   date: '2026.04.22',
+   items: [
+     { type: 'fix', text: '다크모드에서 숫자 입력 필드(그라인더 편집의 클릭당 μm·최소·최대 등)의 글자가 검정으로 표시되던 문제 — iOS Safari의 -webkit-text-fill-color 기본값 override 누락 수정. 전역 input/textarea/select에 적용' },
+     { type: 'improve', text: '타이머 드로우다운 단계에서 최종 누적 총량 표시 — 지금까지 부은 물 총량(g)을 드로우다운 구간에도 계속 노출하여 추출 마무리 시점 확인 가능. 거치형 멜로드립 가산 규칙도 동일 적용' },
+   ],
+ },
  {
    version: 'v2.5.6',
    date: '2026.04.21',
