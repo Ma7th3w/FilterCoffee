@@ -4391,7 +4391,7 @@ function renderDripperList() {
            ${sub ? `<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;">${sub}</div>` : ''}
          </div>
          <div style="display:flex;gap:4px;flex-shrink:0;">
-           ${!d.builtin ? `<button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="openDripperEditor('${d.id}')">편집</button>` : ''}
+           <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="openDripperEditor('${d.id}')">편집</button>
            <button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="hideDripper('${d.id}')">숨김</button>
          </div>
        </div>
@@ -4461,9 +4461,17 @@ function showHiddenDrippers() { toggleHiddenDrippers(); }
 function openDripperEditor(id) {
  editingDripperId = id || null;
  const d = id ? getDripperById(id) : null;
+ const isBuiltin = !!(d && d.builtin);
  document.getElementById('dripperEditorTitle').textContent = id ? '드리퍼 편집' : '드리퍼 추가';
- document.getElementById('dripperEditName').value = d?.name || '';
- document.getElementById('dripperEditBrand').value = d?.brand || '';
+ const nameEl = document.getElementById('dripperEditName');
+ const brandEl = document.getElementById('dripperEditBrand');
+ nameEl.value = d?.name || '';
+ brandEl.value = d?.brand || '';
+ // v2.5.6.2: 빌트인 드리퍼는 이름·브랜드 변경 불가. 멜로 무게만 수정.
+ nameEl.readOnly = isBuiltin;
+ brandEl.readOnly = isBuiltin;
+ nameEl.style.opacity = isBuiltin ? '0.6' : '';
+ brandEl.style.opacity = isBuiltin ? '0.6' : '';
  // v2.5.6.3.3: 거치형 멜로드립 무게 (빌트인은 user override 영역에서 값 조회)
  const mw = getDripperMeloWeight(id);
  document.getElementById('dripperEditMeloWeight').value = (mw != null && mw !== 0) ? mw : '';
@@ -5319,8 +5327,15 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.6.1';
+const APP_VERSION = 'v2.5.6.2';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.6.2',
+   date: '2026.04.24',
+   items: [
+     { type: 'fix', text: '빌트인 드리퍼(Orea V4 · O1 Baby O · Hario V60 · Switch · Neo · Alpha)에도 편집 진입 허용 — 이름·브랜드는 변경 불가(readonly)지만 거치형 멜로드립 무게는 설정 가능. 기존에는 사용자 추가 드리퍼만 편집할 수 있어 빌트인 드리퍼의 멜로 무게를 입력할 방법이 없던 누락 보완' },
+   ],
+ },
  {
    version: 'v2.5.6.1',
    date: '2026.04.22',
