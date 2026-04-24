@@ -126,6 +126,10 @@ body {
  border-top: 1px solid var(--border);
  display: flex;
  padding: 6px 0 calc(env(safe-area-inset-bottom, 0px) + 4px);
+ /* v2.5.6.3: iOS 사파리에서 스크롤 시 탭바가 중간에 박히는 현상 방지 — 별도 레이어로 분리 */
+ transform: translateZ(0);
+ -webkit-transform: translateZ(0);
+ will-change: transform;
 }
 .tab {
  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
@@ -5327,8 +5331,15 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.6.2';
+const APP_VERSION = 'v2.5.6.3';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.6.3',
+   date: '2026.04.24',
+   items: [
+     { type: 'fix', text: 'iOS 사파리에서 원두 페이지 스크롤 시 하단 탭바가 화면 중간에 박히는 현상 수정 — tab-bar를 별도 컴포지터 레이어로 분리하여 스크롤 시 URL 바 출몰에 따른 viewport 재계산 영향 차단' },
+   ],
+ },
  {
    version: 'v2.5.6.2',
    date: '2026.04.24',
