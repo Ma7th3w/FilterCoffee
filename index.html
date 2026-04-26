@@ -2312,6 +2312,11 @@ function confirmGrinderSwitch() {
  const maxEl = document.getElementById('clickMax');
  if (minEl) minEl.value = range.min;
  if (maxEl) maxEl.value = range.max;
+ // v2.5.6.4: 활성 그라인더 전환 시, 해당 그라인더의 직전 클릭수를 clickHistory에서 복원
+ const history = Array.isArray(data.clickHistory) ? data.clickHistory : [];
+ const lastEntry = history.find(h => (h.grinderId || 'builtin_c60') === targetId);
+ data.currentClicks = lastEntry ? lastEntry.clicks : null;
+ data.currentBean = lastEntry ? (lastEntry.bean || '') : '';
  saveData();
  previewGrinderId = null; // 이제 활성 == 미리보기
  updateClickBar();
@@ -4200,9 +4205,17 @@ function setActiveGrinder(id) {
  const maxEl = document.getElementById('clickMax');
  if (minEl) minEl.value = range.min;
  if (maxEl) maxEl.value = range.max;
+ // v2.5.6.4: 활성 그라인더 전환 시, 해당 그라인더의 직전 클릭수를 clickHistory에서 복원
+ // (이전 그라인더의 데이터는 히스토리에 그대로 남아있음)
+ const history = Array.isArray(data.clickHistory) ? data.clickHistory : [];
+ const lastEntry = history.find(h => (h.grinderId || 'builtin_c60') === id);
+ data.currentClicks = lastEntry ? lastEntry.clicks : null;
+ data.currentBean = lastEntry ? (lastEntry.bean || '') : '';
  saveData();
  // v2.5.6.5: 활성 그라인더 변경 시 클릭모달 미리보기 상태도 동기화
  previewGrinderId = null;
+ // v2.5.6.4: 상단 클릭바 숫자도 새 그라인더 기준으로 갱신
+ updateClickBar();
  renderClickGrid();
  renderClickHistory();
  renderClickGrinderPicker();
@@ -5331,8 +5344,15 @@ function migrateMeloDripValues() {
 }
 
 // ─── Patch Notes ───
-const APP_VERSION = 'v2.5.6.3';
+const APP_VERSION = 'v2.5.6.4';
 const PATCH_NOTES = [
+ {
+   version: 'v2.5.6.4',
+   date: '2026.04.24',
+   items: [
+     { type: 'fix', text: '활성 그라인더 전환 시 이전 그라인더의 클릭수가 상단바에 그대로 남아있던 문제 수정 — 전환한 그라인더의 clickHistory 최근 기록을 자동 복원. 설정 → 그라인더 관리에서 [활성]으로 전환하거나 클릭모달에서 [전환] 버튼으로 전환하는 두 경로 모두 적용. 이전 그라인더의 히스토리는 그대로 유지됨' },
+   ],
+ },
  {
    version: 'v2.5.6.3',
    date: '2026.04.24',
